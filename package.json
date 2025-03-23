@@ -1,0 +1,24 @@
+{
+  "name": "nextjs-microblog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "dompurify": "^3.2.4",
+    "fs": "^0.0.1-security",
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.7",
+    "matter": "^0.2.0",
+    "next": "15.0.3",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1"
+  }
+}
