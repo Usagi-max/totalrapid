@@ -1,2 +1,2 @@
-# totalradid
+# totalrapid
 nextjsの動的サイト
