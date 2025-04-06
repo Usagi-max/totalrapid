@@ -226,7 +226,7 @@ export default function About() {
 
           <div className={styles.lp_cycle_container} style={{ backgroundColor:"rgba(0, 159, 233, 0.15)"}}>
             <h2>家庭学習日（火曜日〜日曜日）</h2>
-            <h3 style={{ backgroundColor: "#00A1E9"}}>　STEP1 Reflect　自分の課題を振り返る </h3>
+            <h3 style={{ backgroundColor: "#00A1E9"}}>　STEP5 Do　学習を実行する</h3>
             <h4>指導日の最初の時間に、先週の学習成果を中テストで確認し、自分の苦手分野を振り返ります。</h4>
 
             <ChatMessage
