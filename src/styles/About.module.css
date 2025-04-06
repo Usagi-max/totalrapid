@@ -1,30 +1,3 @@
-.aboutContainer {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .aboutContainer h1 {
-    font-size: 2rem;
-    color: #0070f3;
-  }
-  
-  .aboutContainer p {
-    font-size: 1.2rem;
-    margin: 10px 0;
-  }
-  
-  .aboutContainer ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .aboutContainer ul li {
-    font-size: 1.1rem;
-    margin: 5px 0;
-  }
-  
   .backButton {
     display: inline-block;
     margin-top: 20px;
@@ -40,26 +13,384 @@
   .backButton:hover {
     background-color: #005bb5;
   }
-  
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    background-color: #f0f0f0;
+.body {
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: left;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  /*background-color: #f0f0f0;*/
+}
+
+.body h1{
+  padding-top:60px;
+  margin-top:20px;
+  margin-bottom:10px;
+  text-align: left;
+}
+.body h2{
+  margin:0px;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.body h3{
+  margin:0px;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.body h4{
+  margin:10px;
+  padding-bottom: 5px;
+  text-align: left;
+}
+.body p{
+  margin:0px;
+  text-align: left;
+}
+.body b {
+  background: linear-gradient(90deg,  #E83E34, #F39700); /* オレンジ→赤のグラデーション */
+  -webkit-background-clip: text; /* テキストのみにグラデーションを適用 */
+  -webkit-text-fill-color: transparent; /* テキスト色を透明にする */
+  display: inline-block; /* インライン要素でも適用 */
+  position: relative; /* 疑似要素のために必要 */
+  font-weight: bold;
+}
+
+.body span {
+  position: relative; /* 擬似要素の位置基準 */
+  display: inline-block; /* インライン要素で幅を適用 */
+  font-weight: bold;
+}
+
+.body span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 33%; /* 下から3分の1を背景色で覆う */
+  background: rgba(255, 165, 0, 0.3); /* 薄いオレンジ色 */
+  z-index: 0; /* 文字の背面に配置 */
+  display: block; /* 確実に表示させる */
+}
+
+
+.container {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  /*background-color: #f0f0f0;*/
 }
 .item {
     flex: 1;
-    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    /*margin: 5px;*/
     padding: 20px;
     text-align: center;
-    background-color: lightblue;
-    border: 1px solid #333;
+    /*background-color: lightblue;*/
+    /*border: 1px solid #333;*/
 }
+.item_img{
+  width: 80%;
+}
+
+.lp_head_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp_head_container picture {
+  width: 100%;
+}
+
+.lp_head_image {
+  width: 100%;
+  height: auto; /* アスペクト比を保持 */
+  display: block;
+}
+
+.lp_head_item1 {
+  width: 60%;
+  text-align: left;
+  margin-right: -20%; 
+  padding-top: 40px;
+  position: relative; /* 他の要素との位置調整 */
+}
+
+.lp_head_item2 {
+  width: 60%;
+  max-width: 615px;
+  justify-content: center; /* 水平方向の中央揃え */
+  text-align: right;
+  position: relative;
+  padding-right: 30px;
+}
+.lp_head_item2_img {
+  width: 100%;
+  height: auto;
+}
+
+.lp_about_container {
+  padding-top: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp_about_item1 {
+  width: 50%;
+  display: flex; /* Flexboxを有効にする */
+  justify-content: center; /* 水平方向に中央配置 */
+  align-items: center; /* 垂直方向に中央配置 */
+  margin-right: 0%; 
+  padding: 10px;
+  position: relative; /* 他の要素との位置調整 */
+  flex-direction: column;
+}
+
+.lp_about_item1 li{
+  list-style-type: none;
+  padding-left: 0; 
+}
+.lp_about_item1 ul{
+  margin: 0;
+  padding: 0;
+}
+.lp_about_item1 > div {
+  width: 80%;
+}
+
+.lp_about_item2 {
+  width: 50%;
+  display: flex; /* Flexboxを有効にする */
+  justify-content: center; /* 水平方向に中央配置 */
+  align-items: center; /* 垂直方向に中央配置 */
+  margin-right: 0%; 
+  padding: 10px;
+  position: relative; /* 他の要素との位置調整 */
+  flex-direction: column;
+  text-align: center;
+}
+.lp_about_item2 > div {
+  width: 80%;                 /* 横幅80% */
+  border-radius: 10px;        /* 角丸 */
+  /* border: 4px solid #F39700;  太いオレンジの枠線 */
+  background-color: #FCF4E7;  /* 薄いオレンジの背景色 */
+  padding: 20px;   
+  font-weight: bold; 
+}
+.lp_about_item2 > div > h4 {
+  margin: 0;
+  color:#F39700;
+  font-weight: bold; 
+}
+.lp_about_item2 > div > h2 {
+  background-image: linear-gradient(to right, #E83E34, #F39700); /* オレンジから赤へのグラデーション */
+  -webkit-background-clip: text; /* 背景をテキストに適用 */
+  color: transparent; /* 文字色を透明にして、背景が見えるようにする */
+  font-weight: bold; /* 任意で文字を太くする */
+  margin: 10px;
+}
+.lp_about_item2 > div > p {
+  margin: 0;
+  color:#3a342b;
+  font-weight: bold; 
+}
+
+.lp_about_item2 > p {
+  margin: 5px;
+  font-weight: bold;
+  font-size: 3rem;
+  color:rgb(39, 39, 39)
+}
+
+
+.lp_cycle_container{
+  width: 80%;
+  margin: 2rem auto;
+  padding:  1rem;
+}
+.lp_cycle_container > h3 {
+  max-width: 768px;
+  padding-left: 10px;
+  width: 100%;               /* 横幅80% */
+  border-radius: 10px;     
+  padding: 5px;   
+  font-weight: bold; 
+  color: white;
+}
+
+.lp_cycle_container > h2,.lp_cycle_container > h3,.lp_cycle_container > h4 {
+  text-align: left;
+}
+
+.lp_total_container {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* PCでは2列 */
+  gap: 16px;
+  text-align: left;
+}
+.lp_total_container >div{
+  padding: 10px;
+}
+.lp_total_container >h2{
+  padding: 10px;
+}
+.lp_total_container >h4{
+  font-weight: normal;
+}
+.lp_flow_container{
+  width: 80%;
+  margin:  auto;
+  padding:  1rem;
+}
+.lp_flow_item {
+  width: 80%;
+  margin: auto;
+  padding: 1rem;
+  border-radius: 8px;                /* ← 少し大きめの角丸 */
+  border: 2px solid #F39700;         /* ← 枠線をきちんと表示 */
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* オプション：うっすら影 */
+}
+
+
+/* スマホ対応 */
 @media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
+  .container {
+    flex-direction: column;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .lp_about_container,
+  .lp_cycle_container,
+  .lp_total_container  {
+    flex-direction: column;
+    width:95%;
+    padding-top: 10px;
+  }
+  .lp_about_container div,
+  .lp_cycle_container div,
+  .lp_total_container div  {
+    flex-direction: column;
+    width:95%;
+    padding-top: 10px;
+  }
+  .lp_about_item1,
+  .lp_about_item2{
+    padding-top: 20px;
+  }
+  .lp_about_item1,
+  .lp_about_item2,
+  .lp_about_item2 div {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    padding: 5px;
+  }
+  .lp_about_item2 div {
+    width: 100%;
+  }
+  .lp_about_item1{
+    text-align: left;
+  }
+  .lp_about_item1 div{
+    font-size: 0.8rem;
+  }
+  .lp_about_item2>div>h2{
+    margin: 2px;
+  }
+  .body h1{
+    font-size: 1.2rem;
+    margin-top:20px;
+    margin-bottom:10px;
+  }
+  .body h2{
+    font-size: 1.4rem;
+    margin:5px;
+  }
+  .body h3{
+    font-size: 0.9rem;
+    margin:5px;
+  }
+  .body p{
+    font-size: 0.8rem;
+  }
+  .lp_about_item2 > p{
+    font-size: 1.6rem;
+    margin: -10px;
+  }
+  .lp_total_container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item1 { order: 1; }
+  .item2 { order: 2; }
+  .item4 { order: 3; } /* ←④を先に */
+  .item3 { order: 4; }
+}
+
+.highlightText {
+  font-family: "Arial", "Helvetica", sans-serif; /* ゴシック体 */
+  font-weight: bold; /* 太字 */
+  background-color: #F39700; /* 背景オレンジ */
+  color: white; /* 文字白色 */
+  padding: 5px 10px; /* 余白調整 */
+  display: inline-block; /* 背景がテキストの長さにフィットするように */
+}
+
+.highlightText a {
+  border: 2px solid white; /* 枠線 */ 
+  padding: 3px 5px; /* 枠線内の余白 */
+  text-decoration: none; /* 下線を消す */
+  color: white; /* 文字黒 */
+  background-color: #F39700; /* 背景白色 */
+  font-weight: bold; /* 太字 */
+}
+
+.glowText {
+  font-family: "Arial", "Helvetica", sans-serif; /* ゴシック体 */
+  font-size: 48px; /* 文字サイズ */
+  font-weight: bold; /* 太字 */
+  color: black; /* 文字色 */
+  text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white; /* 白いぼやけ */
+  text-align: center; /* 中央揃え */
+  padding: 20px;
+}
+
+.tableContainer {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableContainer th, 
+.tableContainer td {
+  border: 2px solid #F39700; /* オレンジの枠線 */
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tableContainer th {
+  background-color: white; /* ヘッダーの背景オレンジ */
+  /* color: white; 文字色白 */
+}
+
+.tableContainer td {
+  background-color: white; /* データセルの背景白 */
+  color: black; /* 文字色オレンジ */
 }

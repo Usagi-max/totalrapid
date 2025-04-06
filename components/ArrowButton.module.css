@@ -1,0 +1,26 @@
+.wrapper {
+  display: inline-block;
+}
+
+.arrow {
+  position: relative;
+  display: inline-block;
+  width: 100%; /* widthが親(wrapper)に追従 */
+  padding: 12px 24px;
+  background-color: #F39700;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+  clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 50%, calc(100% - 30px) 100%, 0 100%);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+}
+
+.arrow:hover {
+  background-color: #E83E34;
+}
+
+.text {
+  display: inline-block;
+}
