@@ -1,0 +1,49 @@
+.GradientHeading_container {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    padding: 1rem 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+  }
+  
+  .visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .GradientHeading_container div {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    font-size: clamp(0.8rem, 5vw, 1.5rem);
+    color: white;
+    padding: 0.5em 1em;
+    overflow: hidden;
+  }
+  
+  .GradientHeading_container div::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 100%;
+    background-image: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1) 10px,
+      transparent 10px,
+      transparent 20px
+    ),
+    linear-gradient(135deg, #ff7e5f, #feb47b);
+  
+  background-size: 200% 200%, cover;
+  background-position: 0 0, left;
+  animation: bgSlide 3s linear infinite;
+    z-index: -1;
+    animation: bgSlide 3s linear infinite;
+  }
+  

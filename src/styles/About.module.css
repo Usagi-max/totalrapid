@@ -160,19 +160,38 @@
   flex-direction: column;
 }
 
-.lp_about_item1 li{
+.lp_circle_container {
+  padding-top: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp_circle_item1 {
+  width: 50%;
+  display: flex; /* Flexboxを有効にする */
+  justify-content: center; /* 水平方向に中央配置 */
+  align-items: center; /* 垂直方向に中央配置 */
+  margin-right: 0%; 
+  padding: 10px;
+  position: relative; /* 他の要素との位置調整 */
+  flex-direction: column;
+}
+
+.lp_circle_item1 li{
   list-style-type: none;
   padding-left: 0; 
 }
-.lp_about_item1 ul{
+.lp_circle_item1 ul{
   margin: 0;
   padding: 0;
 }
-.lp_about_item1 > div {
+.lp_circle_item1 > div {
   width: 80%;
 }
 
-.lp_about_item2 {
+.lp_circle_item2 {
   width: 50%;
   display: flex; /* Flexboxを有効にする */
   justify-content: center; /* 水平方向に中央配置 */
@@ -183,7 +202,7 @@
   flex-direction: column;
   text-align: center;
 }
-.lp_about_item2 > div {
+.lp_circle_item2 > div {
   width: 80%;                 /* 横幅80% */
   border-radius: 10px;        /* 角丸 */
   /* border: 4px solid #F39700;  太いオレンジの枠線 */
@@ -191,25 +210,25 @@
   padding: 20px;   
   font-weight: bold; 
 }
-.lp_about_item2 > div > h4 {
+.lp_circle_item2 > div > h4 {
   margin: 0;
   color:#F39700;
   font-weight: bold; 
 }
-.lp_about_item2 > div > h2 {
+.lp_circle_item2 > div > h2 {
   background-image: linear-gradient(to right, #E83E34, #F39700); /* オレンジから赤へのグラデーション */
   -webkit-background-clip: text; /* 背景をテキストに適用 */
   color: transparent; /* 文字色を透明にして、背景が見えるようにする */
   font-weight: bold; /* 任意で文字を太くする */
   margin: 10px;
 }
-.lp_about_item2 > div > p {
+.lp_circle_item2 > div > p {
   margin: 0;
   color:#3a342b;
   font-weight: bold; 
 }
 
-.lp_about_item2 > p {
+.lp_circle_item2 > p {
   margin: 5px;
   font-weight: bold;
   font-size: 3rem;
@@ -275,42 +294,42 @@
     padding-bottom: 0;
     margin-bottom: 0;
   }
-  .lp_about_container,
+  .lp_circle_container,
   .lp_cycle_container,
   .lp_total_container  {
     flex-direction: column;
     width:95%;
     padding-top: 10px;
   }
-  .lp_about_container div,
+  .lp_circle_container div,
   .lp_cycle_container div,
   .lp_total_container div  {
     flex-direction: column;
     width:95%;
     padding-top: 10px;
   }
-  .lp_about_item1,
-  .lp_about_item2{
+  .lp_circle_item1,
+  .lp_circle_item2{
     padding-top: 20px;
   }
-  .lp_about_item1,
-  .lp_about_item2,
-  .lp_about_item2 div {
+  .lp_circle_item1,
+  .lp_circle_item2,
+  .lp_circle_item2 div {
     width: 100%;
     margin: 0;
     text-align: center;
     padding: 5px;
   }
-  .lp_about_item2 div {
+  .lp_circle_item2 div {
     width: 100%;
   }
-  .lp_about_item1{
+  .lp_circle_item1{
     text-align: left;
   }
-  .lp_about_item1 div{
+  .lp_circle_item1 div{
     font-size: 0.8rem;
   }
-  .lp_about_item2>div>h2{
+  .lp_circle_item2>div>h2{
     margin: 2px;
   }
   .body h1{
@@ -329,7 +348,11 @@
   .body p{
     font-size: 0.8rem;
   }
-  .lp_about_item2 > p{
+  .body>div{
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .lp_circle_item2 > p{
     font-size: 1.6rem;
     margin: -10px;
   }
