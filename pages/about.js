@@ -37,7 +37,7 @@ export default function About() {
           <div className={styles.lp_about_item1}>
             <div style={{ position: "relative", width: "100%", justifyContent: "center"}}>
               <FadeInImage
-                src="/images/using pc.jpg"
+                src="/images/student teacher.jpeg"
                 alt="Another Image"
                 width={600}
                 height={400}
@@ -78,7 +78,7 @@ export default function About() {
               <h4>STEP2</h4>
               <p style={{padding:"10px" }}>RAPIDと一緒に<br></br>正しく学習できる</p>
               <Image 
-                src="/images/study_self.png" 
+                src="/images/study_with.png" 
                 alt="using pc" 
                 width={100}
                 height={100} 
@@ -89,7 +89,7 @@ export default function About() {
               <h4>STEP3 </h4>
               <p style={{padding:"10px" }}>自分1人で<br></br>正しく学習できる</p>
               <Image 
-                src="/images/study_with.png" 
+                src="/images/study_self.png" 
                 alt="using pc" 
                 width={100}
                 height={100} 
@@ -101,9 +101,9 @@ export default function About() {
         <h1 id="point1">RAPIDメソッドとは</h1>
         <div className={styles.lp_circle_container}>
           <div className={styles.lp_circle_item1}>
-            <div><span>RAPIDメソッド</span>は、子どもが本物の学習力を身につけるために開発されたものです。</div>
+            <div><strong>RAPIDメソッド</strong>は、子どもが本物の学習力を身につけるために開発されたものです。</div>
             <div>この学習メソッドを使うことで、勉強が苦手な子どもでも自ら進んで計画を立て、学習に取り組み、改善できるようになります。</div>
-            <div>学習塾RAPIDでは、<span>学習を５つのステップ</span>に分け、各ステップで学習の質と量を高めるためのサポートを行なっています。</div>
+            <div>学習塾RAPIDでは、<strong>学習を５つのステップ</strong>に分け、各ステップで学習の質と量を高めるためのサポートを行なっています。</div>
           </div>
           <div className={styles.lp_circle_item1}>
             <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -123,7 +123,7 @@ export default function About() {
           <div className={`${styles.lp_total_item} ${styles.item1}`} >
             <h4>家庭学習サポート①</h4>
             <h2>オンライン自習室</h2>
-            <p>やる気のない日でも学習を継続できるように、<span>塾生が無料で使えるオンライン自習室</span>を毎日開設しています。他の生徒が頑張っている様子を見ることができるので、集中して学習に取り組むことができます。</p>
+            <p>やる気のない日でも学習を継続できるように、<strong>塾生が無料で使えるオンライン自習室</strong>を毎日開設しています。他の生徒が頑張っている様子を見ることができるので、集中して学習に取り組むことができます。</p>
           </div>
           <div className={`${styles.lp_total_item} ${styles.item2}`}>
             <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -150,7 +150,7 @@ export default function About() {
           <div className={`${styles.lp_total_item} ${styles.item4}`}>
             <h4>家庭学習サポート②</h4>
             <h2>学習支援ツールRAPI-LA</h2>
-            <p>学習塾RAPIDでは、RAPIDメソッドを<span>指導日以外の家庭学習</span>でも活用できるように<span>学習支援ツールRAPI-LA</span>を導入しています。RAPI-LAを使うことで５つのステップ通りに学習を進め、自分の学習成果を確認することができます。</p>
+            <p>学習塾RAPIDでは、RAPIDメソッドを<strong>指導日以外の家庭学習</strong>でも活用できるように<strong>学習支援ツールRAPI-LA</strong>を導入しています。RAPI-LAを使うことで５つのステップ通りに学習を進め、自分の学習成果を確認することができます。</p>
           </div>
         </div>
         <h1>R英検準１級合格を目指すAさんの例</h1>
@@ -164,7 +164,7 @@ export default function About() {
 
           </div>
           <img
-                src="/images/スケジュール.png"
+                src="/images/week pc.png"
                 alt="Another Image"
                 maxWidth="1080px"
               />
@@ -315,9 +315,60 @@ export default function About() {
           <ArrowButton text="入試対策コース　4ヶ月〜" width="100%"/>
           </div>
         </div>
+        <div style={{ backgroundColor:"#FFF0D7", width:"100%" ,display: "flex", justifyContent: "center"}}>
 
-        <div style={{ backgroundColor:"#FFF0D7"}}>
-          
+          <div style={{ backgroundColor:"#FFF0D7", width:"80%"}}>
+            <h1>申し込み方法</h1>
+            <div className={styles.consultation_container}>
+              <div>
+                <div>
+                  <h2>まずは無料のオンライン相談</h2>
+                  <p>次の3点について、代表講師が丁寧にご対応させていただきます。</p>
+                  <ul>
+                    <li>①お子様の学習状況と今後目指したい目標についてのヒアリング</li>
+                    <li>②お子様に合わせた最適なカリキュラムと学習プランのご提案</li>
+                    <li>③コースのご案内と料金のお見積もり</li>
+                  </ul>
+                </div>
+                <img src="/images/kobetu soudan.jpeg" alt="相談の様子" />
+              </div>
+
+              <div style={{ backgroundColor:"#FFF0D7"}}>
+                <div style={{ display: "inline-block",color:"#F39700", transform: "scaleX(2)"}}>▼<br></br>▼<br></br>▼</div>
+              </div>
+
+              <div>
+                <p>さらに、オンライン相談をお申し込みいただいた方には、<br />
+                「毎日の勉強がかわる！3大無料特典」をお届けしています。</p>
+
+                <div>
+                  <div>
+                    <span>特典1</span>
+                    <p>ベストな学習法がわかる！</p>
+                    <p>学習タイプ診断</p>
+                  </div>
+                  <div>
+                    <span>特典2</span>
+                    <p>集中できる環境がわかる！</p>
+                    <p>学習環境コンサル</p>
+                  </div>
+                  <div>
+                    <span>特典3</span>
+                    <p>習慣化のコツがわかる！</p>
+                    <p>体験授業</p>
+                  </div>
+                </div>
+
+                <div>
+                  無料カウンセリングに申し込んで特典を受け取る
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        {/* <div style={{ backgroundColor:"white"}}>
           <div className={styles.lp_flow_container} style={{flexDirection: "column",textAlign:"center"}} >
             <h1>ご利用の流れ</h1>
             <div className={styles.lp_flow_item}>
@@ -335,7 +386,7 @@ export default function About() {
                 <p>日程調整や講師の選定が完了した後、オンライン指導がスタートします。</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

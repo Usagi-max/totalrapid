@@ -58,13 +58,13 @@
   font-weight: bold;
 }
 
-.body span {
+.body strong {
   position: relative; /* 擬似要素の位置基準 */
   display: inline-block; /* インライン要素で幅を適用 */
   font-weight: bold;
 }
 
-.body span::after {
+.body strong::after {
   content: "";
   position: absolute;
   left: 0;
@@ -271,6 +271,123 @@
 .lp_total_container >h4{
   font-weight: normal;
 }
+
+.consultation_container {
+  font-family: sans-serif;
+  padding: 40px 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.consultation_container > div:first-of-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 30px;
+  flex-wrap: wrap;
+}
+
+.consultation_container > div:first-of-type h2 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.consultation_container > div:first-of-type p {
+  font-size: 16px;
+  text-align: left;
+  margin-top: 1em;
+}
+
+.consultation_container > div:first-of-type ul {
+  text-align: left;
+  margin-top: 1em;
+  padding-left: 1.2em;
+}
+
+.consultation_container > div:first-of-type li {
+  margin-bottom: 8px;
+}
+
+.consultation_container > div:first-of-type img {
+  max-width: 250px;
+  height: auto;
+  margin-left: 20px;
+}
+
+
+.consultation_container > div:nth-of-type(2) div {
+  font-size: 28px;
+  color: orange;
+  margin: 10px 0 10px;
+}
+
+.consultation_container > div:nth-of-type(3) {
+  background: white;
+  padding: 30px 20px;
+}
+
+.consultation_container > div:nth-of-type(3) > p {
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div {
+  border: 2px solid orange;
+  padding: 20px;
+  width: 250px;
+  position: relative;
+  box-sizing: border-box;
+  background: white;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div > span {
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 20px;
+  position: absolute;
+  top: -18px;
+  left: 10px;
+  font-size: 16px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:first-of-type {
+  color: #f28c00;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:last-of-type {
+  color: orange;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.consultation_container > div:nth-of-type(3) > div:last-of-type {
+  background-color: orange;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .lp_flow_container{
   width: 80%;
   margin:  auto;
