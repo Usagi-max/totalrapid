@@ -6,6 +6,10 @@ import ArrowButton from "../components/ArrowButton";
 import GradientHeading from '../components/GradientHeading';
 import Image from "next/image";
 import FadeInImage from "../components/FadeInImage";
+import PointItem from '../components/PointItem';
+import Spacer from '../components/Spacer';
+import BreakOnSmallScreen from "../components/BreakOnSmallScreen";
+
 
 export default function About() {
   return (
@@ -15,25 +19,14 @@ export default function About() {
         <link rel="icon" href="/images/アイコン　文字なし.png" />
       </Head>
       <div className={styles.body}>
-        {/* <div className={styles.lp_head_container}>
-          <div className={styles.lp_head_item1}><img src="/images/girl_studying.png" alt="girl_studying" /></div>
-          <div className={styles.lp_head_item2}>
-            <img src="/images/3month_power.png" alt="3month_power"style={{ width: "100%", height: "auto", display: "block" }} />
-            <img src="/images/accepting applications.png" alt="accepting applications" style={{ width: "100%", height: "auto", display: "block" }}/>
-            <p className={styles.highlightText}><a>先着10名様</a>入塾金&初回体験授業無料キャンペーン実施中</p>
-            <div className={styles.glowText}>ぼやけた白い影の黒文字</div>
-          </div>
-        </div> */}
         <div className={styles.lp_head_container}>
           <picture>
-            <source srcSet="/images/lp_head_phone.png" media="(max-width: 480px)" />
             <source srcSet="/images/lp_head_phone.png" media="(max-width: 768px)" />
             <img src="/images/lp_head_pc.png" alt="Responsive" className={styles.lp_head_image} />
           </picture>
         </div>
-        <h></h>
 
-        <div className={styles.lp_about_container}>
+        <div className={`${styles.lp_about_container} ${styles.contentArea}`}>
           <div className={styles.lp_about_item1}>
             <div style={{ position: "relative", width: "100%", justifyContent: "center"}}>
               <FadeInImage
@@ -50,20 +43,20 @@ export default function About() {
             <GradientHeading delay={0.1}>お子様の学習習慣の改善に</GradientHeading>
             <GradientHeading delay={0.2}>フォーカスした学習塾です。</GradientHeading>
             <br></br>
-            <div style={{paddingLeft:"30px"}}>「学校や塾だけでは不安」</div>
-            <div style={{paddingLeft:"30px"}}>「勉強しているのにうまく結果が出ない」</div>
+            <p>「学校や塾だけでは不安」</p>
+            <p>「勉強しているのにうまく結果が出ない」</p>
             <br></br>
-            <div style={{paddingLeft:"30px"}}>学習塾RAPIDでは、最新の学習科学に基づき、1人ひとりに合わせた最適なカリキュラムを作成します。</div>
-            <div style={{paddingLeft:"30px"}}>このカリキュラムに沿って学習することで、最終的にはお子様が自分1人で正しく学習できるようになります。</div>
+            <p >学習塾RAPIDでは、最新の学習科学に基づき、1人ひとりに合わせた最適なカリキュラムを作成します。</p>
+            <p >このカリキュラムに沿って学習することで、最終的にはお子様が自分1人で正しく学習できるようになります。</p>
           </div>
         </div>
 
         <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", paddingBottom:"80px"}}>
-          <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", display: "flex", justifyContent: "center"}}>
+          <div className={styles.contentArea}  style={{display: "flex", justifyContent: "center"}}>
             <h1>学習習慣を改善するステップ</h1>
           </div>
           <div className={styles.lp_flow_container} style={{display: "flex", flexDirection: "row",alignItems: "center", alignContent:"middle", maxWidth:"1080px"}} >
-            <div className={styles.lp_flow_item} style={{ width:"300px",height:"300px"  ,display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+            <div className={styles.lp_flow_item} >
               <h4 >STEP1</h4>
               <p style={{padding:"10px" }}>正しい学習方法が<br></br>できない・わからない</p>
               <Image 
@@ -71,10 +64,11 @@ export default function About() {
                 alt="using pc" 
                 width={100}
                 height={100} 
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
             <div style={{ display: "inline-block",color:"#F39700", transform: "rotate(-90deg) scaleX(2)"}}>▼</div>
-            <div className={styles.lp_flow_item} style={{ width:"300px",height:"300px"  ,display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+            <div className={styles.lp_flow_item} >
               <h4>STEP2</h4>
               <p style={{padding:"10px" }}>RAPIDと一緒に<br></br>正しく学習できる</p>
               <Image 
@@ -82,10 +76,11 @@ export default function About() {
                 alt="using pc" 
                 width={100}
                 height={100} 
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
             <div style={{ display: "inline-block",color:"#F39700", transform: "rotate(-90deg) scaleX(2)"}}>▼</div>
-            <div className={styles.lp_flow_item} style={{ width:"300px",height:"300px" ,display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+            <div className={styles.lp_flow_item} >
               <h4>STEP3 </h4>
               <p style={{padding:"10px" }}>自分1人で<br></br>正しく学習できる</p>
               <Image 
@@ -93,17 +88,22 @@ export default function About() {
                 alt="using pc" 
                 width={100}
                 height={100} 
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
           </div>
         </div>
 
-        <h1 id="point1">RAPIDメソッドとは</h1>
-        <div className={styles.lp_circle_container}>
+        <h1>学習塾RAPIDが選ばれる理由</h1>
+        <Spacer height={30} />
+        <h3  id="point1">REASON1</h3>
+        <h2 style={{textAlign: "center"}}>RAPIDメソッドによる<BreakOnSmallScreen />講師とのレッスン</h2>
+        <div className={`${styles.lp_circle_container} ${styles.contentArea}`}>
           <div className={styles.lp_circle_item1}>
-            <div><strong>RAPIDメソッド</strong>は、子どもが本物の学習力を身につけるために開発されたものです。</div>
-            <div>この学習メソッドを使うことで、勉強が苦手な子どもでも自ら進んで計画を立て、学習に取り組み、改善できるようになります。</div>
-            <div>学習塾RAPIDでは、<strong>学習を５つのステップ</strong>に分け、各ステップで学習の質と量を高めるためのサポートを行なっています。</div>
+            <div><h3>RAPIDメソッドとは</h3></div>
+            <div>学習塾RAPIDでは、RAPIDメソッドを利用したレッスンを週に1回・90分行います。</div>
+            <div>このメソッドは、子どもが<strong>本物の学習力</strong>を身につけるために開発されたものです。</div>
+            <div>５つのステップを意識することで、<strong>勉強が苦手</strong>な子どもでも<strong>自ら進んで</strong>計画を立て、学習に取り組み、改善できるようになります。</div>
           </div>
           <div className={styles.lp_circle_item1}>
             <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -117,9 +117,10 @@ export default function About() {
             </div>
           </div>
         </div>
-
-        <h1 id="point2">　　家庭学習を充実させるトータルサポート</h1>
-        <div className={styles.lp_total_container}>
+        <Spacer height={30} />
+        <h3  id="point2">REASON2</h3>
+        <h2 style={{textAlign: "center"}}>家庭学習を充実させる<BreakOnSmallScreen />トータルサポート</h2>
+        <div className={`${styles.lp_total_container} ${styles.contentArea}`}>
           <div className={`${styles.lp_total_item} ${styles.item1}`} >
             <h4>家庭学習サポート①</h4>
             <h2>オンライン自習室</h2>
@@ -128,22 +129,22 @@ export default function About() {
           <div className={`${styles.lp_total_item} ${styles.item2}`}>
             <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
               <Image
-                src="/images/using pc.jpg" 
-                alt="using pc"
-                width={468}
-                height={312 }
-                delay={0.4}
+                src="/images/using pc.jpg"
+                alt="week pc"
+                width={468}         // 元画像の横幅
+                height={312}         // 元画像の高さ
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
           </div>
           <div className={`${styles.lp_total_item} ${styles.item3}`}>
             <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
               <Image
-                src="/images/using phone.jpg" 
-                alt="using phone"
-                width={468}
-                height={312 }
-                delay={0.4}
+                src="/images/using phone.jpg"
+                alt="week pc"
+                width={468}         // 元画像の横幅
+                height={312}         // 元画像の高さ
+                style={{ width: "100%", height: "auto" }}
               />
             </div>
           </div>
@@ -153,24 +154,27 @@ export default function About() {
             <p>学習塾RAPIDでは、RAPIDメソッドを<strong>指導日以外の家庭学習</strong>でも活用できるように<strong>学習支援ツールRAPI-LA</strong>を導入しています。RAPI-LAを使うことで５つのステップ通りに学習を進め、自分の学習成果を確認することができます。</p>
           </div>
         </div>
-        <h1>R英検準１級合格を目指すAさんの例</h1>
+        <h1>スケジュールの具体例</h1>
           <div className={styles.container}>
             <div className={styles.item}>
-              <p>学習塾RAPIDでは、RAPIDメソッドと家庭学習サポートを通じて、お子様の学習を支援します。
-              ここでは、英検準1級合格を目指すAさんの具体例をもとに、指導日とそれ以外の日の家庭学習の流れを見ていきましょう！</p>
-
-
+              <p>学習塾RAPIDでは、RAPIDメソッドと家庭学習サポートを通じて、お子様の学習を支援します。</p>
+              <p>ここでは、英検準2級合格を目指すAさんの事例をもとに、具体的な学習の流れについてご紹介します。</p>
+              <p>※学習時間はあくまでも目安です。このスケジュールでは6ヶ月で合格を目指す場合を想定しています。</p>
+              <Spacer height={15} />
+              <picture>
+                <source srcSet="/images/week-phone.png" media="(max-width: 768px)" />
+                <img src="/images/week-pc.png" alt="Responsive" />
+              </picture>
+              <Spacer height={15} />
+              <PointItem label="POINT1" text="週1回・90分間の講師とのレッスン" content="学習塾RAPIDでは講師とのレッスンで１週間の学習計画を立てます。Aさんは月曜日をレッスン日、それ以外の曜日を家庭学習日としています。"/>
+              <PointItem label="POINT2" text="RAPI-LAを通じて出題される毎日の復習課題" content="家庭学習の成果を確認するために、復習課題が出題されます。Aさんは英検合格の基礎となる単語学習を2日に１回復習することにしています。"/>
+              <PointItem label="POINT3" text="オンライン自習室を利用した学習" content="家庭学習日にはオンライン自習室を利用することができます。Aさんは苦手な速読トレーニングに集中するために火曜日と木曜日にオンライン自習室を利用するようです。"/>
+              <p>それでは、Aさんがこの学習計画をどのように立て、学習を実践していったのかを講師との具体的なやりとりから見ていきましょう！</p>
             </div>
-
           </div>
-          <img
-                src="/images/week pc.png"
-                alt="Another Image"
-                maxWidth="1080px"
-              />
 
-          <div className={styles.lp_cycle_container} style={{ backgroundColor:"#FFF0D7"}}>
-            <h2>指導日（月曜日）</h2>
+          <div className={`${styles.lp_cycle_container} ${styles.contentArea}`} style={{ backgroundColor:"#FFF0D7"}}>
+            <h2>レッスン日（月曜日）</h2>
             <h3 style={{ backgroundColor: "#F39700"}}>　STEP1 Reflect　自分の課題を振り返る</h3>
             <h4>指導日の最初の時間に、先週の学習成果を中テストで確認し、自分の苦手分野を振り返ります。</h4>
             <ChatMessage
@@ -196,7 +200,7 @@ export default function About() {
           </div>
 
 
-          <div className={styles.lp_cycle_container} style={{ backgroundColor:"rgba(236, 105, 72, 0.15)"}}>
+          <div className={`${styles.lp_cycle_container} ${styles.contentArea}`} style={{ backgroundColor:"rgba(236, 105, 72, 0.15)"}}>
             <h3 style={{ backgroundColor: "#EC6848"}}>　STEP2 Aim　目標を設定する</h3>
             <h4>自分の苦手分野を振り返ったら、それを元に講師と今週の学習目標を設定します。</h4>
             <ChatMessage
@@ -221,7 +225,7 @@ export default function About() {
             />
           </div>
 
-          <div className={styles.lp_cycle_container} style={{ backgroundColor:"rgba(196, 15, 36, 0.15)"}}>
+          <div className={`${styles.lp_cycle_container} ${styles.contentArea}`}  style={{ backgroundColor:"rgba(196, 15, 36, 0.15)"}}>
             <h3 style={{ backgroundColor:"#C40F24"}}>　STEP3 Plan　計画と戦略を立てる</h3>
             <h4>今週の目標を達成するための具体的な計画と戦略を立てます。</h4>
             <ChatMessage
@@ -246,7 +250,7 @@ export default function About() {
             />
           </div>
 
-          <div className={styles.lp_cycle_container} style={{ backgroundColor:"rgba(29, 33, 136, 0.15)"}}>
+          <div className={`${styles.lp_cycle_container} ${styles.contentArea}`}  style={{ backgroundColor:"rgba(29, 33, 136, 0.15)"}}>
             <h3 style={{ backgroundColor: "#1D2088"}}>　STEP4 Install　環境を整える</h3>
             <h4>集中できる環境と継続できる仕組みをつくります。</h4>
             <ChatMessage
@@ -271,7 +275,7 @@ export default function About() {
             />
           </div>
 
-          <div className={styles.lp_cycle_container} style={{ backgroundColor:"rgba(0, 159, 233, 0.15)"}}>
+          <div className={`${styles.lp_cycle_container} ${styles.contentArea}`} style={{ backgroundColor:"rgba(0, 159, 233, 0.15)"}}>
             <h2>家庭学習日（火曜日〜日曜日）</h2>
             <h3 style={{ backgroundColor: "#00A1E9"}}>　STEP5 Do　学習を実行する</h3>
             <h4>指導日の最初の時間に、先週の学習成果を中テストで確認し、自分の苦手分野を振り返ります。</h4>
@@ -294,7 +298,7 @@ export default function About() {
           </div>
         <h1>コース概要</h1>
         <h4>学習塾RAPIDでは、目的に合わせた２つのコースを選ぶことができます。</h4>
-        <div className={styles.container}>
+        <div className={`${styles.container} ${styles.contentArea}`} >
           <div className={styles.item}>
           <h4>①英検対策コース</h4>
           <p>最短３ヶ月で英検合格と本物の学習力を手にいれる短期間のコース。RAPIDメソッドの効果を試したいあなたにおすすめ。  </p>
@@ -305,7 +309,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className={styles.container}>
+        <div className={`${styles.container} ${styles.contentArea}`}>
           <div className={styles.item}>
           <h4>②入試対策コース</h4>
           <p>学習習慣を着実に改善しつつ高校入試・大学入試合格を目指す長期間のコース。部活や習い事と両立しながら学力を伸ばしたいあなたにおすすめ。  </p>
@@ -315,11 +319,12 @@ export default function About() {
           <ArrowButton text="入試対策コース　4ヶ月〜" width="100%"/>
           </div>
         </div>
-        <div style={{ backgroundColor:"#FFF0D7", width:"100%" ,display: "flex", justifyContent: "center"}}>
+        <Spacer height={30} />
 
-          <div style={{ backgroundColor:"#FFF0D7", width:"80%"}}>
-            <h1>申し込み方法</h1>
-            <div className={styles.consultation_container}>
+        <div style={{ backgroundColor:"#FFF0D7", width:"100%" ,display: "flex", justifyContent: "center", flexDirection: "column", textAlign: "center"}}>
+          <h1 style={{textAlign: "center"}}>申し込み方法</h1>
+          <div style={{ backgroundColor:"#FFF0D7"}}>
+            <div className={`${styles.consultation_container} ${styles.contentArea}`}>
               <div>
                 <div>
                   <h2>まずは無料のオンライン相談</h2>
@@ -338,8 +343,7 @@ export default function About() {
               </div>
 
               <div>
-                <p>さらに、オンライン相談をお申し込みいただいた方には、<br />
-                「毎日の勉強がかわる！3大無料特典」をお届けしています。</p>
+                <p>さらに、オンライン相談をお申し込みいただいた方には、毎日の勉強がかわる！3大無料特典」をお届けしています。</p>
 
                 <div>
                   <div>

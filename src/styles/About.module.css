@@ -1,18 +1,3 @@
-  .backButton {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #0070f3;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background 0.3s;
-  }
-  
-  .backButton:hover {
-    background-color: #005bb5;
-  }
 .body {
   display: flex; 
   flex-direction: column;
@@ -76,6 +61,11 @@
   display: block; /* 確実に表示させる */
 }
 
+.contentArea{
+  width: 80%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
 
 .container {
   margin-top: 20px;
@@ -159,6 +149,9 @@
   position: relative; /* 他の要素との位置調整 */
   flex-direction: column;
 }
+.lp_about_item1 >p{
+  padding-left: 30px;
+}
 
 .lp_circle_container {
   padding-top: 20px;
@@ -179,14 +172,6 @@
   flex-direction: column;
 }
 
-.lp_circle_item1 li{
-  list-style-type: none;
-  padding-left: 0; 
-}
-.lp_circle_item1 ul{
-  margin: 0;
-  padding: 0;
-}
 .lp_circle_item1 > div {
   width: 80%;
 }
@@ -273,8 +258,6 @@
 }
 
 .consultation_container {
-  font-family: sans-serif;
-  padding: 40px 20px;
   text-align: center;
   width: 100%;
 }
@@ -308,6 +291,7 @@
 
 .consultation_container > div:first-of-type li {
   margin-bottom: 8px;
+  list-style-type: none;
 }
 
 .consultation_container > div:first-of-type img {
@@ -389,20 +373,26 @@
 }
 
 .lp_flow_container{
-  width: 80%;
   margin:  auto;
   padding:  1rem;
 }
 .lp_flow_item {
-  width: 80%;
   margin: auto;
   padding: 1rem;
   border-radius: 8px;                /* ← 少し大きめの角丸 */
   border: 2px solid #F39700;         /* ← 枠線をきちんと表示 */
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* オプション：うっすら影 */
+  width:300px;
+  height:420px;
 }
-
+.lp_flow_item >img{
+  padding: 35px;
+}
+.lp_flow_item >h4,
+.lp_flow_item >p{
+  text-align: center;
+}
 
 /* スマホ対応 */
 @media (max-width: 768px) {
@@ -411,24 +401,32 @@
     padding-bottom: 0;
     margin-bottom: 0;
   }
+  .item{
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .lp_about_container,
   .lp_circle_container,
   .lp_cycle_container,
-  .lp_total_container  {
-    flex-direction: column;
-    width:95%;
-    padding-top: 10px;
-  }
+  .lp_total_container,
   .lp_circle_container div,
-  .lp_cycle_container div,
-  .lp_total_container div  {
+  .lp_total_container div, 
+  .consultation_container {
     flex-direction: column;
     width:95%;
     padding-top: 10px;
   }
+  /* .consultation_container > div >div,
+  .consultation_container > img,
+  .contentArea{
+    width: 100%;
+  } */
+
   .lp_circle_item1,
   .lp_circle_item2{
     padding-top: 20px;
   }
+  .lp_about_item1,
   .lp_circle_item1,
   .lp_circle_item2,
   .lp_circle_item2 div {
@@ -437,9 +435,7 @@
     text-align: center;
     padding: 5px;
   }
-  .lp_circle_item2 div {
-    width: 100%;
-  }
+
   .lp_circle_item1{
     text-align: left;
   }
@@ -465,10 +461,6 @@
   .body p{
     font-size: 0.8rem;
   }
-  .body>div{
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
   .lp_circle_item2 > p{
     font-size: 1.6rem;
     margin: -10px;
@@ -482,6 +474,38 @@
   .item2 { order: 2; }
   .item4 { order: 3; } /* ←④を先に */
   .item3 { order: 4; }
+
+  .lp_about_item1,
+  .consultation_container>div>img {
+    display: none; /* 768px以下の場合非表示 */
+  }
+  .consultation_container > div,
+  .consultation_container > div > div {
+    padding: 0;
+    margin: 0; /* 上下左右のパディングをすべて0に設定 */
+  }
+
+  .consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:first-of-type {
+    margin: 5px;
+  }
+  
+  .lp_about_item1 > p {
+    padding-left: 10px; /* 768px以下の場合非表示 */
+  }
+  .lp_flow_item  {
+    padding: 5px;
+    width:300px;
+    height:250px;
+  }  
+  .lp_flow_item >p {
+    padding: 2px;
+    font-size: 0.6rem;
+  }
+  .lp_flow_item >img {
+    padding: 10px;
+  }
+
+
 }
 
 .highlightText {

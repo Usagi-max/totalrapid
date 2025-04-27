@@ -1,0 +1,27 @@
+.point-item {
+    display: flex;           /* 横並び */
+    gap: 20px;               /* 要素同士の間を10px開ける */
+    align-items: center;     /* 縦位置を揃える（オプション） */
+    justify-content: flex-start; /* 左寄せ */
+}
+
+.point-item h3 {
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #F4D29A; /* 背景オレンジ */
+    border-radius: 15px;        /* 角丸 */
+    padding: 4px 20px;          /* 中の余白（オプションでキレイに見せる） */
+}
+
+.point-item p {
+font-weight: bold;        /* 太字 */
+}
+
+.point-container > p{
+    padding: 10px;
+}
+
+.point-container {
+    padding: 15px;
+}
