@@ -6,7 +6,6 @@
   align-items: center;
   width: 100%;
   height: auto;
-  /*background-color: #f0f0f0;*/
 }
 
 .body h1{
@@ -26,22 +25,27 @@
   padding-bottom: 5px;
 }
 .body h4{
-  margin:10px;
-  padding-bottom: 5px;
+  margin-top:10px;
+  margin-bottom:5px;
   text-align: left;
+}
+.body h5{
+  margin-top:10px;
+
 }
 .body p{
   margin:0px;
   text-align: left;
+  color: #0D0D0D;
 }
-.body b {
-  background: linear-gradient(90deg,  #E83E34, #F39700); /* オレンジ→赤のグラデーション */
-  -webkit-background-clip: text; /* テキストのみにグラデーションを適用 */
-  -webkit-text-fill-color: transparent; /* テキスト色を透明にする */
-  display: inline-block; /* インライン要素でも適用 */
-  position: relative; /* 疑似要素のために必要 */
+/* .body b {
+  background: linear-gradient(90deg,  #E83E34, #F39700); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  display: inline-block; 
+  position: relative; 
   font-weight: bold;
-}
+} */
 
 .body strong {
   position: relative; /* 擬似要素の位置基準 */
@@ -70,24 +74,21 @@
 .container {
   margin-top: 20px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1080px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
   height: auto;
-  /*background-color: #f0f0f0;*/
 }
 .item {
     flex: 1;
     display: flex;
     flex-direction: column;
-    /*margin: 5px;*/
-    padding: 20px;
     text-align: center;
-    /*background-color: lightblue;*/
-    /*border: 1px solid #333;*/
+    width: 100%;
+    max-width: 100%;
 }
 .item_img{
   width: 80%;
@@ -145,12 +146,14 @@
   justify-content: center; /* 水平方向に中央配置 */
   align-items: center; /* 垂直方向に中央配置 */
   margin-right: 0%; 
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   position: relative; /* 他の要素との位置調整 */
   flex-direction: column;
 }
 .lp_about_item1 >p{
   padding-left: 30px;
+  padding-right: 30px;
 }
 
 .lp_circle_container {
@@ -167,13 +170,13 @@
   justify-content: center; /* 水平方向に中央配置 */
   align-items: center; /* 垂直方向に中央配置 */
   margin-right: 0%; 
-  padding: 10px;
+  padding: 30px;
   position: relative; /* 他の要素との位置調整 */
   flex-direction: column;
 }
 
 .lp_circle_item1 > div {
-  width: 80%;
+  width: 100%;
 }
 
 .lp_circle_item2 {
@@ -182,7 +185,7 @@
   justify-content: center; /* 水平方向に中央配置 */
   align-items: center; /* 垂直方向に中央配置 */
   margin-right: 0%; 
-  padding: 10px;
+  padding: 30px;
   position: relative; /* 他の要素との位置調整 */
   flex-direction: column;
   text-align: center;
@@ -223,7 +226,7 @@
 
 .lp_cycle_container{
   width: 80%;
-  margin: 2rem auto;
+  margin: 15px auto;
   padding:  1rem;
 }
 .lp_cycle_container > h3 {
@@ -247,8 +250,8 @@
   gap: 16px;
   text-align: left;
 }
-.lp_total_container >div{
-  padding: 10px;
+.lp_total_item{
+  padding: 18px;
 }
 .lp_total_container >h2{
   padding: 10px;
@@ -304,12 +307,12 @@
 .consultation_container > div:nth-of-type(2) div {
   font-size: 28px;
   color: orange;
-  margin: 10px 0 10px;
 }
 
 .consultation_container > div:nth-of-type(3) {
   background: white;
   padding: 30px 20px;
+  margin-bottom: 10px;
 }
 
 .consultation_container > div:nth-of-type(3) > p {
@@ -375,6 +378,11 @@
 .lp_flow_container{
   margin:  auto;
   padding:  1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: middle;
+  max-width:1080px;
 }
 .lp_flow_item {
   margin: auto;
@@ -387,41 +395,56 @@
   height:420px;
 }
 .lp_flow_item >img{
-  padding: 35px;
+  padding: 25%;
 }
 .lp_flow_item >h4,
 .lp_flow_item >p{
   text-align: center;
 }
 
+@media screen and (min-width: 769px) and (max-width: 900px) {
+  .lp_about_container,
+  .lp_circle_container,
+  .lp_cycle_container,
+  .lp_total_container,
+  .consultation_container,
+  .feature_container,
+  .container {
+    width: 90%;
+  }
+}
+
 /* スマホ対応 */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
-    padding-bottom: 0;
-    margin-bottom: 0;
+    padding: 0px;
   }
   .item{
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
+    width: 100%;
   }
   .lp_about_container,
   .lp_circle_container,
   .lp_cycle_container,
   .lp_total_container,
-  .lp_circle_container div,
-  .lp_total_container div, 
-  .consultation_container {
+  .consultation_container,
+  .feature_container,
+  .container {
     flex-direction: column;
     width:95%;
     padding-top: 10px;
+    min-width: none;
   }
   /* .consultation_container > div >div,
   .consultation_container > img,
   .contentArea{
     width: 100%;
   } */
-
+  .feature_item{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
   .lp_circle_item1,
   .lp_circle_item2{
     padding-top: 20px;
@@ -433,7 +456,8 @@
     width: 100%;
     margin: 0;
     text-align: center;
-    padding: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
   }
 
   .lp_circle_item1{
@@ -449,6 +473,7 @@
     font-size: 1.2rem;
     margin-top:20px;
     margin-bottom:10px;
+    padding-top: 40px;
   }
   .body h2{
     font-size: 1.4rem;
@@ -456,7 +481,7 @@
   }
   .body h3{
     font-size: 0.9rem;
-    margin:5px;
+    margin-top:5px;
   }
   .body p{
     font-size: 0.8rem;
@@ -488,13 +513,36 @@
   .consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:first-of-type {
     margin: 5px;
   }
+
+  .consultation_container > div:nth-of-type(3) > div:first-of-type {
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  }
+  .consultation_container > div:nth-of-type(3) > div:first-of-type >div {
+    width: 60%;
+    text-align: center;
+    align-items: center;
+    min-width: 270px;
+  }
+  .consultation_container > div:nth-of-type(3) > div:first-of-type >div >p{
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  .consultation_container > div:nth-of-type(3) >div:nth-of-type(2){
+    font-size: 0.9rem;
+  }
   
   .lp_about_item1 > p {
-    padding-left: 10px; /* 768px以下の場合非表示 */
+    padding-top: 10px;
+  }
+  .lp_flow_container{
+    max-width: 545px;
   }
   .lp_flow_item  {
     padding: 5px;
-    width:300px;
+    max-width:145px;
     height:250px;
   }  
   .lp_flow_item >p {
@@ -502,10 +550,17 @@
     font-size: 0.6rem;
   }
   .lp_flow_item >img {
+    padding: 2  0%;
+  }
+  .consultation_container > div:nth-of-type(3) > div:last-of-type {
     padding: 10px;
   }
 
-
+}
+@media (max-width: 528px) {
+  .lp_flow_item{
+    height:220px;
+  }
 }
 
 .highlightText {

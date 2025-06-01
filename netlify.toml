@@ -1,2 +1,8 @@
 [build]
-  functions = "netlify-functions"  # Netlify Functionsのディレクトリを指定
+  functions = "netlify-functions"
+
+[[redirects]]
+  from = "/"
+  to = "/about"
+  status = 301
+  force = true

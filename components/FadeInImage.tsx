@@ -1,37 +1,39 @@
 // components/FadeInImage.tsx
 import { useEffect, useRef, useState } from "react";
-import Image, { ImageProps } from "next/image";
+import Image from "next/image";
 import styles from "./FadeInImage.module.css";
 import React from "react";
 
-type FadeInImageProps = ImageProps & {
-  delay?: number; // 秒単位で遅延指定（例: 0.5, 1, 1.5）
+type FadeInImageProps = {
+  src: string;
+  alt: string;
+  delay?: number;
+  aspectRatio?: string; // 追加: '16/9', '4/3' など任意
+  objectFit?: "contain" | "cover";
 };
 
-const FadeInImage = ({ delay = 0, ...props }: FadeInImageProps) => {
+const FadeInImage = ({
+  delay = 0,
+  aspectRatio = "16/9",
+  objectFit = "cover",
+  ...props
+}: FadeInImageProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
+        else setIsVisible(false);
       },
       { threshold: 0.1 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
+    if (containerRef.current) observer.observe(containerRef.current);
 
     return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
+      if (containerRef.current) observer.unobserve(containerRef.current);
     };
   }, []);
 
@@ -39,16 +41,17 @@ const FadeInImage = ({ delay = 0, ...props }: FadeInImageProps) => {
     <div
       ref={containerRef}
       className={`${styles.fadeInImage_container} ${isVisible ? styles.visible : ""}`}
-      style={{
-        transitionDelay: `${delay}s`, // ← 遅延をここで適用
-      }}
+      style={{ transitionDelay: `${delay}s`, aspectRatio }}
     >
       <Image
-        {...props}
+        src={props.src}
+        alt={props.alt}
+        fill
         style={{
-          ...props.style,
-          display: "block",
+          objectFit,
         }}
+        sizes="100vw"
+        priority
       />
     </div>
   );

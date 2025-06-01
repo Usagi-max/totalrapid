@@ -29,7 +29,7 @@ export default function ChatMessage({
           style={{ backgroundColor: bubbleColor }}
         ></div>
       </div>
-      {isUser && <img src={icon} alt="icon" className={styles.icon} />}
+      {isUser && <img src={icon} alt="icon" className={styles.icon_user} />}
     </div>
   );
 }

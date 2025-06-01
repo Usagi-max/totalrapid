@@ -2,7 +2,7 @@
     display: flex;
     justify-content: left;
     align-items: left;
-    padding: 1rem 2rem;
+    padding: 0.5rem 2rem;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 1s ease-out, transform 1s ease-out;
@@ -17,7 +17,7 @@
     position: relative;
     display: inline-block;
     font-weight: bold;
-    font-size: clamp(0.8rem, 5vw, 1.5rem);
+    font-size: clamp(0.7rem, 4.8vw, 1.5rem);
     color: white;
     padding: 0.5em 1em;
     overflow: hidden;
@@ -47,3 +47,6 @@
     animation: bgSlide 3s linear infinite;
   }
   
+  @media (max-width: 768px) {
+
+  }
