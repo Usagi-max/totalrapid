@@ -330,11 +330,12 @@ export default function About() {
           <p>最短3ヶ月で英検合格と本物の学習力を手にいれる短期間のコース。RAPIDメソッドの効果を試したいあなたにおすすめ。  </p>
           </div>
           <div className={styles.feature_item} >
+          <Spacer height={20} />
           <img src="/images/rabbit.png" alt="rabbit" style={{ width: "10%", height: "auto" }}/>
           <ArrowButton text="英検対策コース　3〜4ヶ月" width="85%" />
           </div>
         </div>
-
+        <Spacer height={40} />
         <div className={`${styles.feature_container} ${styles.contentArea}`}>
           <div className={styles.feature_item}>
           <h4>2. 入試対策コース</h4>
@@ -369,7 +370,7 @@ export default function About() {
               </div>
 
               <div>
-                <p>さらに、オンライン相談をお申し込みいただいた方には、毎日の勉強がかわる！3大無料特典」をお届けしています。</p>
+                <p>さらに、オンライン相談をお申し込みいただいた方には、「毎日の勉強がかわる！3大無料特典」をお届けしています。</p>
 
                 <div>
                   <div>
