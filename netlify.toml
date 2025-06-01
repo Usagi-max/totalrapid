@@ -1,7 +1,11 @@
 [build]
   functions = "netlify-functions"
+  command = "npm run build"
 
-[[redirects]]
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[[redirect]]
   from = "/"
   to = "/about"
   status = 301
