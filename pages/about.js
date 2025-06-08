@@ -389,10 +389,26 @@ export default function About() {
                     <p>体験授業</p>
                   </div>
                 </div>
-
-                <div>
-                  <a href="https://lin.ee/Nwh2C8u" target="_blank" rel="noopener noreferrer">無料カウンセリングに申し込んで<BreakOnSmallScreen/>特典を受け取る</a>
+                <Spacer height={20} />
+                <h3 style={{textAlign: "center"}}>無料カウンセリングに申し込んで<BreakOnSmallScreen/>特典を受け取る</h3>
+                <Spacer height={10} />
+                <div className={`${styles.button_link}`}>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header" target="_blank" rel="noopener noreferrer">フォームで問い合わせる</a>
                 </div>
+                {/* <HoverButton
+                        text="フォームで問い合わせる"
+                        linkTo="https://drive.google.com/file/d/1w22PvlFzD894mqTUFkZGNG3wY9vtpAVR/view?usp=drive_link"
+                        normalTextColor="#ffffff"
+                        hoverTextColor="green"
+                        normalBgColor="#000000"
+                        hoverBgColor="orange" 
+                    /> */}
+                <Spacer height={20} />
+
+                <div className={`${styles.button_link}`}>
+                  <a href="https://lin.ee/Nwh2C8u" target="_blank" rel="noopener noreferrer">LINEで問い合わせる</a>
+                </div>
+
               </div>
             </div>  
           </div>
