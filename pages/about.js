@@ -11,7 +11,45 @@ import Spacer from '../components/Spacer';
 import BreakOnSmallScreen from "../components/BreakOnSmallScreen";
 import BreakOnBigScreen from "../components/BreakOnBigScreen";
 import HoverButton from "../components/HoverButton";
+import ReviewSlider from '../components/ReviewSlider';
 
+const reviews = [
+  {
+    grade: '中1',
+    gender: '男',
+    nickname: 'Tさん',
+    icon: '/images/parent_icon_brother.png',
+    comment: 'とても分かりやすい授業です！国語がかなり苦手なのですが、どんなに間違っても先生は優しく丁寧に教えてくださいます。社会・国語・英語は、先生にお願いしています。',
+  },
+  {
+    grade: '中2',
+    gender: '女',
+    nickname: 'Sさん',
+    icon: '/images/parent_icon_user.jpg',
+    comment: '先生独自で作ってくださったプリントと先生の解説がとてもわかりやすくて良かったです！',
+  },
+  {
+    grade: '中1',
+    gender: '女',
+    nickname: 'Nさん',
+    icon: '/images/parent_icon_dog.png',
+    comment: '分かりやすくて、教え方がうまくて、一気にちゃんと頭にはいってきました。とてもよかったです！テスト頑張ります！',
+  },
+  {
+    grade: '中3',
+    gender: '女',
+    nickname: 'Hさん',
+    icon: '/images/parent_icon_flower.png',
+    comment: '先生から提案いただいた試験問題を解いてみて、意外とよく解けたこと、褒めてもらったことなど、とても励みになったようです。',
+  },
+  {
+    grade: '中1',
+    gender: '男',
+    nickname: 'Aさん',
+    icon: '/images/parent_icon_user.jpg',
+    comment: 'いつもありがとうございます。学校のプリントに合わせた問題を作ってくれたのがとても助かっています。',
+  },
+];
 
 export default function About() {
   return (
@@ -158,6 +196,12 @@ export default function About() {
             <h2>学習支援ツールRAPI-LA</h2>
             <p>学習塾RAPIDでは、RAPIDメソッドを<strong>毎日の</strong><strong>家庭学習</strong>でも活用できるように<strong>学習支援ツール</strong><strong>RAPI-LA</strong>を導入しています。RAPI-LAを使うことで５つのステップ通りに学習を進め、自分の学習成果を確認することができます。</p>
           </div>
+        </div>
+
+        <Spacer height={30} />
+        <div style={{maxWidth: "100%"}}>
+        <h1 style={{textAlign: "center"}}>保護者の口コミ</h1>
+          <ReviewSlider reviews={reviews} interval={4000} />
         </div>
 
         <div style={{width:"100%",display: "flex", justifyContent: "center", alignItems: "center", flexDirection:"column",padding:"20px"}}>
