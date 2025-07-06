@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Script from "next/script"; // GAスクリプト読み込みに必要
-import "@/styles/globals.css";
+import "../src/styles/globals.css";
 import * as gtag from "../lib/gtag"; // 追加
 
 export default function App({ Component, pageProps }) {

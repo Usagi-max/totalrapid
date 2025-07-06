@@ -1,0 +1,58 @@
+.container {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: white;
+}
+
+.heading {
+  text-align: center;
+  font-size: 2rem;
+  color: orange;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+
+/* カードのスライダー部分 */
+.sliderWrapper {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: stretch;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+/* カードコンテナ（アニメーション・影付き） */
+.cardContainer {
+  flex: 1 1 0;
+  min-width: 250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cardContainer:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* 戻るボタン */
+.backButtonWrapper {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.backButton {
+  padding: 12px 24px;
+  font-size: 1rem;
+  border-radius: 6px;
+  background-color: orange;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.backButton:hover {
+  background-color: #fff;
+  color: orange;
+  border: 2px solid orange;
+}

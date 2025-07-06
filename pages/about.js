@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Layout from "../components/Layout";
+import Link from "next/link";
 import styles from "../src/styles/About.module.css";
 import ChatMessage from "../components/ChatMessage";
 import ArrowButton from "../components/ArrowButton";
@@ -12,6 +13,11 @@ import BreakOnSmallScreen from "../components/BreakOnSmallScreen";
 import BreakOnBigScreen from "../components/BreakOnBigScreen";
 import HoverButton from "../components/HoverButton";
 import ReviewSlider from '../components/ReviewSlider';
+import NoteCard from "../components/NoteCard";
+import dynamic from 'next/dynamic';
+
+// TypeScriptのTSXコンポーネントを動的に読み込む（SSRを回避）
+const CourseTable = dynamic(() => import('../components/CourseTable'), { ssr: false });
 
 const reviews = [
   {
@@ -200,8 +206,45 @@ export default function About() {
 
         <Spacer height={30} />
         <div style={{maxWidth: "100%"}}>
-        <h1 style={{textAlign: "center"}}>保護者の口コミ</h1>
+        <h1 style={{textAlign: "center"}}>保護者様の口コミ</h1>
           <ReviewSlider reviews={reviews} interval={4000} />
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: "40px" }}>
+            <HoverButton
+                text="公式LINEから問い合わせる"
+                linkTo="https://lin.ee/Nwh2C8u"
+                normalTextColor="#ffffff"
+                normalBgColor="#00B900"
+                normalBorderColor="#ffffff"
+                hoverTextColor="#00B900"
+                hoverBgColor="#ffffff"
+                hoverBorderColor="#00B900"
+            />
+            <Spacer height={5} />
+
+            <HoverButton
+                text="問い合わせフォームから問い合わせる"
+                linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
+                normalTextColor="#ffffff"
+                normalBgColor="black"
+                normalBorderColor="#ffffff"
+                hoverTextColor="black"
+                hoverBgColor="#ffffff"
+                hoverBorderColor="black"
+            />
+            <Spacer height={5} />
+
+            <HoverButton
+            text="料金・コース詳細はコチラ！"
+            linkTo="/prices"
+                normalTextColor="#ffffff"
+                normalBgColor="orange"
+                normalBorderColor="#ffffff"
+                hoverTextColor="orange"
+                hoverBgColor="#ffffff"
+                hoverBorderColor="orange"
+        />
         </div>
 
         <div style={{width:"100%",display: "flex", justifyContent: "center", alignItems: "center", flexDirection:"column",padding:"20px"}}>
@@ -366,7 +409,7 @@ export default function About() {
               />
           </div>
         </div>
-        <h1>コースの特徴</h1>
+        {/* <h1>コースの特徴</h1>
         <h4>学習塾RAPIDでは、目的に合わせた<BreakOnSmallScreen/>2つのコースを選ぶことができます。</h4>
         <div className={`${styles.feature_container} ${styles.contentArea}`} >
           <div className={styles.feature_item}>
@@ -390,6 +433,16 @@ export default function About() {
           <ArrowButton text="入試対策コース　4ヶ月〜" width="100%"/>
           </div>
         </div>
+        <NoteCard
+          title="勉強しながら〇〇せよ！学習の質を10倍に高める学習の進め方"
+          description="勉強が得意な人が無意識に行なっている「自己調整学習」では、次の５つのステップで学習を進めることが重要です。"
+          imageUrl="https://assets.st-note.com/production/uploads/images/186680668/rectangle_large_type_2_3bb33ac6f3050851c65032fdefbaedc2.png?width=1200"
+          link="https://note.com/tatal_rapid/n/n3404706618da"
+        /> */}
+
+        
+
+
         <Spacer height={90} />
 
         <div style={{ backgroundColor:"#FFF0D7", width:"100%" ,display: "flex", justifyContent: "center", flexDirection: "column", textAlign: "center"}}>

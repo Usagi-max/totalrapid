@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 
 const HoverButton = ({
   text,
@@ -7,13 +8,14 @@ const HoverButton = ({
   hoverTextColor,
   normalBgColor,
   hoverBgColor,
+  normalBorderColor, // ✅ 追加
+  hoverBorderColor,  // ✅ 既存
+  openInNewTab = true,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const isInternal = linkTo.startsWith("/");
 
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
-  const handleClick = () => setIsActive(true);
+  const defaultHoverBorderColor = "#333";
 
   const buttonStyle = {
     padding: "10px 20px",
@@ -24,21 +26,49 @@ const HoverButton = ({
     backgroundColor: isHovered ? hoverBgColor || "#ff6347" : normalBgColor || "#6495ed",
     transition: "all 0.3s ease",
     cursor: "pointer",
-    border: "none",
-    outline: "none",
-    textDecoration: "none", // リンクの下線を消す
-    display: "inline-block", // サイズ調整
+    textDecoration: "none",
+    display: "inline-block",
+
+    // ✅ ボーダー条件分岐
+    border: isHovered
+      ? `2px solid ${hoverBorderColor || defaultHoverBorderColor}`
+      : normalBorderColor
+      ? `2px solid ${normalBorderColor}`
+      : "none",
   };
 
-  return (
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+
+  const ButtonTag = isInternal ? Link : "a";
+  const buttonProps = isInternal
+    ? {
+        href: linkTo,
+        passHref: true,
+        legacyBehavior: true,
+      }
+    : {
+        href: linkTo,
+        target: openInNewTab ? "_blank" : "_self",
+        rel: openInNewTab ? "noopener noreferrer" : undefined,
+      };
+
+  return isInternal ? (
+    <Link {...buttonProps}>
+      <a
+        style={buttonStyle}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {text}
+      </a>
+    </Link>
+  ) : (
     <a
-      href={linkTo}
-      target="_blank"
-      rel="noopener noreferrer"
+      {...buttonProps}
       style={buttonStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
     >
       {text}
     </a>
