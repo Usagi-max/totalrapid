@@ -505,6 +505,10 @@ export default function About() {
                 <div className={`${styles.button_link}`}>
                   <a href="https://lin.ee/Nwh2C8u" target="_blank" rel="noopener noreferrer">LINEで問い合わせる</a>
                 </div>
+                <Spacer height={20} />
+                <div className={`${styles.button_link}`}>
+                  <a href="/prices" rel="noopener noreferrer">料金表・コース詳細はこちら</a>
+                </div>
 
               </div>
             </div>  
