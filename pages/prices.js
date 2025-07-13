@@ -5,6 +5,7 @@ import ReviewSlider from '../components/ReviewSlider';
 import Spacer from '../components/Spacer';
 import CourseTable from "../components/CourseTable";
 import HoverButton from "../components/HoverButton";
+import Layout, { siteTitle } from "../components/Layout";
 
 export default function NoteListPage() {
   const notes = [
@@ -66,12 +67,12 @@ export default function NoteListPage() {
 ];
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>学習塾RAPID | 料金表</title>
         <link rel="icon" href="/images/アイコン　文字なし.png" />
       </Head>
-      <div style={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{  maxWidth: "1200px", margin: "0 auto" }}>
         
         <h1 style={{ textAlign: "center", marginBottom: "40px" }}>指導料金とコースの特徴</h1>
         <CourseTable></CourseTable>
@@ -127,7 +128,7 @@ export default function NoteListPage() {
 
         {/* 戻るボタン */}
         <div style={{ textAlign: "center", marginTop: "40px" }}>
-        <HoverButton
+        {/* <HoverButton
             text="元のページに戻る"
             linkTo="/about"
                 normalTextColor="orange"
@@ -136,9 +137,9 @@ export default function NoteListPage() {
                 hoverTextColor="#ffffff"
                 hoverBgColor="orange"
                 hoverBorderColor="#ffffff"
-        />
+        /> */}
         </div>
       </div>
-    </>
+    </Layout>
   );
 }

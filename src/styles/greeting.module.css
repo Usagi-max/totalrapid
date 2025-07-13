@@ -1,0 +1,56 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* 広い画面では左右並び */
+.greetingSection {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.greetingText {
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.greetingImage img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.profileSection {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* レスポンシブ（狭い画面） */
+@media (max-width: 768px) {
+  .greetingSection {
+    flex-direction: column;
+  }
+
+  .greetingText {
+    order: 1;
+  }
+
+.greetingText >p{
+    font-size: 14px;
+  }
+  .greetingImage {
+    order: 2;
+    margin-top: 1rem;
+  }
+
+  .profileSection {
+    order: 3;
+    margin-top: 2rem;
+  }
+}

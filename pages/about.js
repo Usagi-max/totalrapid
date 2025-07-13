@@ -59,7 +59,7 @@ const reviews = [
 
 export default function About() {
   return (
-    <>
+    <Layout>
       <Head>
         <title>学習塾RAPID</title>
         <link rel="icon" href="/images/アイコン　文字なし.png" />
@@ -536,6 +536,6 @@ export default function About() {
           </div>
         </div> */}
       </div>
-    </>
+    </Layout>
   );
 }
