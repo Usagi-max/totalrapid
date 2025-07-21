@@ -26,6 +26,7 @@ export default function Layout({ children, home }) {
 
   const navLinks = [
     { href: "/about", label: "TOP" },
+    { href: "/greetings", label: "塾長挨拶" },
     { href: "/prices", label: "指導料金とコースの特徴" },
     { href: "https://lin.ee/Nwh2C8u", label: "公式LINE" },
     {

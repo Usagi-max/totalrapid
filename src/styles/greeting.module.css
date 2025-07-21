@@ -1,21 +1,84 @@
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* 広い画面では左右並び */
 .greetingSection {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem;
   display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-  margin-bottom: 2rem;
-}
-
-.greetingText {
-  flex: 1;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: white;
   font-size: 1.1rem;
   line-height: 1.6;
+}
+
+/* 背景画像とフィルター */
+.greetingSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/student teacher.jpeg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(20px);
+  z-index: -2;
+}
+
+.greetingSection::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: -1;
+}
+
+/* 最大幅とレイアウト */
+.greetingContentWrapper {
+  max-width: 1200px;
+  width: 100%;
+  gap: 2rem;
+  align-items: center;
+  z-index: 1;
+}
+
+/* テキストエリア */
+.greetingText {
+  flex: 1;
+  color: white;
+  font-size: 1.0rem;
+  line-height: 1.6;
+}
+
+.profileWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start; 
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;   /* 縦方向に並べる */
+  justify-content: flex-start;  /* 上寄せにする */
+  height: 100%; 
+}
+
+.profileText p {
+  margin: 0;
+}
+/* 画像エリア */
+.greetingImage {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .greetingImage img {
@@ -26,14 +89,9 @@
   object-fit: cover;
 }
 
-.profileSection {
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-/* レスポンシブ（狭い画面） */
+/* モバイル対応 */
 @media (max-width: 768px) {
-  .greetingSection {
+  .profileWrapper {
     flex-direction: column;
   }
 
@@ -41,16 +99,13 @@
     order: 1;
   }
 
-.greetingText >p{
-    font-size: 14px;
-  }
   .greetingImage {
     order: 2;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
 
-  .profileSection {
-    order: 3;
-    margin-top: 2rem;
+  .p {
+    font-size: 14px;
+    width: 100%;
   }
 }

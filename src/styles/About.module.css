@@ -415,6 +415,25 @@
   text-align: center;
 }
 
+.button_container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  /* 初期は非表示 */
+  display: none;
+  /* ボタンらしい見た目 */
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.3s ease;
+}
+
+
 @media screen and (min-width: 769px) and (max-width: 900px) {
   .lp_about_container,
   .lp_circle_container,

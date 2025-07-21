@@ -4,54 +4,92 @@
   margin: 0 auto;
   background-color: #fff;
   font-family: sans-serif;
-}
-
-.heading {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  color: #333;
-  border-left: 4px solid #333;
-  padding-left: 10px;
-}
-
-.description {
-  font-size: 14px;
-  margin-bottom: 20px;
   line-height: 1.6;
+}
+
+/* サービス表 */
+.serviceTable {
+  max-width: 800px;
+  margin: 0 auto 60px auto;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border: 1px solid #eee;
+  overflow-x: auto;
+}
+
+.serviceList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.serviceList li {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 1.1rem;
   color: #333;
+  line-height: 1.75;
+}
+
+.serviceList li:last-child {
+  border-bottom: none;
+}
+
+.checkMark {
+  display: inline-block;
+  width: 18px;
+  height: 10px;
+  margin-right: 16px;
+  border-left: 3px solid #00b900;
+  border-bottom: 3px solid #00b900;
+  transform: rotate(-45deg);
+  margin-top: 4px;
+  box-sizing: content-box;
+}
+
+/* 料金表 */
+.priceTableWrapper {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border: 1px solid #eee;
+  overflow-x: auto;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 24px;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: box-shadow 0.3s ease; /* ✅ なめらかに影をつける */
-}
-
-/* ✅ ホバー時にだけ影をつける */
-.table:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .table th {
-  background-color: #f0f0f0;
   color: #333;
   font-weight: bold;
   font-size: 15px;
-  padding: 14px;
+  padding: 16px 14px;
   text-align: left;
   border-bottom: 2px solid #e0e0e0;
+  background-color: #fff;
 }
 
 .table td {
-  padding: 16px;
+  padding: 18px 14px;
   font-size: 14px;
   color: #333;
   border-bottom: 1px solid #eee;
+  vertical-align: top;
+  line-height: 1.75;
+}
+
+/* 行ホバーで視認性アップ */
+.table tr:hover {
+  background-color: #fcfcfc;
 }
 
 .table td:not(:last-child),
@@ -59,11 +97,12 @@
   border-right: none;
 }
 
-/* ✅ 三ヶ月コースだけ背景を薄オレンジ */
+/* おすすめコース行の背景 */
 .recommendRow {
   background-color: #fff8f0;
 }
 
+/* おすすめバッジ */
 .recommendInline {
   display: inline-block;
   margin-left: 10px;
@@ -77,8 +116,43 @@
   line-height: 1;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  animation: pulseColor 3.6s ease-in-out infinite;
 }
 
+.table td {
+  padding: 18px 14px;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+  line-height: 1.75;
+}
+
+/* ✅ 最終行だけ下罫線を消す */
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+
+@keyframes pulseColor {
+  0% {
+    background-color: #f39700;
+    color: #fff;
+    border: 1px solid #fff;
+  }
+  50% {
+    background-color: #fff;
+    color: #f39700;
+    border: 1px solid #f39700;
+  }
+  100% {
+    background-color: #f39700;
+    color: #fff;
+    border: 1px solid #fff;
+  }
+}
+
+/* 注意書き */
 .notes {
   font-size: 12px;
   margin-top: 16px;
@@ -86,4 +160,26 @@
   color: #777;
   line-height: 1.5;
   list-style: none;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .serviceTable,
+  .priceTableWrapper {
+    padding: 24px;
+  }
+
+  .serviceList li {
+    font-size: 1rem;
+  }
+
+  .table td,
+  .table th {
+    font-size: 13px;
+    padding: 12px;
+  }
 }

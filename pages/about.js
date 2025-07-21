@@ -15,6 +15,7 @@ import HoverButton from "../components/HoverButton";
 import ReviewSlider from '../components/ReviewSlider';
 import NoteCard from "../components/NoteCard";
 import dynamic from 'next/dynamic';
+import ScrollButton from "../components/ScrollButton";
 
 // TypeScriptのTSXコンポーネントを動的に読み込む（SSRを回避）
 const CourseTable = dynamic(() => import('../components/CourseTable'), { ssr: false });
@@ -98,8 +99,48 @@ export default function About() {
           </div>
         </div>
         <Spacer height={80} />
+          <ScrollButton targetClass="lp_total_item">
+            <a href="#price-table">料金表へ</a>
+            {/* <HoverButton
+                text="公式LINEから問い合わせる"
+                linkTo="https://lin.ee/Nwh2C8u"
+                normalTextColor="#ffffff"
+                normalBgColor="#00B900"
+                normalBorderColor="#ffffff"
+                hoverTextColor="#00B900"
+                hoverBgColor="#ffffff"
+                hoverBorderColor="#00B900"
+                width="350px"
+            />
+            <Spacer height={5} />
 
-        <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", paddingBottom:"80px"}}>
+            <HoverButton
+                text="問い合わせフォームから問い合わせる"
+                linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
+                normalTextColor="#ffffff"
+                normalBgColor="black"
+                normalBorderColor="#ffffff"
+                hoverTextColor="black"
+                hoverBgColor="#ffffff"
+                hoverBorderColor="black"
+                width="350px"
+            />
+            <Spacer height={5} />
+
+            <HoverButton
+            text="料金・コース詳細はコチラ！"
+            linkTo="/prices"
+                normalTextColor="#ffffff"
+                normalBgColor="orange"
+                normalBorderColor="#ffffff"
+                hoverTextColor="orange"
+                hoverBgColor="#ffffff"
+                hoverBorderColor="orange"
+                width="350px"
+        /> */}
+       </ScrollButton>
+
+        {/* <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", paddingBottom:"80px"}}>
           <div className={styles.contentArea}  style={{display: "flex", justifyContent: "center"}}>
             <h1>学習習慣を改善するステップ</h1>
           </div>
@@ -140,7 +181,7 @@ export default function About() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <h1>学習塾RAPIDが選ばれる理由</h1>
         <Spacer height={50} />
@@ -210,7 +251,7 @@ export default function About() {
           <ReviewSlider reviews={reviews} interval={4000} />
         </div>
 
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
+        <div className={styles.container} style={{ textAlign: "center", marginTop: "40px" }}>
             <HoverButton
                 text="公式LINEから問い合わせる"
                 linkTo="https://lin.ee/Nwh2C8u"
@@ -220,6 +261,7 @@ export default function About() {
                 hoverTextColor="#00B900"
                 hoverBgColor="#ffffff"
                 hoverBorderColor="#00B900"
+                width="350px"
             />
             <Spacer height={5} />
 
@@ -232,6 +274,7 @@ export default function About() {
                 hoverTextColor="black"
                 hoverBgColor="#ffffff"
                 hoverBorderColor="black"
+                width="350px"
             />
             <Spacer height={5} />
 
@@ -244,6 +287,7 @@ export default function About() {
                 hoverTextColor="orange"
                 hoverBgColor="#ffffff"
                 hoverBorderColor="orange"
+                width="350px"
         />
         </div>
 

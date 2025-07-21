@@ -10,6 +10,7 @@ const HoverButton = ({
   hoverBgColor,
   normalBorderColor, // ✅ 追加
   hoverBorderColor,  // ✅ 既存
+  width,             // ✅ 新規追加（例: "150px", "100%", "auto" など）
   openInNewTab = true,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -28,14 +29,15 @@ const HoverButton = ({
     cursor: "pointer",
     textDecoration: "none",
     display: "inline-block",
-
-    // ✅ ボーダー条件分岐
     border: isHovered
       ? `2px solid ${hoverBorderColor || defaultHoverBorderColor}`
       : normalBorderColor
       ? `2px solid ${normalBorderColor}`
       : "none",
+    width: width ? width : undefined,
+    textAlign: "center",  // ← ここを追加
   };
+
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
