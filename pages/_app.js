@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
 
       if (!hasVisited) {
         sessionStorage.setItem("visited", "true");
-        router.replace("/about");
+        router.replace("/study-management");
       }
     }
   }, [router]);
