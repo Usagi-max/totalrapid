@@ -9,7 +9,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/about',
+        destination: '/study-management',
         permanent: true,  // 301リダイレクト（ブラウザはキャッシュ）
       },
     ];
