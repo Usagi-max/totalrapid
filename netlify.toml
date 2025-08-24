@@ -8,6 +8,6 @@
 
 [[redirect]]
   from = "/"
-  to = "/about"
+  to = "/study-management"
   status = 301
   force = true
