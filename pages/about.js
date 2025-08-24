@@ -15,7 +15,7 @@ import HoverButton from "../components/HoverButton";
 import ReviewSlider from '../components/ReviewSlider';
 import NoteCard from "../components/NoteCard";
 import dynamic from 'next/dynamic';
-import ScrollButton from "../components/ScrollButton";
+import SurveyWidget from '../components/SurveyWidget';
 
 // TypeScriptのTSXコンポーネントを動的に読み込む（SSRを回避）
 const CourseTable = dynamic(() => import('../components/CourseTable'), { ssr: false });
@@ -99,46 +99,7 @@ export default function About() {
           </div>
         </div>
         <Spacer height={80} />
-          <ScrollButton targetClass="lp_total_item">
-            <a href="#price-table">料金表へ</a>
-            {/* <HoverButton
-                text="公式LINEから問い合わせる"
-                linkTo="https://lin.ee/Nwh2C8u"
-                normalTextColor="#ffffff"
-                normalBgColor="#00B900"
-                normalBorderColor="#ffffff"
-                hoverTextColor="#00B900"
-                hoverBgColor="#ffffff"
-                hoverBorderColor="#00B900"
-                width="350px"
-            />
-            <Spacer height={5} />
-
-            <HoverButton
-                text="問い合わせフォームから問い合わせる"
-                linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
-                normalTextColor="#ffffff"
-                normalBgColor="black"
-                normalBorderColor="#ffffff"
-                hoverTextColor="black"
-                hoverBgColor="#ffffff"
-                hoverBorderColor="black"
-                width="350px"
-            />
-            <Spacer height={5} />
-
-            <HoverButton
-            text="料金・コース詳細はコチラ！"
-            linkTo="/prices"
-                normalTextColor="#ffffff"
-                normalBgColor="orange"
-                normalBorderColor="#ffffff"
-                hoverTextColor="orange"
-                hoverBgColor="#ffffff"
-                hoverBorderColor="orange"
-                width="350px"
-        /> */}
-       </ScrollButton>
+        <SurveyWidget />
 
         {/* <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", paddingBottom:"80px"}}>
           <div className={styles.contentArea}  style={{display: "flex", justifyContent: "center"}}>
@@ -269,11 +230,11 @@ export default function About() {
                 text="問い合わせフォームから問い合わせる"
                 linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
                 normalTextColor="#ffffff"
-                normalBgColor="black"
+                normalBgColor="#494949ff"
                 normalBorderColor="#ffffff"
-                hoverTextColor="black"
+                hoverTextColor="#494949ff"
                 hoverBgColor="#ffffff"
-                hoverBorderColor="black"
+                hoverBorderColor="#494949ff"
                 width="350px"
             />
             <Spacer height={5} />
@@ -307,13 +268,17 @@ export default function About() {
                 <Spacer height={30} />
                 <div style={{justifyContent:"center", display:"flex", width: "100%"}}>
                   <div style={{width:"500px",maxWidth:"100%"}}>
+
                     <HoverButton
-                        text="より詳細なカリキュラムを確認したい方はコチラ！"
+                        text="より詳細なカリキュラムはコチラ！"
                         linkTo="https://drive.google.com/file/d/1w22PvlFzD894mqTUFkZGNG3wY9vtpAVR/view?usp=drive_link"
                         normalTextColor="#ffffff"
-                        hoverTextColor="#000000"
-                        normalBgColor="#000000"
-                        hoverBgColor="orange"
+                        normalBgColor="#494949ff"
+                        normalBorderColor="#ffffff"
+                        hoverTextColor="#494949ff"
+                        hoverBgColor="#ffffff"
+                        hoverBorderColor="#494949ff"
+                        width="350px"
                     />
                   </div>
                 </div>

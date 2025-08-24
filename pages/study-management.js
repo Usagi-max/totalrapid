@@ -1,13 +1,16 @@
-// pages/prices.js
+// pages/study-management.js
+import styles from "../src/styles/study-management.module.css";
 import Head from "next/head";
 import NoteCard from "../components/NoteCard";
-import ReviewSlider from '../components/ReviewSlider';
-import Spacer from '../components/Spacer';
+import ReviewSlider from "../components/ReviewSlider";
+import Spacer from "../components/Spacer";
 import CourseTable from "../components/CourseTable";
 import HoverButton from "../components/HoverButton";
 import Layout, { siteTitle } from "../components/Layout";
+import SurveyWidget from '../components/SurveyWidget';
 
 export default function NoteListPage() {
+  const images = [1, 2, 3, 4, 5].map((n) => `/images/${n}.png`);
   const notes = [
     {
         title:"勉強しながら〇〇せよ！学習の質を10倍に高める学習の進め方",
@@ -62,45 +65,27 @@ export default function NoteListPage() {
     gender: '男',
     nickname: 'Aさん',
     icon: '/images/parent_icon_user.jpg',
-    comment: 'いつもありがとうございます。学校のプリントに合わせた問題を作ってくれたのがとても助かっています。',
+    comment: '先生が徹底管理してくださるおかげで、疲れているときでもくじけずに勉強に取り掛かることが出来ました。一人では難しかったと思います',
   },
 ];
 
   return (
     <Layout>
-      <Head>
-        <title>学習塾RAPID | 料金表</title>
-        <link rel="icon" href="/images/アイコン　文字なし.png" />
-      </Head>
-      <div style={{  maxWidth: "1200px", margin: "0 auto" }}>
-        
-        <h1 style={{ textAlign: "center", marginBottom: "40px" }}>指導料金とコースの特徴</h1>
-        <CourseTable></CourseTable>
-        
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
-            <HoverButton
-                text="公式LINEから問い合わせる"
-                linkTo="https://lin.ee/Nwh2C8u"
-                normalTextColor="#00B900"
-                normalBgColor="#ffffff"
-                normalBorderColor="#00B900"
-                hoverTextColor="#ffffff"
-                hoverBgColor="#00B900"
-                hoverBorderColor="#ffffff"
-            />
-        <Spacer height={5} />
-
-            <HoverButton
-                text="問い合わせフォームから問い合わせる"
-                linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
-                normalTextColor="black"
-                normalBgColor="#ffffff"
-                normalBorderColor="black"
-                hoverTextColor="#ffffff"
-                hoverBgColor="black"
-                hoverBorderColor="#ffffff"
-            />
-        </div>
+      <main className="container">
+        <SurveyWidget showForm={false} />
+        {images.map((src, i) => (
+          <div key={i} className="imgBlock">
+            <div className="imgWrap">
+              {/* ここは next/image ではなく素の <img> を使用（画像サイズを気にせず高さ自動） */}
+              <img
+                src={src}
+                alt={`画像 ${i + 1}`}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        ))}
         <Spacer height={20} />
         <h1 style={{ textAlign: "center", marginBottom: "40px" }}>note記事</h1>
 
@@ -125,21 +110,8 @@ export default function NoteListPage() {
           <h1 style={{ textAlign: "center", marginBottom: "40px" }}>保護者様の口コミ</h1>
           <ReviewSlider reviews={reviews} interval={4000} />
         </div>
-
-        {/* 戻るボタン */}
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
-        {/* <HoverButton
-            text="元のページに戻る"
-            linkTo="/about"
-                normalTextColor="orange"
-                normalBgColor="#ffffff"
-                normalBorderColor="orange"
-                hoverTextColor="#ffffff"
-                hoverBgColor="orange"
-                hoverBorderColor="#ffffff"
-        /> */}
-        </div>
-      </div>
+        <Spacer height={250} />
+      </main>
     </Layout>
   );
 }

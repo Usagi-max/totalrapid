@@ -1,0 +1,48 @@
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px 48px;
+}
+
+.title {
+  margin: 0 0 24px;
+  font-size: 28px;
+  letter-spacing: 0.2px;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 24px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+}
+
+.imgWrap {
+  width: 100%;
+  background: #0a0a0a;
+}
+
+/* 画像は幅100%、高さは自動で縦に連続表示 */
+.imgWrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.caption {
+  margin: 10px 14px 14px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  border-top: 1px dashed var(--border);
+  padding-top: 8px;
+}

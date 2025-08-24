@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-08-24T08:15:47.367Z",
+  "answers": [
+    {
+      "key": "学年",
+      "value": "小学生"
+    },
+    {
+      "key": "資料タイプ",
+      "value": "体験授業"
+    },
+    {
+      "key": "進学時期",
+      "value": "1年以内"
+    },
+    {
+      "key": "オンライン希望",
+      "value": "いいえ"
+    },
+    {
+      "key": "都道府県",
+      "value": "愛知"
+    },
+    {
+      "key": "メール",
+      "value": "dmvipml@gmail.com"
+    }
+  ],
+  "email": "dmvipml@gmail.com"
+}
