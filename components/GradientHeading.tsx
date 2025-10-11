@@ -1,13 +1,21 @@
+//GradientHeading.tsx
 import { useEffect, useRef, useState } from "react";
 import styles from "./GradientHeading.module.css";
 import React from "react";
 
 type Props = {
   children: React.ReactNode;
-  delay?: number; // ← 遅延秒数（任意）
+  delay?: number; // 遅延秒数（任意）
+  gradientStart?: string; // グラデーション開始色
+  gradientEnd?: string;   // グラデーション終了色
 };
 
-const GradientHeading = ({ children, delay = 0 }: Props) => {
+const GradientHeading = ({
+  children,
+  delay = 0,
+  gradientStart = "#ff7e5f", // デフォルト
+  gradientEnd = "#feb47b",   // デフォルト
+}: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -30,9 +38,14 @@ const GradientHeading = ({ children, delay = 0 }: Props) => {
   return (
     <div
       ref={containerRef}
-      className={`${styles.GradientHeading_container} ${isVisible ? styles.visible : ""}`}
+      className={`${styles.GradientHeading_container} ${
+        isVisible ? styles.visible : ""
+      }`}
       style={{
-        transitionDelay: `${delay}s`, // ← 遅延をここで指定！
+        transitionDelay: `${delay}s`,
+        // CSS変数を注入
+        ["--gradient-start" as any]: gradientStart,
+        ["--gradient-end" as any]: gradientEnd,
       }}
     >
       <div>{children}</div>

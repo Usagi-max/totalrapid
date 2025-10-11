@@ -16,6 +16,9 @@ import ReviewSlider from '../components/ReviewSlider';
 import NoteCard from "../components/NoteCard";
 import dynamic from 'next/dynamic';
 import SurveyWidget from '../components/SurveyWidget';
+import StepFlow from "../components/StepFlow"
+import Marker from "../components/Marker";
+import DownArrow from "../components/DownArrow";
 
 // TypeScriptのTSXコンポーネントを動的に読み込む（SSRを回避）
 const CourseTable = dynamic(() => import('../components/CourseTable'), { ssr: false });
@@ -57,6 +60,42 @@ const reviews = [
     comment: 'いつもありがとうございます。学校のプリントに合わせた問題を作ってくれたのがとても助かっています。',
   },
 ];
+const steps = [
+  {
+    image: "/images/study__.png",
+    title: "体験フォームの⼊⼒",
+    description: "こちらよりお名前とメールアドレスを⼊⼒してください。体験授業についてメールでご案内します。",
+  },
+  {
+    image: "/images/study_with.png",
+    title: "体験授業への参加",
+    description: "実際の授業を受講していただけます。希望があれば、授業後に保護者様も含めた個別⾯談を⾏うことも可能です。",
+  },
+  {
+    image: "/images/study_self.png",
+    title: "受講開始",
+    description: "内容に納得していただければすぐに受講を開始していただけます。また、過去の授業のアーカイブを全て視聴できるようになります。",
+  },
+];
+const markers = [
+  {
+    name: "blueFade",
+    primaryColor: "#5b86e5",
+    secondColor: "#36d1dc",
+    textColor: "#000000",
+    gradationType: "diagonal",
+    fadeInType: "float-fade", // or "fade" or "none"
+    opacity: 0.4,
+  },
+  {
+    name: "pinkSoft",
+    primaryColor: "#ff9a9e",
+    secondColor: "#fad0c4",
+    textColor: "#222",
+    gradationType: "horizontal",
+    opacity: 0.3,
+  },
+];
 
 export default function About() {
   return (
@@ -68,13 +107,16 @@ export default function About() {
       <div className={styles.body}>
         <div className={styles.lp_head_container}>
           <picture>
-            <source srcSet="/images/lp_head_phone.png" media="(max-width: 768px)" />
-            <img src="/images/lp_head_pc.png" alt="Responsive" className={styles.lp_head_image} />
+            <source srcSet="/images/sakamoto_head.png" media="(max-width: 768px)" />
+            <img src="/images/geo_head.png" alt="Responsive" className={styles.lp_head_image} />
           </picture>
         </div>
         <Spacer height={50} />
+        <h2><strong>「最低限の勉強で８割」を狙う</strong><BreakOnSmallScreen /><strong>理系受験生のためのカリキュラム</strong></h2>
         <div className={`${styles.lp_about_container} ${styles.contentArea}`}>
-          <div className={styles.lp_about_item1}>
+          {/* <div className={styles.lp_about_item1}>
+
+            <Spacer height={20} />
             <div style={{ position: "relative", width: "100%", justifyContent: "center"}}>
               <FadeInImage
                 src="/images/student teacher.jpeg"
@@ -85,21 +127,26 @@ export default function About() {
                 delay={0.4}
               />
             </div>
-          </div>
-          <div className={styles.lp_about_item1} style={{display: "flex", flexDirection: "column",alignItems: "flex-start", alignContent:"flex-start"}}>    
-            <GradientHeading delay={0.0}>学習塾RAPIDは、</GradientHeading>
-            <GradientHeading delay={0.1}>お子様の学習習慣の改善に</GradientHeading>
-            <GradientHeading delay={0.2}>フォーカスした学習塾です。</GradientHeading>
-            <br></br>
-            <p>「学校や塾だけでは不安」</p>
-            <p>「勉強しているのにうまく結果が出ない」</p>
-            <br></br>
-            <p >学習塾RAPIDでは、最新の学習科学に基づき、1人ひとりに合わせた最適なカリキュラムを作成します。</p>
-            <p >このカリキュラムに沿って学習することで、最終的にはお子様が自分1人で正しく学習できるようになります。</p>
+          </div> */} 
+          <div>
+            <p>理系を目指すお子さまにとって、地理は主要科目に比べるとどうしても優先順位が下がりがちです。</p>
+            <p><Marker markers={markers} use="blueFade">英語・数学・理科にしっかりと時間を割く</Marker>ために、地理の勉強は最低限にしたいと考える受験生がほとんどだと思います。</p><br/>
+            <p>それでは、地理の共通テストで効率良く８割を達成するためにはどのような勉強をすればいいのでしょうか？</p>
+            <p>実は、地理の共通テストの問題はいくつかの<Marker markers={markers} use="blueFade">「法則」</Marker>を身につけることで高得点が取れるように設計されています。</p><br/>
+            <p>しかし、大半の受験生はこの「法則」を知りません。</p>
+            <p>教科書や参考書を読み、<Marker markers={markers} use="blueFade">専門用語を丸暗記</Marker>することで対策しようとするため、多くの時間をかけてしまっている現状があります。</p><br/>
+            <p>そこで、サカモト塾では<Marker markers={markers} use="blueFade">過去に出題された問題パターンを全て分析</Marker>することで、正解を導くために必要な「法則」を明らかにしました。</p>
+            <p>当塾の講座ではこれらの「法則」を全て伝授しており、実際に数ヶ月で０から高得点を取れるようになった受講生もいます。</p>
+            <p>地理は<Marker markers={markers} use="blueFade">「時間をかけて丸暗記する科目」</Marker>ではなく、<Marker markers={markers} use="blueFade">「法則を理解して効率良く学ぶ科目」</Marker>です。</p>
+            <p>私たちと一緒に、無理のない学習法で８割を狙っていきましょう！</p>
           </div>
         </div>
         <Spacer height={80} />
-        <SurveyWidget />
+        <SurveyWidget
+          primaryColor="#36d1dc"
+          primaryDark="#1e5f73"
+          bgLight="#f0f4f8"
+        />
 
         {/* <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", paddingBottom:"80px"}}>
           <div className={styles.contentArea}  style={{display: "flex", justifyContent: "center"}}>
@@ -147,24 +194,131 @@ export default function About() {
         <h1>学習塾RAPIDが選ばれる理由</h1>
         <Spacer height={50} />
         <h3  id="point1">REASON1</h3>
-        <h2 style={{textAlign: "center"}}>RAPIDメソッドによる<BreakOnSmallScreen />講師とのレッスン</h2>
+        <h2 style={{textAlign: "center"}}><strong>現役教員による</strong><BreakOnSmallScreen /><strong>学校よりも分かりやすい授業</strong></h2>
+        <Spacer height={30} />
+        <p>当塾では、<Marker markers={markers} use="blueFade">教育現場</Marker>での<Marker markers={markers} use="blueFade">指導経験</Marker>を持つ講師のみを選抜しています。</p>
+        <p>特に、塾長は<Marker markers={markers} use="blueFade">現役</Marker>の地理教員であり、これまでに<Marker markers={markers} use="blueFade">偏差値40〜70</Marker>までの多様な生徒に地理総合・地理探究の指導を行ってきました。</p>
         <div className={`${styles.lp_circle_container} ${styles.contentArea}`}>
           <div className={styles.lp_circle_item1}>
-            <div><h2>RAPIDメソッドとは</h2></div>
-            <div>学習塾RAPIDでは、RAPIDメソッドを利用したレッスンを週に1回・90分行います。</div>
-            <div>このメソッドは、子どもが<strong>本物の学習力</strong>を身につけるために開発されたものです。</div>
-            <div>５つのステップを意識することで、<strong>勉強が苦手</strong>な子どもでも<strong>自ら進んで</strong>計画を立て、学習に取り組み、改善できるようになります。</div>
+            <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <FadeInImage
+                src="/images/地理塾長.png" 
+                alt="rapidmethod_cercle"
+                width={400}
+                height={400}
+                aspectRatio="1/1"
+                delay={0.4}
+              />
+            </div>
+          </div>
+          <div className={styles.lp_circle_item1}>
+            <h2>塾長の経歴</h2><br/>
+            <p>①<Marker markers={markers} use="blueFade">私立高校の現役教員</Marker>で、１〜３年生の地理総合・地理探究の授業とテスト作成を担当。</p>
+            <p>生徒の<Marker markers={markers} use="blueFade">日常生活</Marker>と関連付けた興味を引く切り口と<Marker markers={markers} use="blueFade">直感的</Marker>に分かりやすい解説で<Marker markers={markers} use="blueFade">校内授業満足度１位</Marker>を獲得。</p><br/>
+            <p>②国立大学・大学院で<Marker markers={markers} use="blueFade">社会科教育学</Marker>を専攻し、特に地理教育を専門としている</p><br/>
+            <p>③学校外ではココナラにて<Marker markers={markers} use="blueFade">累計150人</Marker>の生徒に指導し、<Marker markers={markers} use="blueFade">平均評価4.9</Marker>を獲得</p>
+            <p>（現在はココナラでの募集を停止しております）</p>
           </div>
 
         </div>
         <Spacer height={70} />
         <h3  id="point2">REASON2</h3>
-        <h2 style={{textAlign: "center"}}>家庭学習を充実させる<BreakOnSmallScreen />トータルサポート</h2>
+        <h2 style={{textAlign: "center"}}><strong>テストに出やすい内容に特化した</strong><BreakOnSmallScreen /><strong>オリジナル教材</strong></h2>
         <div className={`${styles.lp_total_container} ${styles.contentArea}`}>
           <div className={`${styles.lp_total_item} ${styles.item1}`} >
-            <h4>お子様の集中をサポートする</h4>
-            <h2>無料オンライン自習室</h2>
-            <p>やる気のない日でも学習を継続できるように、塾生が<strong>無料</strong>で使える<strong>オンライン自習室</strong>を毎日開設しています。他の生徒が頑張っている様子を見ることができるので、集中して学習に取り組むことができます。</p>
+            <h4>学校で指導する中で見つけた</h4>
+            <h2>教科書と共通テストのギャップ</h2>
+            {/* <GradientHeading gradientStart="#36d1dc" gradientEnd="#5b86e5" delay={0.0}>教科書と共通テストのギャップ</GradientHeading> */}
+            <p>これまでたくさんの受験生を指導する中で最も多かったのは、教科書や参考書を使って勉強しても、<Marker markers={markers} use="blueFade">共通テストの問題が解けない</Marker>」という声でした。</p>
+            <p>実は、学校で配布される<Marker markers={markers} use="blueFade">地理の教科書や参考書</Marker>は、難しい専門用語を理解して<Marker markers={markers} use="blueFade">暗記</Marker>するために書かれたものです。</p>
+            <p>しかし、新課程の共通テストに出題されるのは、初めて見るグラフや地図の読解問題です。</p>
+            <p>これでは普段の学習スタイルとテスト問題の<Marker markers={markers} use="blueFade">形式が異なる</Marker>ため、攻略するまでに<Marker markers={markers} use="blueFade">たくさんの時間</Marker>がかかってしまいます。</p>
+          </div>
+          <div className={`${styles.lp_total_item} ${styles.item2}`}>
+            <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <Image
+                src="/images/地理塾長イラスト悩む.PNG"
+                alt="week pc"
+                width={468}         // 元画像の横幅
+                height={312}         // 元画像の高さ
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+          </div>
+        </div>
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <DownArrow
+            size={80}
+            primaryColor="#5b86e5"
+            secondColor="#36d1dc"
+            strokeColor="#ffffff"
+            gradationType="vertical"
+          />
+        </div>
+        <div className={`${styles.lp_total_container} ${styles.contentArea}`}>
+          <div className={`${styles.lp_total_item} ${styles.item4}`}>
+            <h4>市販教材の弱点を補う</h4>
+            <h2>オリジナル教材の開発</h2>
+            <p><Marker markers={markers} use="blueFade">市販の問題集</Marker>は過去問を中心とした難易度の高いものばかりで、地理が苦手な生徒は<Marker markers={markers} use="blueFade">挫折</Marker>しやすいです。</p>
+            <p>私自身も最初は基礎知識を学びながら問題演習ができる市販教材を探しましたが、見つけることはできませんでした。</p>
+            <p><Marker markers={markers} use="blueFade">こうなったら、自分で作るしかない！</Marker></p>
+            <p>このような思いからオリジナル教材を作成し、基礎知識の習得と読解問題の演習を両立した受験指導を実施しました。</p>
+            <p>この教材は多くの生徒に好評で、他のクラスの生徒から<Marker markers={markers} use="blueFade">「出版して欲しい」</Marker>と言われたこともあります。</p>
+          </div>
+          <div className={`${styles.lp_total_item} ${styles.item3}`}>
+            <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <Image
+                src="/images/地理塾長イラスト決意.PNG"
+                alt="week pc"
+                width={468}         // 元画像の横幅
+                height={312}         // 元画像の高さ
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+          </div>
+        </div>
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+          <DownArrow
+            size={80}
+            primaryColor="#5b86e5"
+            secondColor="#36d1dc"
+            strokeColor="#ffffff"
+            gradationType="vertical"
+          />
+        </div>
+        <div className={`${styles.lp_total_container} ${styles.contentArea}`}>
+          <div className={`${styles.lp_total_item} ${styles.item5}`}>
+            <h4>ゼロから最短で実力をつけられる</h4>
+            <h2>基礎知識と演習のバランス</h2>
+            <p>当塾ではこのオリジナル教材をさらに<Marker markers={markers} use="blueFade">ブラッシュアップ</Marker>して指導に使っています。</p>
+            <p>教材は①問題を解くために必要な最低限の解説パート、②問題演習パート、③問題解説パートで構成されており、<Marker markers={markers} use="blueFade">どんなに地理が苦手な生徒でも</Marker>共通テストレベルの問題を解くことができるようになっています。</p>
+            <p>学校の授業や自宅での学習で問題が解けなくて自信がなくなってしまった生徒にもおすすめです！</p>
+          </div>
+          <div className={`${styles.lp_total_item} ${styles.item6}`}>
+            <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
+              <Image
+                src="/images/地理塾長イラスト基礎と演習.png"
+                alt="week pc"
+                width={468}         // 元画像の横幅
+                height={312}         // 元画像の高さ
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+          </div>
+        </div>
+        
+        <Spacer height={70} />
+        <h3  id="point2">REASON3</h3>
+        <h2 style={{textAlign: "center"}}><strong>選べる２つの学び方と</strong><BreakOnSmallScreen /><strong>24時間対応の質問チャット</strong></h2>
+        <div className={`${styles.lp_total_container} ${styles.contentArea}`}>
+          <div className={`${styles.lp_total_item} ${styles.item1}`} >
+            <h4>学校で指導する中で見つけた</h4>
+            <h2>教科書と共通テストのギャップ</h2>
+            <p>サカモト塾ではライブ形式とオンデマンド形式の２つの学び方を選ぶことができます。</p>
+            <p>ライブ形式では、週に１回、Zoomを使ってリアルタイムで講師と一緒に勉強します。</p>
+            <p>授業内では質問し放題なので、疑問に思ったことはその場ですぐに解消できます。</p>
+            <p>オンデマンド形式では、<Marker markers={markers} use="blueFade">見逃した授業</Marker>や<Marker markers={markers} use="blueFade">参加できなかった授業</Marker>の映像授業を見て勉強します。</p>
+            <p>自分の好きなペースで、内容を理解するまで何回でも見直すことができます。</p>
           </div>
           <div className={`${styles.lp_total_item} ${styles.item2}`}>
             <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -189,16 +343,37 @@ export default function About() {
             </div>
           </div>
           <div className={`${styles.lp_total_item} ${styles.item4}`}>
-            <h4>お子様の学習継続をサポートする</h4>
-            <h2>学習支援ツールRAPI-LA</h2>
-            <p>学習塾RAPIDでは、RAPIDメソッドを<strong>毎日の</strong><strong>家庭学習</strong>でも活用できるように<strong>学習支援ツール</strong><strong>RAPI-LA</strong>を導入しています。RAPI-LAを使うことで５つのステップ通りに学習を進め、自分の学習成果を確認することができます。</p>
+            <h4>市販教材の弱点を補う</h4>
+            <h2>オリジナル教材の開発</h2>
+            <p>また、当塾に在籍する生徒は、質問チャットをいつでも利用することができます。</p>
+            <p>講師の解説を聞いて分からなかった内容はもちろん、学校の授業を受けたり自習したりする中で出てきた疑問点にも対応しています。</p>
+            <p>大学合格まで全力でサポートいたします。</p>
           </div>
         </div>
 
         <Spacer height={30} />
-        <div style={{maxWidth: "100%"}}>
+        <div className={` ${styles.contentArea}`}>
         <h1 style={{textAlign: "center"}}>保護者様の口コミ</h1>
           <ReviewSlider reviews={reviews} interval={4000} />
+        </div>
+
+        <Spacer height={50} />
+        <GradientHeading gradientStart="#36d1dcd8" gradientEnd="#5b87e5d5" delay={0.0}>お申し込みの流れ</GradientHeading>
+        <div className={` ${styles.contentArea}`}>
+          {/* <StepFlow
+            steps={steps}
+            primaryColor="#5b86e5"
+            secondColor="#36d1dc"
+            textColor="#ffffff"
+            gradationType="diagonal" // "vertical" | "horizontal" | "diagonal" | "radial"
+          /> */}
+          <StepFlow
+            steps={steps}
+            primaryColor="#5b87e5d5"
+            secondColor="#36d1dcd8"
+            textColor="#ffffff"
+            gradationType="diagonal" // "vertical" | "horizontal" | "diagonal" | "radial"
+          />
         </div>
 
         <div className={styles.container} style={{ textAlign: "center", marginTop: "40px" }}>
@@ -232,11 +407,11 @@ export default function About() {
             text="料金・コース詳細はコチラ！"
             linkTo="/prices"
                 normalTextColor="#ffffff"
-                normalBgColor="orange"
+                normalBgColor="#5b86e5"
                 normalBorderColor="#ffffff"
-                hoverTextColor="orange"
+                hoverTextColor="#5b86e5"
                 hoverBgColor="#ffffff"
-                hoverBorderColor="orange"
+                hoverBorderColor="#5b86e5"
                 width="350px"
         />
         </div>

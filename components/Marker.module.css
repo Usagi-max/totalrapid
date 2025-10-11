@@ -1,0 +1,46 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  z-index: 0; /* テキストを上に出すため marker は z-index:1, text は 3 */
+}
+
+
+/* テキストは常に最前面 */
+.text {
+  position: relative;
+  z-index: 3;
+}
+
+/* 下線マーカー（初期は透明で下にオフセット） */
+.marker {
+  position: absolute;
+  bottom: 0.1em;
+  left: 0;
+  width: 100%;
+  height: 0.45em;
+  border-radius: 4px;
+  z-index: 1;
+
+  /* カスタムプロパティで色を受け取る（デフォルトも指定） */
+  background-image: linear-gradient(
+    135deg,
+    var(--marker-gradient-start, #5b86e5),
+    var(--marker-gradient-end, #36d1dc)
+  );
+
+  /* 初期は見えない状態 */
+  opacity: 0;
+  transform: translateY(8px);
+
+  /* トランジション（ふわっと） */
+  transition:
+    opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* isVisible = true のとき マーカーだけフェードインして上へ移動 */
+.visible {
+  opacity: var(--marker-opacity, 0.6);
+  transform: translateY(0);
+}

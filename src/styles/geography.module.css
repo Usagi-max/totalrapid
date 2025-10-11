@@ -1,0 +1,649 @@
+.body {
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-evenly;
+  text-align: left;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+
+.body h1{
+  padding-top:60px;
+  margin-top:20px;
+  margin-bottom:10px;
+  text-align: left;
+}
+.body h2{
+  margin:0px;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.body h3{
+  margin:0px;
+  text-align: left;
+  padding-bottom: 5px;
+}
+.body h4{
+  margin-top:10px;
+  margin-bottom:5px;
+  text-align: left;
+}
+.body h5{
+  margin-top:10px;
+
+}
+.body p{
+  margin:0px;
+  text-align: left;
+  color: #0D0D0D;
+}
+/* .body b {
+  background: linear-gradient(90deg,  #E83E34, #F39700); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  display: inline-block; 
+  position: relative; 
+  font-weight: bold;
+} */
+
+.body strong {
+  position: relative; /* 擬似要素の位置基準 */
+  display: inline-block; /* インライン要素で幅を適用 */
+  font-weight: bold;
+}
+
+.body strong::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 33%; /* 下から3分の1を背景色で覆う */
+  background: rgba(255, 165, 0, 0.3); /* 薄いオレンジ色 */
+  z-index: 0; /* 文字の背面に配置 */
+  display: block; /* 確実に表示させる */
+}
+
+.contentArea{
+  width: 80%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.container {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+.item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+}
+.item_img{
+  width: 80%;
+}
+
+.lp_head_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp_head_container picture {
+  width: 100%;
+}
+
+.lp_head_image {
+  width: 100%;
+  height: auto; /* アスペクト比を保持 */
+  display: block;
+}
+
+.lp_head_item1 {
+  width: 60%;
+  text-align: left;
+  margin-right: -20%; 
+  padding-top: 40px;
+  position: relative; /* 他の要素との位置調整 */
+}
+
+.lp_head_item2 {
+  width: 60%;
+  max-width: 615px;
+  justify-content: center; /* 水平方向の中央揃え */
+  text-align: right;
+  position: relative;
+  padding-right: 30px;
+}
+.lp_head_item2_img {
+  width: 100%;
+  height: auto;
+}
+
+.lp_about_container {
+  padding-top: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp_about_item1 {
+  width: 50%;
+  display: flex; /* Flexboxを有効にする */
+  justify-content: center; /* 水平方向に中央配置 */
+  align-items: center; /* 垂直方向に中央配置 */
+  margin-right: 0%; 
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: relative; /* 他の要素との位置調整 */
+  flex-direction: column;
+}
+.lp_about_item1 >p{
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.lp_circle_container {
+  padding-top: 20px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp_circle_item1 {
+  width: 50%;
+  display: flex; /* Flexboxを有効にする */
+  justify-content: center; /* 水平方向に中央配置 */
+  align-items: center; /* 垂直方向に中央配置 */
+  margin-right: 0%; 
+  padding: 30px;
+  position: relative; /* 他の要素との位置調整 */
+  flex-direction: column;
+}
+
+.lp_circle_item1 > div {
+  width: 100%;
+}
+
+.lp_circle_item2 {
+  width: 50%;
+  display: flex; /* Flexboxを有効にする */
+  justify-content: center; /* 水平方向に中央配置 */
+  align-items: center; /* 垂直方向に中央配置 */
+  margin-right: 0%; 
+  padding: 30px;
+  position: relative; /* 他の要素との位置調整 */
+  flex-direction: column;
+  text-align: center;
+}
+.lp_circle_item2 > div {
+  width: 80%;                 /* 横幅80% */
+  border-radius: 10px;        /* 角丸 */
+  /* border: 4px solid #F39700;  太いオレンジの枠線 */
+  background-color: #FCF4E7;  /* 薄いオレンジの背景色 */
+  padding: 20px;   
+  font-weight: bold; 
+}
+.lp_circle_item2 > div > h4 {
+  margin: 0;
+  color:#F39700;
+  font-weight: bold; 
+}
+.lp_circle_item2 > div > h2 {
+  background-image: linear-gradient(to right, #E83E34, #F39700); /* オレンジから赤へのグラデーション */
+  -webkit-background-clip: text; /* 背景をテキストに適用 */
+  color: transparent; /* 文字色を透明にして、背景が見えるようにする */
+  font-weight: bold; /* 任意で文字を太くする */
+  margin: 10px;
+}
+.lp_circle_item2 > div > p {
+  margin: 0;
+  color:#3a342b;
+  font-weight: bold; 
+}
+
+.lp_circle_item2 > p {
+  margin: 5px;
+  font-weight: bold;
+  font-size: 3rem;
+  color:rgb(39, 39, 39)
+}
+
+
+.lp_cycle_container{
+  width: 80%;
+  margin: 15px auto;
+  padding:  1rem;
+}
+.lp_cycle_container > h3 {
+  max-width: 768px;
+  padding-left: 10px;
+  width: 100%;               /* 横幅80% */
+  border-radius: 10px;     
+  padding: 5px;   
+  font-weight: bold; 
+  color: white;
+}
+
+.lp_cycle_container > h2,.lp_cycle_container > h3,.lp_cycle_container > h4 {
+  text-align: left;
+}
+
+.lp_total_container {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* PCでは2列 */
+  gap: 16px;
+  text-align: left;
+}
+.lp_total_item{
+  padding: 18px;
+}
+.lp_total_container >h2{
+  padding: 10px;
+}
+.lp_total_container >h4{
+  font-weight: normal;
+}
+
+.consultation_container {
+  text-align: center;
+  width: 100%;
+}
+
+.consultation_container > div:first-of-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 30px;
+  flex-wrap: wrap;
+}
+
+.consultation_container > div:first-of-type h2 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.consultation_container > div:first-of-type p {
+  font-size: 16px;
+  text-align: left;
+  margin-top: 1em;
+}
+
+.consultation_container > div:first-of-type ul {
+  text-align: left;
+  margin-top: 1em;
+  padding-left: 1.2em;
+}
+
+.consultation_container > div:first-of-type li {
+  margin-bottom: 8px;
+  list-style-type: none;
+}
+
+.consultation_container > div:first-of-type img {
+  max-width: 250px;
+  height: auto;
+  margin-left: 20px;
+}
+
+
+.consultation_container > div:nth-of-type(2) div {
+  font-size: 28px;
+  color: orange;
+}
+
+.consultation_container > div:nth-of-type(3) {
+  background: white;
+  padding: 30px 20px;
+  margin-bottom: 10px;
+}
+
+.consultation_container > div:nth-of-type(3) > p {
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div {
+  border: 2px solid orange;
+  padding: 20px;
+  width: 250px;
+  position: relative;
+  box-sizing: border-box;
+  background: white;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div > span {
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 20px;
+  position: absolute;
+  top: -18px;
+  left: 10px;
+  font-size: 16px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:first-of-type {
+  color: #f28c00;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:last-of-type {
+  color: orange;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.consultation_container > div:nth-of-type(3) > div:last-of-type {
+  background-color: orange;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.button_link{
+  margin-top: 10px;
+  background-color: orange;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.lp_flow_container{
+  margin:  auto;
+  padding:  1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: middle;
+  max-width:1080px;
+}
+.lp_flow_item {
+  margin: auto;
+  padding: 1rem;
+  border-radius: 8px;                /* ← 少し大きめの角丸 */
+  border: 2px solid #F39700;         /* ← 枠線をきちんと表示 */
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* オプション：うっすら影 */
+  width:300px;
+  height:420px;
+}
+.lp_flow_item >img{
+  padding: 25%;
+}
+.lp_flow_item >h4,
+.lp_flow_item >p{
+  text-align: center;
+}
+
+.button_container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  /* 初期は非表示 */
+  display: none;
+  /* ボタンらしい見た目 */
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.3s ease;
+}
+
+
+@media screen and (min-width: 769px) and (max-width: 900px) {
+  .lp_about_container,
+  .lp_circle_container,
+  .lp_cycle_container,
+  .lp_total_container,
+  .consultation_container,
+  .feature_container,
+  .container {
+    width: 90%;
+  }
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 0px;
+  }
+  .item{
+    padding: 0;
+    width: 100%;
+  }
+  .lp_about_container,
+  .lp_circle_container,
+  .lp_cycle_container,
+  .lp_total_container,
+  .consultation_container,
+  .feature_container,
+  .container {
+    flex-direction: column;
+    width:95%;
+    padding-top: 10px;
+    min-width: none;
+  }
+  /* .consultation_container > div >div,
+  .consultation_container > img,
+  .contentArea{
+    width: 100%;
+  } */
+  .feature_item{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .lp_circle_item1,
+  .lp_circle_item2{
+    padding-top: 20px;
+  }
+  .lp_about_item1,
+  .lp_circle_item1,
+  .lp_circle_item2,
+  .lp_circle_item2 div {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    padding-bottom: 5px;
+    padding-top: 5px;
+  }
+
+  .lp_circle_item1{
+    text-align: left;
+  }
+  .lp_circle_item1 div{
+    font-size: 0.8rem;
+  }
+  .lp_circle_item2>div>h2{
+    margin: 2px;
+  }
+  .body h1{
+    font-size: 1.2rem;
+    margin-top:20px;
+    margin-bottom:10px;
+    padding-top: 40px;
+  }
+  .body h2{
+    font-size: 1.4rem;
+    margin:5px;
+  }
+  .body h3{
+    font-size: 0.9rem;
+    margin-top:5px;
+  }
+  .body p{
+    font-size: 0.8rem;
+  }
+  .lp_circle_item2 > p{
+    font-size: 1.6rem;
+    margin: -10px;
+  }
+  .lp_total_container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item1 { order: 1; }
+  .item2 { order: 2; }
+  .item4 { order: 3; } /* ←④を先に */
+  .item3 { order: 4; }
+  .item5 { order: 5; } /* ←④を先に */
+  .item6 { order: 6; }
+
+  .lp_about_item1,
+  .consultation_container>div>img {
+    display: none; /* 768px以下の場合非表示 */
+  }
+  .consultation_container > div,
+  .consultation_container > div > div {
+    padding: 0;
+    margin: 0; /* 上下左右のパディングをすべて0に設定 */
+  }
+
+  .consultation_container > div:nth-of-type(3) > div:first-of-type > div > p:first-of-type {
+    margin: 5px;
+  }
+
+  .consultation_container > div:nth-of-type(3) > div:first-of-type {
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+  }
+  .consultation_container > div:nth-of-type(3) > div:first-of-type >div {
+    width: 60%;
+    text-align: center;
+    align-items: center;
+    min-width: 270px;
+  }
+  .consultation_container > div:nth-of-type(3) > div:first-of-type >div >p{
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  .consultation_container > div:nth-of-type(3) >div:nth-of-type(2){
+    font-size: 0.9rem;
+  }
+  
+  .lp_about_item1 > p {
+    padding-top: 10px;
+  }
+  .lp_flow_container{
+    max-width: 545px;
+  }
+  .lp_flow_item  {
+    padding: 5px;
+    max-width:145px;
+    height:250px;
+  }  
+  .lp_flow_item >p {
+    padding: 2px;
+    font-size: 0.6rem;
+  }
+  .lp_flow_item >img {
+    padding: 2  0%;
+  }
+  .consultation_container > div:nth-of-type(3) > div:last-of-type {
+    padding: 10px;
+  }
+
+}
+@media (max-width: 528px) {
+  .lp_flow_item{
+    height:220px;
+  }
+}
+
+.highlightText {
+  font-family: "Arial", "Helvetica", sans-serif; /* ゴシック体 */
+  font-weight: bold; /* 太字 */
+  background-color: #F39700; /* 背景オレンジ */
+  color: white; /* 文字白色 */
+  padding: 5px 10px; /* 余白調整 */
+  display: inline-block; /* 背景がテキストの長さにフィットするように */
+}
+
+.highlightText a {
+  border: 2px solid white; /* 枠線 */ 
+  padding: 3px 5px; /* 枠線内の余白 */
+  text-decoration: none; /* 下線を消す */
+  color: white; /* 文字黒 */
+  background-color: #F39700; /* 背景白色 */
+  font-weight: bold; /* 太字 */
+}
+
+.glowText {
+  font-family: "Arial", "Helvetica", sans-serif; /* ゴシック体 */
+  font-size: 48px; /* 文字サイズ */
+  font-weight: bold; /* 太字 */
+  color: black; /* 文字色 */
+  text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white; /* 白いぼやけ */
+  text-align: center; /* 中央揃え */
+  padding: 20px;
+}
+
+.tableContainer {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableContainer th, 
+.tableContainer td {
+  border: 2px solid #F39700; /* オレンジの枠線 */
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tableContainer th {
+  background-color: white; /* ヘッダーの背景オレンジ */
+  /* color: white; 文字色白 */
+}
+
+.tableContainer td {
+  background-color: white; /* データセルの背景白 */
+  color: black; /* 文字色オレンジ */
+}

@@ -1,4 +1,3 @@
-//SurveyWidget.tsx
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './SurveyWidget.module.css';
@@ -65,7 +64,17 @@ const questions: QA[] = [
   },
 ];
 
-export default function SurveyWidget() {
+type SurveyWidgetProps = {
+  primaryColor?: string;
+  primaryDark?: string;
+  bgLight?: string;
+};
+
+export default function SurveyWidget({
+  primaryColor = 'orange',
+  primaryDark = 'darkorange',
+  bgLight = '#eee',
+}: SurveyWidgetProps) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [loading, setLoading] = useState(false);
@@ -76,7 +85,7 @@ export default function SurveyWidget() {
 
   // スマホ幅なら menu から始める
   useEffect(() => {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 2000) {
       setMode('menu');
     } else {
       setMode('form');
@@ -152,13 +161,26 @@ export default function SurveyWidget() {
   // --- お問い合わせ方法選択画面 ---
   if (mode === 'menu') {
     return (
-      <div className={`${styles.widget} ${styles.half}`}>
+      <div
+        className={`${styles.widget} ${styles.half}`}
+        style={
+          {
+            '--color-primary': primaryColor,
+            '--color-primary-dark': primaryDark,
+            '--color-bg-light': bgLight,
+          } as React.CSSProperties
+        }
+      >
         <div className={styles.header}>お問い合わせ方法を選択</div>
         <div className={styles.body} style={{ textAlign: 'center' }}>
           <button
             className={styles.lineBtn}
             onClick={() =>
-              window.open('https://lin.ee/Nwh2C8u', '_blank', 'noopener,noreferrer')
+              window.open(
+                'https://lin.ee/Nwh2C8u',
+                '_blank',
+                'noopener,noreferrer'
+              )
             }
           >
             LINEで問い合わせる
@@ -173,12 +195,26 @@ export default function SurveyWidget() {
 
   // --- フォーム表示 ---
   return (
-    <div className={styles.widget}>
-      <div className={styles.header}>お問い合わせ</div>
+    <div
+      className={styles.widget}
+      style={
+        {
+          '--color-primary': primaryColor,
+          '--color-primary-dark': primaryDark,
+          '--color-bg-light': bgLight,
+        } as React.CSSProperties
+      }
+    >
+      <div className={styles.header}>
+        お問い合わせ
+        <button className={styles.closeBtn} onClick={() => setMode('menu')}>
+          ×
+        </button>
+      </div>
       <div className={styles.body}>
         {completed ? (
           <div className={styles.completed}>
-            <p>✅ 回答完了しました。ありがとうございます！</p>
+            <p>回答完了しました。ありがとうございます！</p>
             <button className={styles.retryBtn} onClick={handleRetry}>
               回答を修正して再送信する
             </button>

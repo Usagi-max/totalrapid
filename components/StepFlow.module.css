@@ -1,0 +1,85 @@
+.container {
+  display: grid;
+  align-items: stretch;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.stepWrapper {
+  display: contents;
+}
+
+.stepBox {
+  padding: 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.stepBox:hover {
+  transform: translateY(-4px);
+}
+
+.numberBadge {
+  margin-bottom: 8px;
+}
+
+.badgeBackground {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.badgeOverlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+}
+
+.badgeNumber {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  z-index: 2;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.arrowIcon {
+  width: 48px;
+  height: 48px;
+}
+
+/* ▼ 縦レイアウト時（スマホなど） */
+.vertical {
+  grid-template-columns: 1fr !important;
+  grid-template-rows: auto;
+}
+
+.vertical .stepWrapper {
+  display: block;
+}
+
+.vertical .arrow {
+  transform: rotate(90deg); /* ✅ 右向き → 下向き */
+  margin: 12px 0;
+}
