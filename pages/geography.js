@@ -329,8 +329,8 @@ export default function About() {
   striped={false}
   randomObject={true}
   accentColors={["#36d1dc", "#5b86e5", "#89f7fe"]}
-  shapeType={["circle", "square", "line", "triangle"]}
-  squareCount={100}
+  shapeType={["square", "line"]}
+  squareCount={60}
   speed={1.6}
   opacityRange={[0.15, 0.35]}
   blur={false}
@@ -437,7 +437,7 @@ export default function About() {
           striped={true}
           randomObject={false}
           accentColors={["#89f6fe42", "#5a80d371"]}
-          shapeType={["circle", "square", "line", "triangle"]}
+          shapeType={[ "square", "line"]}
           squareCount={70}
           speed={1.6}
           opacityRange={[0.15, 0.35]}
