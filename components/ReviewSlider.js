@@ -44,7 +44,7 @@ const ReviewSlider = ({ reviews, interval = 3000 }) => {
           setCurrentIndex(0);
           requestAnimationFrame(() => {
             if (sliderRef.current) {
-              sliderRef.current.style.transition = 'transform 0.5s ease-in-out';
+              sliderRef.current.style.transition = 'transform 1.0s ease-in-out';
             }
           });
         }

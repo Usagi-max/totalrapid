@@ -1,0 +1,76 @@
+.gradientStripeBox {
+  width: 100%;
+  padding: 60px 5%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* striped時の背景。--stripe-gradientはJSから供給 */
+.striped {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.25) 0px,
+      rgba(255, 255, 255, 0.25) 20px,
+      rgba(180, 210, 230, 0.10) 20px,
+      rgba(180, 210, 230, 0.10) 40px
+    ),
+    var(--stripe-gradient);
+  background-size: 200% 200%, 100% 100%;
+  animation: moveStripe 180s linear infinite;
+  background-blend-mode: overlay;
+}
+
+@keyframes moveStripe {
+  0% {
+    background-position: 0% 0%, 0 0;
+  }
+  50% {
+    background-position: 100% 100%, 0 0;
+  }
+  100% {
+    background-position: 0% 0%, 0 0;
+  }
+}
+
+.plain {
+  background: #E8FEFE;
+}
+
+.bgCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blurCanvas {
+  filter: blur(12px);
+}
+
+.innerBox {
+  position: relative;
+  z-index: 1;
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 2px solid #ffffff;
+  padding: 24px;
+  width: 100%;
+  max-width: 1080px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.innerBoxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}

@@ -1,0 +1,63 @@
+.tabSwitcher {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+.tabButtons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tabButton.activeTab {
+  z-index: 2; /* アクティブタブを前面に */
+}
+
+.tabContent {
+  position: relative;
+  border-radius: 0 0 12px 12px;
+  width: 100%;
+  min-height: 400px; /* 画像に合わせて調整 */
+  margin-top: -2px; /* アクティブタブの枠線と重なる */
+  background: #f0f0f0;
+}
+
+.tabPane {
+  display: none; /* 非アクティブは非表示 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.tabPane.activePane {
+  display: block; /* アクティブのみ表示 */
+  position: relative; /* 親の min-height を使う */
+}
+
+.imageWrapper {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.tabImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: contain; /* 縦横比を維持して全体表示 */
+}
