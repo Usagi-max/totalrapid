@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    // 初回訪問時に /about へリダイレクト
+    // 初回訪問時に /〇〇へリダイレクト
     if (typeof window !== "undefined") {
       const hasVisited = sessionStorage.getItem("visited");
 

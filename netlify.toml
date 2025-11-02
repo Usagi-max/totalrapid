@@ -8,6 +8,6 @@
 
 [[redirect]]
   from = "/"
-  to = "/study-management"
+  to = "/geography"
   status = 301
   force = true
