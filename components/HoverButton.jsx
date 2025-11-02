@@ -20,6 +20,7 @@ const HoverButton = ({
 
   const buttonStyle = {
     padding: "10px 20px",
+    marginTop: "5px",
     fontSize: "16px",
     fontWeight: "bold",
     borderRadius: "5px",

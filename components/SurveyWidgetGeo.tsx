@@ -63,12 +63,16 @@ const questions: QA[] = [
 type SurveyWidgetProps = {
   primaryColor?: string;
   primaryDark?: string;
+  secondaryColor?: string;
+  secondaryDark?: string;
   bgLight?: string;
 };
 
 export default function SurveyWidget({
   primaryColor = 'orange',
   primaryDark = 'darkorange',
+  secondaryColor = 'orange',
+  secondaryDark = 'darkorange',
   bgLight = '#eee',
 }: SurveyWidgetProps) {
   const [step, setStep] = useState(0);
@@ -163,6 +167,8 @@ export default function SurveyWidget({
           {
             '--color-primary': primaryColor,
             '--color-primary-dark': primaryDark,
+            '--color-secondary': secondaryColor,
+            '--color-secondary-dark': secondaryDark,
             '--color-bg-light': bgLight,
           } as React.CSSProperties
         }

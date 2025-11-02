@@ -111,18 +111,18 @@ const priceTable = {
   ],
   rows: [
     {
-      data: ["定期受講コース【系統地理】", "少人数指導", "主に高校２年生を対象に系統地理の内容を指導します。学校の定期試験や模試、大学受験で高得点を取ることが目標です。","入塾金5000円＋2500円(月4コマ・月額10000円)"],
+      data: ["集団指導コース【系統地理】", "少人数指導", "主に高校２年生を対象に系統地理の内容を指導します。学校の定期試験や模試、大学受験で高得点を取ることが目標です。","入塾金5000円＋2500円(月4コマ・月額10000円)"],
       recommend: true,
     },
     {
-      data: ["定期受講コース【地誌】", "少人数指導", "主に高校３年生を対象に地誌の内容を指導します。学校の定期試験や模試、大学受験で高得点を取ることが目標です。","入塾金5000円＋2500円(月4コマ・月額10000円)"],
+      data: ["集団指導コース【地誌】", "少人数指導", "主に高校３年生を対象に地誌の内容を指導します。学校の定期試験や模試、大学受験で高得点を取ることが目標です。","入塾金5000円＋2500円(月4コマ・月額10000円)"],
       recommend: true,
     },
     {
-      data: ["個別指導コース", "１対１個別指導", "高校１年生から既卒生までを対象に、高校地理の範囲から単元を１つお選びいただき指導します。定期試験対策や補習、受験直前指導などご要望にお答えします。","入塾金5000円＋5000円(１コマ)〜（お子様の実態により変動します。詳しくはお問い合わせください。）"],
+      data: ["個別指導コース【定期受講】", "１対１個別指導", "高校１年生から既卒生までを対象に、高校地理の範囲から単元を１つお選びいただき指導します。定期試験対策や補習、受験直前指導などご要望にお答えします。","入塾金5000円＋5000円(１コマ)〜（お子様の実態により変動します。詳しくはお問い合わせください。）"],
     },
     {
-      data: ["スポット受講コース", "１対１個別指導", "高校１年生から既卒生までを対象に、高校地理の範囲から単元を１つお選びいただき指導します。定期試験対策や補習、受験直前指導などご要望にお答えします。","7000円(１コマ)〜（お子様の実態により変動します。詳しくはお問い合わせください。）"],
+      data: ["個別指導コース【スポット受講】", "１対１個別指導", "高校１年生から既卒生までを対象に、高校地理の範囲から単元を１つお選びいただき指導します。定期試験対策や補習、受験直前指導などご要望にお答えします。","7000円(１コマ)〜（お子様の実態により変動します。詳しくはお問い合わせください。）"],
     },
   ],
 };
@@ -198,7 +198,7 @@ export default function About() {
       <div className={styles.body}>
         <div className={styles.lp_head_container}>
           <picture>
-            <source srcSet="/images/sakamoto_head.png" media="(max-width: 768px)" />
+            <source srcSet="/images/geo_head.png" media="(max-width: 768px)" />
             <img src="/images/geo_head.png" alt="Responsive" className={styles.lp_head_image} />
           </picture>
         </div>
@@ -234,8 +234,10 @@ export default function About() {
         </div>
         <Spacer height={150} />
         <SurveyWidget
-          primaryColor="#36d1dc"
-          primaryDark="#1e5f73"
+          primaryColor="#5b86e5"
+          primaryDark="#25375eff"
+          secondaryColor = "#36d1dc"
+          secondaryDark = "#1e5f73"
           bgLight="#f0f4f8"
         />
 
@@ -448,13 +450,13 @@ export default function About() {
           <div>
             <h1 className={styles.gradientText}>REASON03</h1>
             {/* <h3 style={{textAlign: "center"}} id="point2">REASON3</h3> */}
-            <h2 style={{textAlign: "center"}}><strong>選べる２つの学び方と</strong><BreakOnSmallScreen /><strong>24時間対応の質問チャット</strong></h2>
+            <h2 style={{textAlign: "center"}}><strong>お子様に合わせた</strong><BreakOnSmallScreen /><strong>学びのサポート</strong></h2>
             <div className={`${styles.lp_total_container} `}>
               <div className={`${styles.lp_total_item} ${styles.item1}`} >
-                <h4>学校で指導する中で見つけた</h4>
-                <h2>教科書と共通テストのギャップ</h2>
-                <p>サカモト塾ではライブ形式とオンデマンド形式の２つの学び方を選ぶことができます。</p>
-                <p>ライブ形式では、週に１回、Zoomを使ってリアルタイムで講師と一緒に勉強します。</p>
+                <h4>2つの形式から選べる</h4>
+                <h2>自分のペースに合わせた受講方法</h2>
+                <p>当塾ではライブ形式とオンデマンド形式の２つの学び方を選ぶことができます。</p>
+                <p>ライブ形式では、週に1回、Zoomを使ってリアルタイムで講師と一緒に勉強します。</p>
                 <p>授業内では質問し放題なので、疑問に思ったことはその場ですぐに解消できます。</p>
                 <p>オンデマンド形式では、<Marker markers={markers} use="blueFade">見逃した授業</Marker>や<Marker markers={markers} use="blueFade">参加できなかった授業</Marker>の映像授業を見て勉強します。</p>
                 <p>自分の好きなペースで、内容を理解するまで何回でも見直すことができます。</p>
@@ -482,10 +484,10 @@ export default function About() {
                 </div>
               </div>
               <div className={`${styles.lp_total_item} ${styles.item4}`}>
-                <h4>きめ細やかな</h4>
-                <h2>質問対応</h2>
-                <p>当塾に在籍する生徒は、質問チャットをいつでも利用することができます。</p>
-                <p>講師の解説を聞いて分からなかった内容はもちろん、学校の授業を受けたり自習したりする中で出てきた疑問点にも対応しています。</p>
+                <h4>授業外での疑問も解消する</h4>
+                <h2>チャットを使った個別質問対応</h2>
+                <p>当塾に在籍する生徒は、質問チャットを<Marker markers={markers} use="blueFade">いつでも</Marker>利用することができます。</p>
+                <p><Marker markers={markers} use="blueFade">講師の解説</Marker>を聞いて分からなかった内容はもちろん、<Marker markers={markers} use="blueFade">学校の授業</Marker>や<Marker markers={markers} use="blueFade">自習中</Marker>に出てきた疑問点にも対応しています。</p>
                 <p>大学合格まで全力でサポートいたします。</p>
               </div>
             </div>
@@ -528,36 +530,31 @@ export default function About() {
           />
         </div>
 
-        <div className={styles.container} style={{ textAlign: "center", marginTop: "40px" }}>
+        <div
+          className={styles.container}
+          style={{
+            display: "flex",
+            // justifyContent: "space-between",
+            // alignItems: "center",
+            flexDirection: "column",
+            marginTop: "40px",
+          }}
+        >
             <HoverButton
-                text="公式LINEから問い合わせる"
+                text="LINEで問い合わせる"
                 linkTo="https://lin.ee/Nwh2C8u"
                 normalTextColor="#ffffff"
-                normalBgColor="#00B900"
+                normalBgColor="#06c755"
                 normalBorderColor="#ffffff"
-                hoverTextColor="#00B900"
+                hoverTextColor="#06c755"
                 hoverBgColor="#ffffff"
-                hoverBorderColor="#00B900"
+                hoverBorderColor="#06c755"
                 width="350px"
             />
-            <Spacer height={5} />
 
             <HoverButton
-                text="問い合わせフォームから問い合わせる"
+                text="メールで問い合わせる"
                 linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
-                normalTextColor="#ffffff"
-                normalBgColor="#494949ff"
-                normalBorderColor="#ffffff"
-                hoverTextColor="#494949ff"
-                hoverBgColor="#ffffff"
-                hoverBorderColor="#494949ff"
-                width="350px"
-            />
-            <Spacer height={5} />
-
-            <HoverButton
-            text="料金・コース詳細はコチラ！"
-            linkTo="/prices"
                 normalTextColor="#ffffff"
                 normalBgColor="#5b86e5"
                 normalBorderColor="#ffffff"
@@ -565,7 +562,8 @@ export default function About() {
                 hoverBgColor="#ffffff"
                 hoverBorderColor="#5b86e5"
                 width="350px"
-        />
+            />
+
         </div>
         <QASection
           title="よくある質問"
