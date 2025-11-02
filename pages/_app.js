@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }) {
 
       if (!hasVisited) {
         sessionStorage.setItem("visited", "true");
-        router.replace("/study-management");
+        router.replace("/geography");
       }
     }
   }, [router]);

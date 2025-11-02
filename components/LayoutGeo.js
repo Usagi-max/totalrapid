@@ -26,7 +26,7 @@ export default function Layout({ children, home }) {
 
   const navLinks = [
     { href: "/geography", label: "TOP" },
-    { href: "/about", label: "RAPID" },
+    // { href: "/about", label: "RAPID" },
     { href: "https://lin.ee/Nwh2C8u", label: "公式LINE" },
   ];
 

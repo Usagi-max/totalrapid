@@ -1,16 +1,23 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
   images: {
     unoptimized: true,
   },
+
   async redirects() {
+    // 🔽 環境変数で切り替え
+    if (process.env.DISABLE_REDIRECT === 'true') {
+      return [];
+    }
+
     return [
       {
         source: '/',
-        destination: '/study-management',
-        permanent: true,  // 301リダイレクト（ブラウザはキャッシュ）
+        destination: '/geography',
+        permanent: true,
       },
     ];
   },
