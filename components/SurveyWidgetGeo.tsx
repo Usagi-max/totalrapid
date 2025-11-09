@@ -13,12 +13,7 @@ type QA = {
 const questions: QA[] = [
   {
     question: 'お子様の現在の学年を教えてください。',
-    options: [
-      '高校１年生',
-      '高校２年生',
-      '高校３年生',
-      '既卒生',
-    ],
+    options: ['高校１年生', '高校２年生', '高校３年生', '既卒生'],
     type: 'choice',
     required: true,
   },
@@ -50,7 +45,6 @@ const questions: QA[] = [
   {
     question: '具体的にご相談したい内容がある場合は教えてください',
     type: 'text',
-    required: false,
   },
   {
     question:
@@ -59,7 +53,6 @@ const questions: QA[] = [
     required: true,
   },
 ];
-
 
 type SurveyWidgetProps = {
   primaryColor?: string;
@@ -80,18 +73,23 @@ export default function SurveyWidget({
   const [answers, setAnswers] = useState<Record<number, string | string[]>>({});
   const [loading, setLoading] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [mode, setMode] = useState<'menu' | 'form'>('menu');
 
-  // mode: menu = LINE/メール選択, form = フォーム表示
-  const [mode, setMode] = useState<'menu' | 'form'>('form');
+  // ✅ スライドイン制御用
+  const [visible, setVisible] = useState(false);
+  const [scrollStarted, setScrollStarted] = useState(false);
 
-  // スマホ幅なら menu から始める
+  // ユーザーがスクロールを始めたら検知
   useEffect(() => {
-    if (window.innerWidth <= 2000) {
-      setMode('menu');
-    } else {
-      setMode('form');
-    }
-  }, []);
+    const handleScroll = () => {
+      if (!scrollStarted) {
+        setScrollStarted(true);
+        setTimeout(() => setVisible(true), 1000); // 1秒後に表示
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { once: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scrollStarted]);
 
   const current = questions[step];
   const progress = Math.round((step / questions.length) * 100);
@@ -101,11 +99,12 @@ export default function SurveyWidget({
     if (!current.options) return;
     const prev = answers[step];
     if (Array.isArray(prev)) {
-      if (prev.includes(opt)) {
-        setAnswers({ ...answers, [step]: prev.filter((o) => o !== opt) });
-      } else {
-        setAnswers({ ...answers, [step]: [...prev, opt] });
-      }
+      setAnswers({
+        ...answers,
+        [step]: prev.includes(opt)
+          ? prev.filter((o) => o !== opt)
+          : [...prev, opt],
+      });
     } else {
       setAnswers({ ...answers, [step]: [opt] });
     }
@@ -116,10 +115,9 @@ export default function SurveyWidget({
   };
 
   const handleNext = async () => {
-    if (step < questions.length - 1) {
-      setStep(step + 1);
-    } else {
-      setLoading(true);
+    if (step < questions.length - 1) return setStep(step + 1);
+    setLoading(true);
+    try {
       const payload = {
         timestamp: new Date().toISOString(),
         answers: questions.map((q, i) => ({
@@ -128,42 +126,35 @@ export default function SurveyWidget({
             ? (answers[i] as string[]).join(', ')
             : (answers[i] as string) || '',
         })),
-        email: (answers[questions.length - 1] as string) || '',
       };
-      try {
-        const res = await fetch('/api/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text);
-        }
-        setCompleted(true);
-      } catch (err) {
-        console.error('送信エラー:', err);
-        alert('送信中にエラーが発生しました。');
-      } finally {
-        setLoading(false);
-      }
+      await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      setCompleted(true);
+    } catch (err) {
+      console.error(err);
+      alert('送信中にエラーが発生しました。');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handlePrev = () => {
-    if (step > 0) setStep(step - 1);
-  };
-
+  const handlePrev = () => setStep((s) => Math.max(0, s - 1));
   const handleRetry = () => {
     setCompleted(false);
     setStep(0);
   };
 
-  // --- お問い合わせ方法選択画面 ---
+  // --- 表示しない状態 ---
+  if (!visible) return null;
+
+  // --- メニュー表示 ---
   if (mode === 'menu') {
     return (
       <div
-        className={`${styles.widget} ${styles.half}`}
+        className={`${styles.widget} ${styles.hiddenRight}`}
         style={
           {
             '--color-primary': primaryColor,
@@ -179,11 +170,7 @@ export default function SurveyWidget({
           <button
             className={styles.lineBtn}
             onClick={() =>
-              window.open(
-                'https://lin.ee/Nwh2C8u',
-                '_blank',
-                'noopener,noreferrer'
-              )
+              window.open('https://lin.ee/Nwh2C8u', '_blank', 'noopener')
             }
           >
             LINEで問い合わせる
@@ -196,16 +183,16 @@ export default function SurveyWidget({
     );
   }
 
-  // --- フォーム表示 ---
+  // --- フォーム ---
   return (
     <div
-      className={styles.widget}
+      className={`${styles.widget} ${styles.slideIn}`}
       style={
         {
           '--color-primary': primaryColor,
           '--color-primary-dark': primaryDark,
-          '--color-secondary': secondaryColor,        // ← 追加！
-          '--color-secondary-dark': secondaryDark,    // ← 追加！
+          '--color-secondary': secondaryColor,
+          '--color-secondary-dark': secondaryDark,
           '--color-bg-light': bgLight,
         } as React.CSSProperties
       }
@@ -229,8 +216,6 @@ export default function SurveyWidget({
             <div className={styles.required}>
               {current.required && <span>必須</span>} {current.question}
             </div>
-
-            {/* 選択肢 */}
             {current.type === 'choice' && current.options && (
               <div className={styles.options}>
                 {current.options.map((opt, idx) => {
@@ -248,8 +233,6 @@ export default function SurveyWidget({
                 })}
               </div>
             )}
-
-            {/* テキスト or メール */}
             {(current.type === 'text' || current.type === 'email') && (
               <div className={styles.inputWrap}>
                 {current.type === 'text' ? (
@@ -268,7 +251,6 @@ export default function SurveyWidget({
                 )}
               </div>
             )}
-
             <div className={styles.nav}>
               {step > 0 && (
                 <button className={styles.prevBtn} onClick={handlePrev}>
@@ -287,7 +269,6 @@ export default function SurveyWidget({
                   : '送信'}
               </button>
             </div>
-
             <div className={styles.progress}>
               <span>{progress}%</span>
               <div className={styles.bar}>

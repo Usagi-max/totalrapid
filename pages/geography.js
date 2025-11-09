@@ -29,6 +29,20 @@ import QASection from "../components/QASection";
 const CourseTable = dynamic(() => import('../components/CourseTable'), { ssr: false });
 
 const reviews = [
+    {
+    grade: '既卒生',
+    gender: '男',
+    nickname: 'Nさん',
+    icon: '/images/parent_icon_dog.png',
+    comment: '夏から始めたんですが、わずか３か月で模試の地理が60点台→80点台に！先生が「得点に直結する考え方」だけを選んで教えてくださるので、効率が抜群でした。他の科目に時間を回せたのもありがたかったです。',
+  },
+  {
+    grade: '高3',
+    gender: '女',
+    nickname: 'Hさん',
+    icon: '/images/parent_icon_flower.png',
+    comment: '理系科目中心の学習スケジュールの中で、地理を最小限の時間で仕上げたいと思って受講しました。結果、共通テスト本番では85点を取ることができ、合否にも大きく影響しました。先生のカリキュラムに出会えて本当によかったです。',
+  },
   {
     grade: '高3',
     gender: '男',
@@ -42,20 +56,6 @@ const reviews = [
     nickname: 'Sさん',
     icon: '/images/parent_icon_user.jpg',
     comment: 'オンライン授業に不安がありましたが、ライブ形式でも講師の方が生徒一人ひとりの理解度を見ながら進めてくれるので安心でした。質問しやすい雰囲気で、初めてでもすぐに馴染めたようです。映像授業のフォローも万全でした。',
-  },
-  {
-    grade: '既卒生',
-    gender: '男',
-    nickname: 'Nさん',
-    icon: '/images/parent_icon_dog.png',
-    comment: '夏から始めたんですが、わずか３か月で模試の地理が60点台→80点台に！先生が「得点に直結する考え方」だけを選んで教えてくださるので、効率が抜群でした。他の科目に時間を回せたのもありがたかったです。',
-  },
-  {
-    grade: '高3',
-    gender: '女',
-    nickname: 'Hさん',
-    icon: '/images/parent_icon_flower.png',
-    comment: '理系科目中心の学習スケジュールの中で、地理を最小限の時間で仕上げたいと思って受講しました。結果、共通テスト本番では85点を取ることができ、合否にも大きく影響しました。先生のカリキュラムに出会えて本当によかったです。',
   },
   {
     grade: '高2',
@@ -226,7 +226,7 @@ export default function About() {
               <p>実は、地理の共通テストの問題はいくつかの<Marker markers={markers} use="blueFade">「法則」</Marker>を身につけることで高得点が取れるように設計されています。</p><br/>
               <p>しかし、大半の受験生はこの「法則」を知りません。</p>
               <p>教科書や参考書を読み、<Marker markers={markers} use="blueFade">専門用語を丸暗記</Marker>することで対策しようとするため、多くの時間をかけてしまっている現状があります。</p><br/>
-              <p>そこで、サカモト塾では<Marker markers={markers} use="blueFade">過去に出題された問題パターンを全て分析</Marker>することで、正解を導くために必要な「法則」を明らかにしました。</p>
+              <p>そこで、私たちは<Marker markers={markers} use="blueFade">過去に出題された問題パターンを全て分析</Marker>することで、正解を導くために必要な「法則」を明らかにしました。</p>
               <p>当塾の講座ではこれらの「法則」を全て伝授しており、実際に数ヶ月で０から高得点を取れるようになった受講生もいます。</p>
               <p>地理は<Marker markers={markers} use="blueFade">「時間をかけて丸暗記する科目」</Marker>ではなく、<Marker markers={markers} use="blueFade">「法則を理解して効率良く学ぶ科目」</Marker>です。</p>
               <p>私たちと一緒に、無理のない学習法で８割を狙っていきましょう！</p>
@@ -242,48 +242,6 @@ export default function About() {
           bgLight="#f0f4f8"
         />
 
-        {/* <div style={{ backgroundColor:"#FFF0D7" ,   width:"100%", paddingBottom:"80px"}}>
-          <div className={styles.contentArea}  style={{display: "flex", justifyContent: "center"}}>
-            <h1>学習習慣を改善するステップ</h1>
-          </div>
-          <div className={styles.lp_flow_container}>
-            <div className={styles.lp_flow_item} >
-              <h4 >STEP1</h4>
-              <p style={{padding:"10px" }}>自分一人で<BreakOnBigScreen />正しく学習できない</p>
-              <Image 
-                src="/images/study__.png" 
-                alt="using pc" 
-                width={100}
-                height={100} 
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            <div style={{ display: "inline-block",color:"#F39700", transform: "rotate(-90deg) scaleX(2)", padding:"2%"}}>▼</div>
-            <div className={styles.lp_flow_item} >
-              <h4>STEP2</h4>
-              <p style={{padding:"10px" }}>RAPIDと一緒に<BreakOnBigScreen />正しく学習できる</p>
-              <Image 
-                src="/images/study_with.png" 
-                alt="using pc" 
-                width={100}
-                height={100} 
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            <div style={{ display: "inline-block",color:"#F39700", transform: "rotate(-90deg) scaleX(2)", padding:"2%"}}>▼</div>
-            <div className={styles.lp_flow_item} >
-              <h4>STEP3 </h4>
-              <p style={{padding:"10px" }}>自分1人で<BreakOnBigScreen />正しく学習できる</p>
-              <Image 
-                src="/images/study_self.png" 
-                alt="using pc" 
-                width={100}
-                height={100} 
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-          </div>
-        </div> */}
         <GradientStripeBox
           striped={true}
           randomObject={false}
