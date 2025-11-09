@@ -128,11 +128,11 @@ const priceTable = {
 };
 const tabsData = [
   {
-    label: "教科書と共通テストの比較①",
+    label: "基礎問題",
     image: "/images/koukou_chiri_vs_kyoutsu_test_1.png"
   },
   {
-    label: "教科書と共通テストの比較②",
+    label: "応用問題",
     image: "/images/koukou_chiri_vs_kyoutsu_test_2.png"
   }
 ];
@@ -202,37 +202,38 @@ export default function About() {
             <img src="/images/geo_head.png" alt="Responsive" className={styles.lp_head_image} />
           </picture>
         </div>
-        <Spacer height={150} />
-        <h2><strong>「最低限の勉強で８割」を狙う</strong><BreakOnSmallScreen /><strong>理系受験生のためのカリキュラム</strong></h2>
-        <div className={`${styles.lp_about_container}`}>
-          {/* <div className={styles.lp_about_item1}>
-
-            <Spacer height={20} />
-            <div style={{ position: "relative", width: "100%", justifyContent: "center"}}>
-              <FadeInImage
-                src="/images/student teacher.jpeg"
-                alt="Another Image"
-                width={600}
-                height={400}
-                aspectRatio="4/3"
-                delay={0.4}
-              />
+        <Spacer large={150} small={30} breakpoint={760}/>
+        <GradientStripeBox
+          striped={false}
+          randomObject={false}
+          backgroundColor="#fff"
+          accentColors={["#ffffff42", "#5a80d371"]}
+          shapeType={[ "line"]}
+          squareCount={70}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={false}
+          mixBlend={false}
+          roundedSquares={false}
+          shadow={false}
+        >
+          <h2 style={{textAlign: "center"}}><strong>「最低限の勉強で８割」を狙う</strong><BreakOnSmallScreen /><strong>理系受験生のためのカリキュラム</strong></h2>
+          <div className={`${styles.lp_about_container}`}>
+            <div>
+              <p>理系を目指すお子さまにとって、地理は主要科目に比べるとどうしても優先順位が下がりがちです。</p>
+              <p><Marker markers={markers} use="blueFade">英語・数学・理科にしっかりと時間を割く</Marker>ために、地理の勉強は最低限にしたいと考える受験生がほとんどだと思います。</p><br/>
+              <p>それでは、地理の共通テストで効率良く８割を達成するためにはどのような勉強をすればいいのでしょうか？</p>
+              <p>実は、地理の共通テストの問題はいくつかの<Marker markers={markers} use="blueFade">「法則」</Marker>を身につけることで高得点が取れるように設計されています。</p><br/>
+              <p>しかし、大半の受験生はこの「法則」を知りません。</p>
+              <p>教科書や参考書を読み、<Marker markers={markers} use="blueFade">専門用語を丸暗記</Marker>することで対策しようとするため、多くの時間をかけてしまっている現状があります。</p><br/>
+              <p>そこで、サカモト塾では<Marker markers={markers} use="blueFade">過去に出題された問題パターンを全て分析</Marker>することで、正解を導くために必要な「法則」を明らかにしました。</p>
+              <p>当塾の講座ではこれらの「法則」を全て伝授しており、実際に数ヶ月で０から高得点を取れるようになった受講生もいます。</p>
+              <p>地理は<Marker markers={markers} use="blueFade">「時間をかけて丸暗記する科目」</Marker>ではなく、<Marker markers={markers} use="blueFade">「法則を理解して効率良く学ぶ科目」</Marker>です。</p>
+              <p>私たちと一緒に、無理のない学習法で８割を狙っていきましょう！</p>
             </div>
-          </div> */} 
-          <div>
-            <p>理系を目指すお子さまにとって、地理は主要科目に比べるとどうしても優先順位が下がりがちです。</p>
-            <p><Marker markers={markers} use="blueFade">英語・数学・理科にしっかりと時間を割く</Marker>ために、地理の勉強は最低限にしたいと考える受験生がほとんどだと思います。</p><br/>
-            <p>それでは、地理の共通テストで効率良く８割を達成するためにはどのような勉強をすればいいのでしょうか？</p>
-            <p>実は、地理の共通テストの問題はいくつかの<Marker markers={markers} use="blueFade">「法則」</Marker>を身につけることで高得点が取れるように設計されています。</p><br/>
-            <p>しかし、大半の受験生はこの「法則」を知りません。</p>
-            <p>教科書や参考書を読み、<Marker markers={markers} use="blueFade">専門用語を丸暗記</Marker>することで対策しようとするため、多くの時間をかけてしまっている現状があります。</p><br/>
-            <p>そこで、サカモト塾では<Marker markers={markers} use="blueFade">過去に出題された問題パターンを全て分析</Marker>することで、正解を導くために必要な「法則」を明らかにしました。</p>
-            <p>当塾の講座ではこれらの「法則」を全て伝授しており、実際に数ヶ月で０から高得点を取れるようになった受講生もいます。</p>
-            <p>地理は<Marker markers={markers} use="blueFade">「時間をかけて丸暗記する科目」</Marker>ではなく、<Marker markers={markers} use="blueFade">「法則を理解して効率良く学ぶ科目」</Marker>です。</p>
-            <p>私たちと一緒に、無理のない学習法で８割を狙っていきましょう！</p>
           </div>
-        </div>
-        <Spacer height={150} />
+        </GradientStripeBox>
+        <Spacer large={150} small={30} breakpoint={760}/>
         <SurveyWidget
           primaryColor="#5b86e5"
           primaryDark="#25375eff"
@@ -283,23 +284,23 @@ export default function About() {
             </div>
           </div>
         </div> */}
-<GradientStripeBox
-  striped={true}
-  randomObject={false}
-  accentColors={["#7b97d171", "#6ec9cf42"]}
-  shapeType={["circle", "square", "line", "triangle"]}
-  squareCount={100}
-  speed={1.6}
-  opacityRange={[0.15, 0.35]}
-  blur={true}
-  mixBlend={true}
-  roundedSquares={false}
->
+        <GradientStripeBox
+          striped={true}
+          randomObject={false}
+          accentColors={["#7b97d171", "#6ec9cf42"]}
+          shapeType={["circle", "square", "line", "triangle"]}
+          squareCount={100}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={true}
+          mixBlend={true}
+          roundedSquares={false}
+        >
           <div>
             <h1 className={styles.gradientText}>REASON01</h1>
             {/* <h3 style={{textAlign: "center"}} id="point1">REASON1</h3> */}
             <h2 style={{textAlign: "center"}}><strong>現役教員による、</strong><BreakOnSmallScreen /><strong>学校よりも分かりやすい授業</strong></h2>
-            <Spacer height={30} />
+            <Spacer large={30} />  
             <p style={{textAlign: "center"}}>当塾では、<Marker markers={markers} use="blueFade">教育現場</Marker>での<Marker markers={markers} use="blueFade">指導経験</Marker>を持つ講師のみを選抜しています。</p>
             <p style={{textAlign: "center"}}>特に、塾長は<Marker markers={markers} use="blueFade">現役</Marker>の地理教員であり、これまでに<Marker markers={markers} use="blueFade">偏差値40〜70</Marker>までの多様な生徒に地理総合・地理探究の指導を行ってきました。</p>
             <div className={`${styles.lp_circle_container} ${styles.contentArea}`}>
@@ -327,18 +328,18 @@ export default function About() {
           </div>
         </GradientStripeBox>
 
-<GradientStripeBox
-  striped={false}
-  randomObject={true}
-  accentColors={["#36d1dc", "#5b86e5", "#89f7fe"]}
-  shapeType={["square", "line"]}
-  squareCount={60}
-  speed={1.6}
-  opacityRange={[0.15, 0.35]}
-  blur={false}
-  mixBlend={true}
-  roundedSquares={false}
->
+        <GradientStripeBox
+          striped={false}
+          randomObject={true}
+          accentColors={["#36d1dc", "#5b86e5", "#89f7fe"]}
+          shapeType={["square", "line"]}
+          squareCount={60}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={false}
+          mixBlend={true}
+          roundedSquares={false}
+        >
           <div>
             <h1 className={styles.gradientText}>REASON02</h1>
             {/* <h3 style={{textAlign: "center"}} id="point2">REASON2</h3> */}
@@ -425,7 +426,8 @@ export default function About() {
                 </div>
               </div>
             </div>
-            <Spacer height={50} />
+            <Spacer large={50} />
+            <h4>教科書と共通テストの比較</h4>
             <TabSwitcher
               tabs={tabsData}
               textColor="#ffffff"
@@ -450,7 +452,7 @@ export default function About() {
           <div>
             <h1 className={styles.gradientText}>REASON03</h1>
             {/* <h3 style={{textAlign: "center"}} id="point2">REASON3</h3> */}
-            <h2 style={{textAlign: "center"}}><strong>お子様に合わせた</strong><BreakOnSmallScreen /><strong>学びのサポート</strong></h2>
+            <h2 style={{textAlign: "center"}}><strong>お子様に合わせた学びのサポート</strong></h2>
             <div className={`${styles.lp_total_container} `}>
               <div className={`${styles.lp_total_item} ${styles.item1}`} >
                 <h4>2つの形式から選べる</h4>
@@ -493,7 +495,40 @@ export default function About() {
             </div>
           </div>
         </GradientStripeBox>
-          <Spacer height={30} />
+
+        <GradientStripeBox
+          striped={false}
+          randomObject={false}
+          backgroundColor="#fff"
+          accentColors={["#ffffff42", "#5a80d371"]}
+          shapeType={[ "line"]}
+          squareCount={70}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={false}
+          mixBlend={false}
+          roundedSquares={false}
+          shadow={false}
+        >
+          <div className={` ${styles.contentArea}`}>
+            <h1 className={styles.gradientText}>保護者様の口コミ</h1>
+            <ReviewSlider reviews={reviews} interval={4000} />
+          </div>
+        </GradientStripeBox>
+        <GradientStripeBox
+          striped={false}
+          randomObject={false}
+          backgroundColor="#fff"
+          accentColors={["#ffffff42", "#5a80d371"]}
+          shapeType={[ "line"]}
+          squareCount={70}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={false}
+          mixBlend={false}
+          roundedSquares={false}
+          shadow
+        >
           <FlexibleTable
             title="サービス内容一覧"
             tableData={priceTable}
@@ -502,15 +537,24 @@ export default function About() {
             bgColor="#ffffff"
             highlightBgColor="#36d1dc23"
             hasShadow={true}
+            minTableWidth="900px"
           />
+        </GradientStripeBox>
 
-        <Spacer height={30} />
-        <div className={` ${styles.contentArea}`}>
-          <h1 className={styles.gradientText}>保護者様の口コミ</h1>
-          <ReviewSlider reviews={reviews} interval={4000} />
-        </div>
-
-        <Spacer height={50} />
+        <GradientStripeBox
+          striped={false}
+          randomObject={false}
+          backgroundColor="#fff"
+          accentColors={["#ffffff42", "#5a80d371"]}
+          shapeType={[ "line"]}
+          squareCount={70}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={false}
+          mixBlend={false}
+          roundedSquares={false}
+          // shadow={false}
+        >
         <div className={` ${styles.contentArea}`}>
           
           <h1 className={styles.gradientText}>お申し込みの流れ</h1>
@@ -528,18 +572,18 @@ export default function About() {
             textColor="#ffffff"
             gradationType="diagonal" // "vertical" | "horizontal" | "diagonal" | "radial"
           />
-        </div>
 
-        <div
-          className={styles.container}
-          style={{
-            display: "flex",
-            // justifyContent: "space-between",
-            // alignItems: "center",
-            flexDirection: "column",
-            marginTop: "40px",
-          }}
-        >
+
+          <div
+            className={styles.container}
+            style={{
+              display: "flex",
+              // justifyContent: "space-between",
+              // alignItems: "center",
+              flexDirection: "column",
+              marginTop: "40px",
+            }}
+          >
             <HoverButton
                 text="LINEで問い合わせる"
                 linkTo="https://lin.ee/Nwh2C8u"
@@ -549,10 +593,12 @@ export default function About() {
                 hoverTextColor="#06c755"
                 hoverBgColor="#ffffff"
                 hoverBorderColor="#06c755"
-                width="350px"
+                width="280px"
             />
-
-            <HoverButton
+          </div>
+                </div>
+        </GradientStripeBox>
+            {/* <HoverButton
                 text="メールで問い合わせる"
                 linkTo="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform?usp=header"
                 normalTextColor="#ffffff"
@@ -562,21 +608,34 @@ export default function About() {
                 hoverBgColor="#ffffff"
                 hoverBorderColor="#5b86e5"
                 width="350px"
-            />
+            /> */}
 
-        </div>
-        <QASection
-          title="よくある質問"
-          qaData={qaData}
-          accentColors={["#36d1dc", "#5b86e5"]} // 2色指定 → グラデーション
-          textColor="#222"
-          bgColor="#ffffffff"
-        />
-
+        <GradientStripeBox
+          striped={false}
+          randomObject={false}
+          backgroundColor="#fff"
+          accentColors={["#ffffff42", "#5a80d371"]}
+          shapeType={[ "line"]}
+          squareCount={70}
+          speed={1.6}
+          opacityRange={[0.15, 0.35]}
+          blur={false}
+          mixBlend={false}
+          roundedSquares={false}
+          shadow={false}
+        >
+          <QASection
+            title="よくある質問"
+            qaData={qaData}
+            accentColors={["#36d1dc", "#5b86e5"]} // 2色指定 → グラデーション
+            textColor="#222"
+            bgColor="#ffffffff"
+          />
+        </GradientStripeBox>
         
 
 
-        <Spacer height={90} />
+        <Spacer large={90} />
 
 
 

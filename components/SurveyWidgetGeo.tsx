@@ -1,3 +1,4 @@
+//SurveyWidgetGeo.tsx
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './SurveyWidget.module.css';
@@ -203,6 +204,8 @@ export default function SurveyWidget({
         {
           '--color-primary': primaryColor,
           '--color-primary-dark': primaryDark,
+          '--color-secondary': secondaryColor,        // ← 追加！
+          '--color-secondary-dark': secondaryDark,    // ← 追加！
           '--color-bg-light': bgLight,
         } as React.CSSProperties
       }

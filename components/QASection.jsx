@@ -3,11 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 
 /**
  * QASection コンポーネント
- * @param {string} title - セクションタイトル
- * @param {Array<{ q: string, a: string }>} qaData - 質問と回答の配列
- * @param {string[]} accentColors - アクセントカラー（1色または2色）
- * @param {string} textColor - テキストカラー
- * @param {string} bgColor - 背景色
  */
 export default function QASection({
   title,
@@ -32,9 +27,6 @@ export default function QASection({
       style={{
         background: bgColor,
         color: textColor,
-        padding: "3rem 2rem",
-        borderRadius: "12px",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
         maxWidth: "1080px",
         margin: "2rem auto",
         transition: "all 0.3s ease",
@@ -43,7 +35,6 @@ export default function QASection({
       {/* タイトル */}
       <h2
         style={{
-          fontSize: "1.8rem",
           textAlign: "center",
           marginBottom: "1rem",
           backgroundImage: accentStyle,
@@ -89,9 +80,28 @@ export default function QASection({
 /**
  * アコーディオンアイテム
  */
-function AccordionItem({ index, isOpen, question, answer, accentColors, textColor, onToggle }) {
+function AccordionItem({
+  index,
+  isOpen,
+  question,
+  answer,
+  accentColors,
+  textColor,
+  onToggle,
+}) {
   const contentRef = useRef(null);
   const [height, setHeight] = useState("0px");
+
+  // 🆕 画面サイズを監視してボタンのpaddingを調整
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 600);
+    };
+    handleResize(); // 初期判定
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (isOpen && contentRef.current) {
@@ -127,7 +137,8 @@ function AccordionItem({ index, isOpen, question, answer, accentColors, textColo
           width: "100%",
           background: "transparent",
           border: "none",
-          padding: "1.2rem 1.5rem",
+          // 🆕 画面サイズでpaddingを切り替え
+          padding: isSmallScreen ? "0.8rem 1rem" : "1.2rem 1.5rem",
           textAlign: "left",
           fontWeight: "bold",
           fontSize: "1.1rem",
@@ -135,14 +146,15 @@ function AccordionItem({ index, isOpen, question, answer, accentColors, textColo
           color: textColor,
         }}
       >
-        <span>
-          Q{index + 1}. {question}
-        </span>
+        <p>
+          <span>
+            Q{index + 1}. {question}
+          </span>
+        </p>
         <span
           style={{
             transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
             transition: "transform 0.3s ease",
-            fontSize: "1.6rem",
             color: accentColors[0],
             fontWeight: "bold",
           }}
@@ -166,7 +178,6 @@ function AccordionItem({ index, isOpen, question, answer, accentColors, textColo
               lineHeight: "1.7",
               whiteSpace: "pre-line",
               opacity: 0.95,
-              fontSize: "1rem",
             }}
           >
             {answer}

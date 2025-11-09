@@ -477,6 +477,9 @@
     padding-top: 10px;
     min-width: none;
   }
+  .lp_total_item,.lp_circle_item1{
+     padding: 8px;
+  }
   /* .consultation_container > div >div,
   .consultation_container > img,
   .contentArea{
@@ -517,7 +520,7 @@
     padding-top: 40px;
   }
   .body h2{
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin:5px;
   }
   .body h3{

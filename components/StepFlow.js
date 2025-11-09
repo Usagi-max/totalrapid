@@ -1,4 +1,6 @@
+// StepFlow.js
 "use client";
+
 import styles from "./StepFlow.module.css";
 import { useEffect, useState } from "react";
 
@@ -6,7 +8,7 @@ export default function StepFlow({
   steps,
   primaryColor = "#5b86e5",  // グラデーション開始色
   secondColor = "#36d1dc",   // グラデーション終了色
-  textColor = "#f0f4f8",     // 数字・矢印の線色・ボックス背景色
+  textColor = "#ffffff",     // 内側背景色や文字色
   gradationType = "diagonal" // vertical | horizontal | diagonal | radial
 }) {
   const [isVertical, setIsVertical] = useState(false);
@@ -23,7 +25,7 @@ export default function StepFlow({
     ? "1fr"
     : steps.map((_, i) => (i < steps.length - 1 ? "1fr 60px" : "1fr")).join(" ");
 
-  // グラデーション設定
+  // ✅ グラデーション設定関数
   const getGradient = () => {
     switch (gradationType) {
       case "vertical":
@@ -50,9 +52,8 @@ export default function StepFlow({
           <div
             className={styles.stepBox}
             style={{
-              borderImage: `${gradient} 1`,
-              borderImageSlice: 1,
-              backgroundColor: textColor,
+              "--gradient-border": gradient, // ✅ 枠線グラデーションをCSS変数で渡す
+              "--step-bg": textColor,
             }}
           >
             <div className={styles.numberBadge}>
@@ -64,10 +65,7 @@ export default function StepFlow({
                   className={styles.badgeOverlay}
                   style={{ backgroundImage: gradient }}
                 />
-                <span
-                  className={styles.badgeNumber}
-                  style={{ color: textColor }}
-                >
+                <span className={styles.badgeNumber} style={{ color: textColor }}>
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
@@ -111,9 +109,9 @@ export default function StepFlow({
                   )}
                 </defs>
 
-                {/* ✅ ダブルアロー（右向き） */}
+                {/* ✅ ダブルアロー */}
                 <path
-          d="M14 16 l10 10 -10 10"
+                  d="M14 16 l10 10 -10 10"
                   fill="none"
                   stroke={`url(#grad-${index})`}
                   strokeWidth="4"
@@ -121,7 +119,7 @@ export default function StepFlow({
                   strokeLinejoin="round"
                 />
                 <path
-          d="M24 16l10 10 -10 10"
+                  d="M24 16l10 10 -10 10"
                   fill="none"
                   stroke={`url(#grad-${index})`}
                   strokeWidth="4"

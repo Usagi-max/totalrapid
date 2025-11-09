@@ -146,11 +146,11 @@ export default function Layout({ children, home }) {
       <footer className={styles.footer}>
         <div className={styles.footerLinks}>
           <Link href="/about">TOP</Link>
-          <Link href="/prices">料金</Link>
+          {/* <Link href="/prices">料金</Link> */}
           <a href="https://lin.ee/Nwh2C8u" target="_blank" rel="noopener noreferrer">公式LINE</a>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform" target="_blank" rel="noopener noreferrer">
+          {/* <a href="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform" target="_blank" rel="noopener noreferrer">
             お問い合わせフォーム
-          </a>
+          </a> */}
         </div>
         <div>© {new Date().getFullYear()} 学習塾 RAPID All rights reserved.</div>
       </footer>

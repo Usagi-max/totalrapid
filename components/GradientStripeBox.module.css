@@ -1,3 +1,4 @@
+/* GradientStripeBox.module.css */
 .gradientStripeBox {
   width: 100%;
   padding: 60px 5%;
@@ -39,7 +40,7 @@
 }
 
 .plain {
-  background: #E8FEFE;
+  background: var(--plain-bg, #E8FEFE); /* JSから値が来なければデフォルト使用 */
 }
 
 .bgCanvas {
@@ -65,7 +66,7 @@
   padding: 24px;
   width: 100%;
   max-width: 1080px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow, 0 4px 14px rgba(0, 0, 0, 0.1)); /* 🆕 */
 }
 
 .innerBoxContainer {
@@ -73,4 +74,14 @@
   flex-direction: column;
   gap: 40px;
   align-items: center;
+}
+
+@media (max-width: 600px) {
+  .gradientStripeBox {
+    padding: 30px 8px;
+  }
+
+  .innerBox {
+    padding: 8px;
+  }
 }

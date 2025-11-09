@@ -3,11 +3,15 @@
   max-width: 1080px;
   margin: 0 auto;
   font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .tabButtons {
   display: flex;
-  gap: 8px;
+  width: 100%;
+  gap: 0;
   margin-bottom: 0;
 }
 
@@ -23,34 +27,33 @@
 }
 
 .tabButton.activeTab {
-  z-index: 2; /* アクティブタブを前面に */
+  z-index: 2;
 }
 
+/* 🆕 グラデーション枠線付きタブコンテンツ */
 .tabContent {
-  position: relative;
-  border-radius: 0 0 12px 12px;
   width: 100%;
-  min-height: 400px; /* 画像に合わせて調整 */
-  margin-top: -2px; /* アクティブタブの枠線と重なる */
+  border-radius: 12px;
   background: #f0f0f0;
+  margin-top: -2px;
+  border: 3px solid transparent;
+  border-image: linear-gradient(90deg, #36d1dc, #5b86e5) 1;
+  box-sizing: border-box;
+  z-index: 1;
 }
 
 .tabPane {
-  display: none; /* 非アクティブは非表示 */
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: none;
   width: 100%;
 }
 
 .tabPane.activePane {
-  display: block; /* アクティブのみ表示 */
-  position: relative; /* 親の min-height を使う */
+  display: block;
 }
 
 .imageWrapper {
   width: 100%;
-  padding: 16px;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -59,5 +62,40 @@
   height: auto;
   display: block;
   border-radius: 8px;
-  object-fit: contain; /* 縦横比を維持して全体表示 */
+  object-fit: contain;
+}
+
+/* 🆕 小画面時（横スクロール対応＋中身は可変横幅） */
+@media (max-width: 600px) {
+  .tabSwitcher {
+    align-items: flex-start;
+  }
+
+  .tabContent {
+    position: relative;
+    width: 100%; /* ✅ 常に画面幅いっぱい */
+    background: #fff;
+    border: 3px solid transparent;
+    border-image: linear-gradient(90deg, #36d1dc, #5b86e5) 1;
+    border-radius: 12px;
+
+    /* ✅ 横スクロール可（中身が広ければスクロール） */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .imageWrapper {
+    display: inline-block; /* ✅ 横幅を中身に合わせる */
+    min-width: 200%; /* ✅ 横幅を画面の1.5倍に設定（スクロールさせる） */
+    padding: 0;
+    white-space: nowrap;
+  }
+
+  .tabImage {
+    width: auto;  /* ✅ アスペクト比維持 */
+    display: inline-block;
+    object-fit: contain;
+    border-radius: 8px;
+  }
 }

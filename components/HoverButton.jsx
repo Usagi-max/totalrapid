@@ -23,7 +23,7 @@ const HoverButton = ({
     marginTop: "5px",
     fontSize: "16px",
     fontWeight: "bold",
-    borderRadius: "5px",
+    borderRadius: "6px",
     color: isHovered ? hoverTextColor || "#ffffff" : normalTextColor || "#ffffff",
     backgroundColor: isHovered ? hoverBgColor || "#ff6347" : normalBgColor || "#6495ed",
     transition: "all 0.3s ease",

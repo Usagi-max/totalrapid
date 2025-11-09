@@ -1,69 +1,85 @@
+/* FlexibleTable.module.css */
 .container {
-  padding-top: 24px;
-  padding-bottom: 24px;
   max-width: 1080px;
   margin: 0 auto;
   background-color: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.6;
-
-  /* ✅ JSXから渡されたaccentColorを受け取る */
   --accent-color: #f39700;
+
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-/* テーブル全体の枠 */
+/* テーブル全体 */
 .tableWrapper {
   max-width: 100%;
   margin: 0 auto 40px auto;
   background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 40px;
-  border: 1px solid #eee;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 横スクロール用ラッパー */
+.scrollContainer {
+  width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #eee;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  height: 8px;
+}
+.scrollContainer::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 /* テーブル本体 */
 .table {
-  width: 100%;
+  width: max-content;
+  min-width: var(--min-table-width, 800px);
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: auto;
+  box-sizing: border-box;
 }
 
-/* ヘッダーセル */
-.table th {
-  color: #333;
-  font-weight: bold;
-  font-size: 15px;
-  padding: 14px 12px;
-  text-align: left;
-  border-bottom: 2px solid #e0e0e0;
-  background-color: #fff;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-}
-
-/* データセル */
+/* 共通セル */
+.table th,
 .table td {
-  padding: 16px 12px;
+  padding: 14px 12px;
   font-size: 14px;
   color: #333;
   border-bottom: 1px solid #eee;
-  vertical-align: top;
   line-height: 1.75;
+  vertical-align: top;
   word-break: break-word;
   overflow-wrap: anywhere;
+  /* ✅ 1列あたりの最大幅を画面幅の90%に制限 */
+  max-width: 50vw;
 }
 
-/* 行ホバー時の軽いハイライト */
+/* ヘッダー */
+.table th {
+  font-weight: bold;
+  border-bottom: 2px solid #e0e0e0;
+  background-color: #fff;
+  color: #333;
+  text-align: left;
+}
+
+/* nowrap列用: 明示的に指定された列のみ折り返さない */
+.table th.nowrap,
+.table td.nowrap {
+  white-space: nowrap;
+  max-width: none;
+}
+
+/* hover */
 .table tr:hover {
   background-color: #fcfcfc;
-}
-
-/* 各列間の境界線 */
-.table td:not(:last-child),
-.table th:not(:last-child) {
-  border-right: none;
 }
 
 /* おすすめ行 */
@@ -82,15 +98,12 @@
   font-size: 11px;
   font-weight: bold;
   border-radius: 12px;
-  vertical-align: middle;
   line-height: 1;
   white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--accent-color);
   animation: pulseColor 3.6s ease-in-out infinite;
 }
 
-/* バッジのアニメーション */
 @keyframes pulseColor {
   0% {
     background-color: var(--accent-color);
@@ -109,26 +122,9 @@
   }
 }
 
-/* 注意書き */
-.notes {
-  font-size: 12px;
-  margin-top: 16px;
-  padding-left: 20px;
-  color: #777;
-  line-height: 1.5;
-  list-style: none;
-}
-
-/* ✅ レスポンシブ対応 */
+/* レスポンシブ */
 @media (max-width: 768px) {
-  .container {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
 
-  .tableWrapper {
-    padding: 24px;
-  }
 
   .table th,
   .table td {
@@ -141,3 +137,4 @@
     padding: 3px 8px;
   }
 }
+

@@ -1,10 +1,8 @@
+// FlexibleTable.jsx
 import React, { useRef, useLayoutEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import styles from "./FlexibleTable.module.css";
 
-/**
- * 高さ・幅計測を行うテーブル
- */
 const FlexibleTable = ({
   title = "サービス内容一覧",
   tableData = { headers: [], rows: [] },
@@ -13,13 +11,13 @@ const FlexibleTable = ({
   bgColor = "#fff",
   highlightBgColor = "#fff8f0",
   hasShadow = true,
+  minTableWidth = "800px",
 }) => {
   if (!tableData || !Array.isArray(tableData.headers) || !Array.isArray(tableData.rows)) {
     console.error("Invalid tableData format. It must include 'headers' and 'rows' arrays.");
     return null;
   }
 
-  // ✅ useMemoでheadersをメモ化
   const headers = useMemo(
     () =>
       tableData.headers.map((h) =>
@@ -33,7 +31,6 @@ const FlexibleTable = ({
   const [columnWidths, setColumnWidths] = useState([]);
   const tableRef = useRef(null);
 
-  // ✅ 幅計測
   useLayoutEffect(() => {
     if (!tableRef.current || !headers.length || !tableData.rows.length) return;
 
@@ -43,11 +40,10 @@ const FlexibleTable = ({
 
     const calculated = headers.map((header, colIndex) => {
       if (!header.noWrap) return null;
-      let texts = tableData.rows.map((r) => (r.data?.[colIndex] ? String(r.data[colIndex]) : ""));
+      const texts = tableData.rows.map((r) => (r.data?.[colIndex] ? String(r.data[colIndex]) : ""));
       texts.push(header.label);
-      let maxText = texts.reduce((a, b) => (a.length > b.length ? a : b), "");
-      const width = ctx.measureText(maxText).width + 40;
-      return width;
+      const maxText = texts.reduce((a, b) => (a.length > b.length ? a : b), "");
+      return ctx.measureText(maxText).width + 40;
     });
 
     setColumnWidths((prev) => {
@@ -64,98 +60,94 @@ const FlexibleTable = ({
     <div
       className={styles.container}
       style={{
-        "--accent-color": accentColor, // ✅ CSS変数として渡す
+        "--accent-color": accentColor,
       }}
     >
-
-
       <div
         className={styles.tableWrapper}
         style={{
           backgroundColor: bgColor,
-          boxShadow: hasShadow ? "0 4px 12px rgba(0, 0, 0, 0.1)" : "none",
           border: `1px solid ${accentColor}33`,
         }}
       >
-        <h2
+        <h1
           style={{
             fontWeight: "bold",
-      background: "linear-gradient(90deg, #36d1dc, #5b86e5)",
-      WebkitBackgroundClip: "text", // キャメルケースに
-      WebkitTextFillColor: "transparent",
-      display: "block",
-      margin: "0 auto",
-      fontSize: "1.8rem",
-      textAlign: "center",
-            
+            background: "linear-gradient(90deg, #36d1dc, #5b86e5)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            margin: "0 auto 24px",
+            textAlign: "center",
           }}
         >
           {title}
-        </h2>
-        <table className={styles.table} ref={tableRef}>
-          <thead>
-            <tr>
-              {headers.map((header, i) => (
-                <th
-                  key={i}
-                  style={{
-                    color: textColor,
-                    whiteSpace: header.noWrap ? "nowrap" : "normal",
-                    width: header.noWrap
-                      ? `${columnWidths[i] ? columnWidths[i] + "px" : "auto"}`
-                      : `${(header.widthWeight / totalWeight) * 100}%`,
-                  }}
-                >
-                  {header.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
+        </h1>
 
-          <tbody>
-            {tableData.rows.map((row, i) => {
-              const isRecommend = row.recommend || false;
-              const cells = Array.isArray(row.data) ? row.data : [];
+        <div
+          className={styles.scrollContainer}
+          style={{
+            "--min-table-width": minTableWidth,
+          }}
+        >
+          <table className={styles.table} ref={tableRef}>
+            <thead>
+              <tr>
+                {headers.map((header, i) => (
+                  <th
+                    key={i}
+                    className={header.noWrap ? styles.nowrap : ""}
+                    style={{
+                      color: textColor,
+                      width: header.noWrap
+                        ? `${columnWidths[i] ? columnWidths[i] + "px" : "auto"}`
+                        : `${(header.widthWeight / totalWeight) * 100}%`,
+                    }}
+                  >
+                    {header.label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.rows.map((row, i) => {
+                const isRecommend = row.recommend || false;
+                const cells = Array.isArray(row.data) ? row.data : [];
 
-              return (
-                <tr
-                  key={i}
-                  className={isRecommend ? styles.recommendRow : ""}
-                  style={{
-                    backgroundColor: isRecommend ? highlightBgColor : bgColor,
-                    borderLeft: isRecommend
-                      ? `4px solid ${accentColor}`
-                      : "4px solid transparent",
-                  }}
-                >
-                  {cells.map((cell, j) => (
-                    <td
-                      key={j}
-                      style={{
-                        color: textColor,
-                        whiteSpace: headers[j]?.noWrap ? "nowrap" : "normal",
-                        wordBreak: headers[j]?.noWrap ? "keep-all" : "break-word",
-                        overflowWrap: "anywhere",
-                        width: headers[j]?.noWrap
-                          ? `${columnWidths[j] ? columnWidths[j] + "px" : "auto"}`
-                          : `${(headers[j]?.widthWeight / totalWeight) * 100}%`,
-                        verticalAlign: "top",
-                      }}
-                    >
-                      {cell}
-                      {j === 0 && isRecommend && (
-                        <>
-                          <br />
-                          <span className={styles.recommendInline}>おすすめ</span>
-                        </>
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                return (
+                  <tr
+                    key={i}
+                    className={isRecommend ? styles.recommendRow : ""}
+                    style={{
+                      backgroundColor: isRecommend ? highlightBgColor : bgColor,
+                      borderLeft: isRecommend ? `4px solid ${accentColor}` : "4px solid transparent",
+                    }}
+                  >
+                    {cells.map((cell, j) => (
+                      <td
+                        key={j}
+                        className={headers[j]?.noWrap ? styles.nowrap : ""}
+                        style={{
+                          color: textColor,
+                          width: headers[j]?.noWrap
+                            ? `${columnWidths[j] ? columnWidths[j] + "px" : "auto"}`
+                            : `${(headers[j]?.widthWeight / totalWeight) * 100}%`,
+                        }}
+                      >
+                        {cell}
+                        {j === 0 && isRecommend && (
+                          <>
+                            <br />
+                            <span className={styles.recommendInline}>おすすめ</span>
+                          </>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -164,28 +156,16 @@ const FlexibleTable = ({
 FlexibleTable.propTypes = {
   title: PropTypes.string,
   tableData: PropTypes.shape({
-    headers: PropTypes.arrayOf(
-      PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.shape({
-          label: PropTypes.string.isRequired,
-          widthWeight: PropTypes.number,
-          noWrap: PropTypes.bool,
-        }),
-      ])
-    ),
-    rows: PropTypes.arrayOf(
-      PropTypes.shape({
-        data: PropTypes.arrayOf(PropTypes.node).isRequired,
-        recommend: PropTypes.bool,
-      })
-    ),
+    headers: PropTypes.array,
+    rows: PropTypes.array,
   }),
   textColor: PropTypes.string,
   accentColor: PropTypes.string,
   bgColor: PropTypes.string,
   highlightBgColor: PropTypes.string,
   hasShadow: PropTypes.bool,
+  minTableWidth: PropTypes.string,
 };
 
 export default FlexibleTable;
+

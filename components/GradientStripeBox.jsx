@@ -1,3 +1,4 @@
+//GradientStripeBox.jsx
 "use client";
 
 import React, { useEffect, useRef } from "react";
@@ -6,22 +7,11 @@ import styles from "./GradientStripeBox.module.css";
 /**
  * GradientStripeBox コンポーネント 🌈
  *
- * 背景タイプ：
- * - striped={true}：グラデーション＋ストライプ（accentColorsを使用）
- * - randomObject={true}：ランダム図形生成背景
- *
- * 💡 両立も可能！
- * <GradientStripeBox
- *   striped={true}
- *   randomObject={true}
- *   accentColors={["#36d1dc", "#5b86e5", "#89f7fe"]}
- *   shapeType={["circle", "triangle", "line"]}
- *   squareCount={60}
- *   speed={1.2}
- *   blur={true}
- *   mixBlend={true}
- * />
+ * 新props:
+ * - backgroundColor：背景色を指定（デフォルト: #E8FEFE）
+ * - shadow：影のオンオフ制御（デフォルト: true）
  */
+
 const GradientStripeBox = ({
   children,
   striped = true,
@@ -34,9 +24,10 @@ const GradientStripeBox = ({
   mixBlend = false,
   roundedSquares = true,
   shapeType = "square",
+  backgroundColor = "#E8FEFE", // 背景色指定
+  shadow = true, // 🆕 影制御
 }) => {
   const canvasRef = useRef(null);
-
   const isGradient3 = accentColors.length >= 3;
 
   useEffect(() => {
@@ -53,7 +44,6 @@ const GradientStripeBox = ({
     resize();
     window.addEventListener("resize", resize);
 
-    // HEX → RGB
     const hexToRgb = (hex) => {
       const v = hex.replace("#", "");
       const bigint = parseInt(v, 16);
@@ -63,11 +53,9 @@ const GradientStripeBox = ({
     const rgbs = accentColors.map((c) => hexToRgb(c));
 
     const interpolateColor = (factor) => {
-      // グラデーション内補間
       const idx = Math.floor(factor * (rgbs.length - 1));
       const nextIdx = Math.min(idx + 1, rgbs.length - 1);
       const localFactor = factor * (rgbs.length - 1) - idx;
-
       const r = Math.round(
         rgbs[idx][0] + (rgbs[nextIdx][0] - rgbs[idx][0]) * localFactor
       );
@@ -78,8 +66,7 @@ const GradientStripeBox = ({
         rgbs[idx][2] + (rgbs[nextIdx][2] - rgbs[idx][2]) * localFactor
       );
       const opacity =
-        opacityRange[0] +
-        Math.random() * (opacityRange[1] - opacityRange[0]);
+        opacityRange[0] + Math.random() * (opacityRange[1] - opacityRange[0]);
       return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     };
 
@@ -111,7 +98,6 @@ const GradientStripeBox = ({
           ctx.arc(0, 0, sq.size / 2, 0, Math.PI * 2);
           ctx.fill();
           break;
-
         case "square":
           const r = roundedSquares ? sq.size / 6 : 0;
           ctx.beginPath();
@@ -147,7 +133,6 @@ const GradientStripeBox = ({
           ctx.closePath();
           ctx.fill();
           break;
-
         case "triangle":
           ctx.beginPath();
           ctx.moveTo(0, -sq.size / 1.5);
@@ -156,7 +141,6 @@ const GradientStripeBox = ({
           ctx.closePath();
           ctx.fill();
           break;
-
         case "line":
           ctx.beginPath();
           const len = sq.size * 1.5;
@@ -164,32 +148,23 @@ const GradientStripeBox = ({
           ctx.lineTo(len / 2, 0);
           ctx.stroke();
           break;
-
-        default:
-          break;
       }
       ctx.restore();
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      if (mixBlend) ctx.globalCompositeOperation = "overlay";
-      else ctx.globalCompositeOperation = "source-over";
-
+      ctx.globalCompositeOperation = mixBlend ? "overlay" : "source-over";
       shapes.forEach((sq) => {
         sq.x += sq.speedX;
         sq.y += sq.speedY;
         sq.angle += sq.rotationSpeed;
-
         if (sq.x < -sq.size) sq.x = canvas.width + sq.size;
         if (sq.x > canvas.width + sq.size) sq.x = -sq.size;
         if (sq.y < -sq.size) sq.y = canvas.height + sq.size;
         if (sq.y > canvas.height + sq.size) sq.y = -sq.size;
-
         drawShape(sq);
       });
-
       animationFrameId = requestAnimationFrame(draw);
     };
 
@@ -210,7 +185,6 @@ const GradientStripeBox = ({
     shapeType,
   ]);
 
-  // striped背景の動的生成
   const stripeGradient = isGradient3
     ? `linear-gradient(180deg, ${accentColors[0]} 0%, ${accentColors[1]} 50%, ${accentColors[2]} 100%)`
     : `linear-gradient(180deg, ${accentColors[0]} 0%, ${accentColors[1]} 100%)`;
@@ -222,6 +196,10 @@ const GradientStripeBox = ({
       }`}
       style={{
         "--stripe-gradient": stripeGradient,
+        "--plain-bg": backgroundColor,
+        "--box-shadow": shadow
+          ? "0 4px 14px rgba(0, 0, 0, 0.1)"
+          : "none", // 🆕 CSS変数で影制御
       }}
     >
       {randomObject && (
@@ -247,3 +225,4 @@ const GradientStripeBox = ({
 };
 
 export default GradientStripeBox;
+

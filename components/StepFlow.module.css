@@ -1,8 +1,10 @@
+/* StepFlow.module.css */
 .container {
   display: grid;
   align-items: stretch;
   gap: 16px;
   transition: all 0.3s ease;
+  margin: 10px; /* ✅ コンポーネント外側に余白を追加 */
 }
 
 .stepWrapper {
@@ -10,15 +12,38 @@
 }
 
 .stepBox {
+  position: relative;
   padding: 16px;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  background: transparent;
+  border-radius: 6px; /* ✅ 角丸 */
+  background-color: var(--step-bg, #fff);
+  overflow: hidden; /* ✅ 擬似要素の角丸を反映 */
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   transition: transform 0.2s ease;
+}
+
+/* ✅ 擬似要素でグラデーション枠を描画 */
+.stepBox::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px; /* 枠線の太さ */
+  background: var(--gradient-border);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stepBox > * {
+  position: relative;
+  z-index: 1; /* コンテンツを上に */
 }
 
 .stepBox:hover {
@@ -80,6 +105,6 @@
 }
 
 .vertical .arrow {
-  transform: rotate(90deg); /* ✅ 右向き → 下向き */
+  transform: rotate(90deg);
   margin: 12px 0;
 }
