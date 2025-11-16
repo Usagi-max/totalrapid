@@ -1,21 +1,29 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(req) {
-  const visited = req.cookies.get('visited'); // クッキーを取得
+  const url = req.nextUrl.clone();
+  const visited = req.cookies.get('visited');
 
-  // ✅ クッキーがなければ初回アクセスとみなす
-  if (!visited) {
-    const res = NextResponse.redirect(new URL('/geography', req.url));
-    // クッキーをセット（以降のアクセスではリダイレクトしない）
-    res.cookies.set('visited', 'true', { path: '/', maxAge: 60 * 60 * 24 }); // 1日有効
-    return res;
+  console.log('🟦 Middleware Triggered');
+  console.log('🟩 Requested URL:', url.pathname);
+  console.log('🟨 Cookie visited:', visited);
+
+  // ログ表示用ヘッダー
+  const res = NextResponse.next();
+  res.headers.set('x-debug-path', url.pathname);
+  res.headers.set('x-debug-visited', visited ? 'true' : 'false');
+
+  // 初回アクセス時は geography へ
+  if (!visited && url.pathname === '/') {
+    console.log('🔴 Redirecting to /geography (first visit)');
+    const redirectRes = NextResponse.redirect(new URL('/geography', req.url));
+    redirectRes.cookies.set('visited', 'true', { path: '/', maxAge: 86400 });
+    return redirectRes;
   }
 
-  // 2回目以降のアクセスはそのままページを表示
-  return NextResponse.next();
+  return res;
 }
 
-// このミドルウェアをどのURLに適用するか指定
 export const config = {
-  matcher: '/', // ルート（/）だけ
+  matcher: '/',
 };
