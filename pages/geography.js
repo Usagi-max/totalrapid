@@ -9,6 +9,9 @@
   import dynamic from 'next/dynamic';
   import Marker from "../components/Marker";
   import DownArrow from "../components/DownArrow";
+  // import SurveyWidget from "../components/SurveyWidgetGeo";
+
+
   // ===========================
   // Dynamic Imports（SSR OFF）
   // ===========================
@@ -25,7 +28,7 @@
   const StepFlow = dynamic(() => import('../components/StepFlow'), {
     ssr: false,
   });
-  const SurveyWidget = dynamic(() => import('../components/SurveyWidget'), {
+  const SurveyWidget = dynamic(() => import('../components/SurveyWidgetGeo'), {
     ssr: false,
   });
   const TabSwitcher = dynamic(() => import('../components/TabSwitcher'), {
