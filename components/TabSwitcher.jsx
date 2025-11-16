@@ -1,3 +1,4 @@
+// TabSwitcher.jsx
 "use client";
 
 import React, { useState } from "react";
