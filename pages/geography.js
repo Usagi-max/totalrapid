@@ -10,7 +10,7 @@
   import dynamic from 'next/dynamic';
   import Marker from "../components/Marker";
   import DownArrow from "../components/DownArrow";
-  import useGlobalClickTracker from "../hooks/useGlobalClickTracker";
+  import useGlobalClickTracker from "../src/hooks/useGlobalClickTracker";
 
 
   // ===========================

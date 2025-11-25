@@ -1,10 +1,11 @@
 // /pages/_app.tsx
+import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import "../src/styles/globals.css";
 import * as gtag from "../lib/gtag";
-import useGlobalClickTracker from "../hooks/useGlobalClickTracker";
+import useGlobalClickTracker from "../src/hooks/useGlobalClickTracker";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -37,6 +38,11 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+      {/* --- viewport を正しい位置に追加 --- */}
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+
       {/* --- Google Analytics スクリプト --- */}
       <Script
         strategy="afterInteractive"
