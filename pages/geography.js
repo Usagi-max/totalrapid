@@ -1,3 +1,4 @@
+  //geography.js
   import Head from "next/head";
   import Layout from "../components/LayoutGeo";
   import styles from "../src/styles/geography.module.css";
@@ -9,7 +10,7 @@
   import dynamic from 'next/dynamic';
   import Marker from "../components/Marker";
   import DownArrow from "../components/DownArrow";
-  // import SurveyWidget from "../components/SurveyWidgetGeo";
+  import useGlobalClickTracker from "../hooks/useGlobalClickTracker";
 
 
   // ===========================
@@ -199,6 +200,7 @@
 
 
   export default function About() {
+    useGlobalClickTracker(); // ← これだけで全自動クリック監視
     return (
       <Layout>
         <Head>
