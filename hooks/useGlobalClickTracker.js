@@ -1,80 +1,59 @@
+// /hooks/useGlobalClickTracker.js
 import { useEffect } from "react";
+import { v4 as uuid } from "uuid";
 
 export default function useGlobalClickTracker() {
   useEffect(() => {
-    // -------------------------------------------------------
-    // ① クリック者ID（UUID）を Cookie に保存（匿名ユーザーID）
-    // -------------------------------------------------------
-    const getClientId = () => {
-      const COOKIE_NAME = "client_id";
-
+    // --- Session ID（Cookie で保存） ---
+    const getSessionId = () => {
       const existing = document.cookie
         .split("; ")
-        .find((c) => c.startsWith(COOKIE_NAME + "="));
+        .find((row) => row.startsWith("session_id="));
 
       if (existing) return existing.split("=")[1];
 
-      const newId = crypto.randomUUID();
-      document.cookie = `${COOKIE_NAME}=${newId}; path=/; max-age=31536000`; // 1年
+      const newId = uuid();
+      document.cookie = `session_id=${newId}; path=/; max-age=7200`; // 2時間
       return newId;
     };
 
-    const clientId = getClientId();
+    const session_id = getSessionId();
 
-    // -------------------------------------------------------
-    // ② イベント名を自動判定（ID → class → text）
-    // -------------------------------------------------------
-    const cleanStr = (str) =>
-      str
-        ?.trim()
-        .replace(/\s+/g, "_")
-        .replace(/[^a-zA-Z0-9_-]/g, "") || "";
-
-    const detectEventName = (target) => {
-      if (target.id) return cleanStr(target.id);
-
-      if (target.className) {
-        const cls =
-          typeof target.className === "string"
-            ? target.className.split(" ")[0]
-            : "";
-        if (cls) return cleanStr(cls);
-      }
-
-      const text = target.innerText || target.textContent;
-      if (text) return cleanStr(text);
-
-      return "unknown_click";
-    };
-
-    // -------------------------------------------------------
-    // ③ クリックイベントの監視
-    // -------------------------------------------------------
+    // --- クリック発火 ---
     const handleClick = (e) => {
-      const target = e.target.closest("a, button, div, span");
+      const target = e.target.closest("[data-track]");
       if (!target) return;
 
-      const eventName = detectEventName(target);
+      const buttonName =
+        target.dataset.track ||
+        target.innerText?.trim() ||
+        target.id ||
+        "unknown";
 
-      const payload = {
-        timestamp: new Date().toISOString(),
-        clientId,
-        eventName,
-        page: window.location.pathname,
-      };
+      const page = window.location.pathname;
 
-      // ---- API Route へ送信（sendBeacon） ----
-      try {
-        const blob = new Blob([JSON.stringify(payload)], {
-          type: "application/json",
-        });
-        navigator.sendBeacon("/api/log", blob);
-      } catch {
-        fetch("/api/log", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          keepalive: true,
+      const timestamp = new Date().toISOString();
+
+      // --- API に送信 ---
+      fetch("/api/trackClick", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          timestamp,
+          session_id,
+          buttonName,
+          page,
+        }),
+      });
+
+      // --- GA4 へ送信 ---
+      if (window.gtag) {
+        window.gtag("event", "button_click", {
+          event_category: "interaction",
+          event_label: buttonName,
+          page_location: window.location.href,
+          page_path: page,
+          session_id,
         });
       }
     };

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./layout.module.css";
 
+
 const name = "学習塾RAPID";
 export const siteTitle = "Total Rapid Blog";
 
@@ -26,6 +27,7 @@ export default function Layout({ children, home }) {
 
   const navLinks = [
     { href: "/geography", label: "TOP" },
+    { href: "/geography-prices", label: "料金" },
     // { href: "/about", label: "RAPID" },
     { href: "https://lin.ee/Nwh2C8u", label: "公式LINE" },
   ];
@@ -140,7 +142,7 @@ export default function Layout({ children, home }) {
       <footer className={styles.footer}>
         <div className={styles.footerLinks}>
           <Link href="/geography">TOP</Link>
-          {/* <Link href="/prices">料金</Link> */}
+          <Link href="/geography-prices">料金</Link>
           <a href="https://lin.ee/Nwh2C8u" target="_blank" rel="noopener noreferrer">公式LINE</a>
           {/* <a href="https://docs.google.com/forms/d/e/1FAIpQLSdWso9jwFRnCI2cgCP7X3-p52cqlmcJIjWwRYZsD3RScqhiVg/viewform" target="_blank" rel="noopener noreferrer">
             お問い合わせフォーム

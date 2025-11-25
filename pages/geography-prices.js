@@ -5,9 +5,41 @@ import ReviewSlider from '../components/ReviewSlider';
 import Spacer from '../components/Spacer';
 import CourseTable from "../components/CourseTable";
 import HoverButton from "../components/HoverButton";
-import Layout, { siteTitle } from "../components/Layout";
+import Layout, { siteTitle } from "../components/LayoutGeo";
+import dynamic from "next/dynamic";
+
 
 export default function NoteListPage() {
+  const FlexibleTable = dynamic(() => import('../components/FlexibleTable'), {
+    ssr: false,
+  });
+  const GradientStripeBox = dynamic(() => import('../components/GradientStripeBox'), {
+    ssr: false,
+  });
+  const priceTable = {
+    headers: [
+      { label: "コース名", noWrap: true },
+      { label: "指導形式", noWrap: true },
+      { label: "指導内容", widthWeight: 1 },
+      { label: "料金", widthWeight: 1 },
+    ],
+    rows: [
+      {
+        data: ["集団指導コース【系統地理】", "少人数指導", "主に高校２年生を対象に系統地理の内容を指導します。学校の定期試験や模試、大学受験で高得点を取ることが目標です。","入塾金5000円＋2500円(月4コマ・月額10000円)"],
+        recommend: true,
+      },
+      {
+        data: ["集団指導コース【地誌】", "少人数指導", "主に高校３年生を対象に地誌の内容を指導します。学校の定期試験や模試、大学受験で高得点を取ることが目標です。","入塾金5000円＋2500円(月4コマ・月額10000円)"],
+        recommend: true,
+      },
+      {
+        data: ["個別指導コース【定期受講】", "１対１個別指導", "高校１年生から既卒生までを対象に、高校地理の範囲から単元を１つお選びいただき指導します。定期試験対策や補習、受験直前指導などご要望にお答えします。","入塾金5000円＋5000円(１コマ)〜（お子様の実態により変動します。詳しくはお問い合わせください。）"],
+      },
+      {
+        data: ["個別指導コース【スポット受講】", "１対１個別指導", "高校１年生から既卒生までを対象に、高校地理の範囲から単元を１つお選びいただき指導します。定期試験対策や補習、受験直前指導などご要望にお答えします。","7000円(１コマ)〜（お子様の実態により変動します。詳しくはお問い合わせください。）"],
+      },
+    ],
+  };
   const notes = [
     {
         title:"勉強しながら〇〇せよ！学習の質を10倍に高める学習の進め方",
@@ -75,9 +107,49 @@ export default function NoteListPage() {
       <div style={{  maxWidth: "1200px", margin: "0 auto" }}>
         
         <h1 style={{ textAlign: "center", marginBottom: "40px" }}>指導料金とコースの特徴</h1>
-        <CourseTable></CourseTable>
+        {/* <CourseTable></CourseTable> */}
+        <p>当塾では、集団指導コースと個別指導コースの２つをご用意しております。</p>
+        <p>集団指導コースでは少人数の生徒に対し共通のカリキュラムに基づいた指導を１コマ2500円で行なっております。</p>
+        <p>科目は系統地理(主に高校２年生対象)と地誌(主に高校３年生対象)の２つから選択することができます。</p>
+        <h2>系統地理(主に高校２年生対象)</h2>
+        <p>こちらのコースでは、一般的な学校の進度に合わせつつ、模試や共通テスト対策を意識した内容を取り扱っています。</p>
+        <p>定期試験はもちろん受験対策を少しずつ進めたい方におすすめです。
+        個別指導コースでは講師と生徒が１対１で、オリジナルのカリキュラムに基づいた指導を行なっております。</p>
+        <p>「この単元から試験に出やすい内容を教えて欲しい」「定期試験の復習をして欲しい」など、様々なご要望にご対応しています。</p>
+        <h2>地誌(主に高校３年生対象)</h2>
+        <p>こちらのコースでは、１コマ7000円から指導を承っております。定期受講をご希望のお客様は割引価格でご提供しておりますので、詳しくは下の料金表をご確認ください。</p>
+        <p>
+        当塾では、入塾金5000円と毎月のコース別指導料金以外に料金は一切かかりません。</p>
+        <p>また、現在、新規のお客様限定で「①入塾金無料」「②全額返金対応※」のキャンペーンを行なっております。キャンペーンは予告なく終了することがございますので、お申し込みはお早めにお願いいたします。</p>
+        <p>※集団指導コースにおいて指導にご満足いただけなかった場合、お申し込み後1ヶ月以内のお客様を対象に全額返金対応をいたします。
+        </p>
+          <GradientStripeBox
+            striped={false}
+            randomObject={false}
+            backgroundColor="#fff"
+            accentColors={["#ffffff42", "#5a80d371"]}
+            shapeType={[ "line"]}
+            squareCount={70}
+            speed={1.6}
+            opacityRange={[0.15, 0.35]}
+            blur={false}
+            mixBlend={false}
+            roundedSquares={false}
+            shadow
+          >
+            <FlexibleTable
+              title="サービス内容一覧"
+              tableData={priceTable}
+              textColor="#222"
+              accentColor="#36d1dcd8"
+              bgColor="#ffffff"
+              highlightBgColor="#36d1dc23"
+              hasShadow={true}
+              minTableWidth="900px"
+            />
+          </GradientStripeBox>
         
-        <div style={{ textAlign: "center", marginTop: "40px" }}>
+        {/* <div style={{ textAlign: "center", marginTop: "40px" }}>
             <HoverButton
                 text="公式LINEから問い合わせる"
                 linkTo="https://lin.ee/Nwh2C8u"
@@ -100,11 +172,10 @@ export default function NoteListPage() {
                 hoverBgColor="black"
                 hoverBorderColor="#ffffff"
             />
-        </div>
+        </div> */}
         <Spacer height={20} />
-        <h1 style={{ textAlign: "center", marginBottom: "40px" }}>note記事</h1>
+        {/* <h1 style={{ textAlign: "center", marginBottom: "40px" }}>note記事</h1>
 
-        {/* ✅ 横並びラッパー */}
         <div
           style={{
             display: "flex",
@@ -118,7 +189,7 @@ export default function NoteListPage() {
               <NoteCard {...note} />
             </div>
           ))}
-        </div>
+        </div> */}
 
         <Spacer height={50} />
         <div style={{maxWidth: "100%"}}>
