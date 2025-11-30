@@ -13,6 +13,23 @@ export default function App({ Component, pageProps }) {
   // ★ 全ページにクリックトラッカーを適用
   useGlobalClickTracker();
 
+  // -------------------------------------------------------
+  // ★ URL パラメータの永続化（方式②：sessionStorage）
+  // -------------------------------------------------------
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const currentParams = window.location.search;
+
+    // URL にパラメータが付いている時だけ保存
+    if (currentParams && currentParams !== "") {
+      sessionStorage.setItem("saved_params", currentParams);
+    }
+
+    // （※ パラメータが消えた後も sessionStorage 側は残る）
+  }, [router.asPath]);
+  // -------------------------------------------------------
+
   // ★ 初回訪問時のみ /geography にリダイレクト
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -26,7 +43,7 @@ export default function App({ Component, pageProps }) {
 
   // ★ ルート変更時に GA4 PV を送信
   useEffect(() => {
-    const handleRouteChange = (url) => {
+    const handleRouteChange = (url: string) => {
       gtag.pageview(url);
     };
     router.events.on("routeChangeComplete", handleRouteChange);
@@ -38,12 +55,11 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
-      {/* --- viewport を正しい位置に追加 --- */}
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      {/* --- Google Analytics スクリプト --- */}
+      {/* GA4 読み込み */}
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
