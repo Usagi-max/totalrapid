@@ -4,7 +4,7 @@ import NoteCard from "../components/NoteCard";
 import ReviewSlider from '../components/ReviewSlider';
 import Spacer from '../components/Spacer';
 import CourseTable from "../components/CourseTable";
-import HoverButton from "../components/HoverButton";
+import HoverButton from "../components/HoverButton";  
 
 import styles from "../src/styles/geography.module.css";
 import Layout, { siteTitle } from "../components/LayoutGeo";
@@ -122,11 +122,40 @@ export default function NoteListPage() {
             shadow={false}
           >
             <div>
-              <h1 className={styles.gradientText}><strong>指導料金とコースの特徴</strong></h1>
+              <div className={styles.gradientText}><strong>指導料金とコースの特徴</strong></div>
               {/* <CourseTable></CourseTable> */}
-              <p>当塾では、集団指導コースと個別指導コースの２つをご用意しております。</p>
-              <p>集団指導コースでは少人数の生徒に対し共通のカリキュラムに基づいた指導を１コマ2500円で行なっております。</p>
-              <p>科目は系統地理(主に高校２年生対象)と地誌(主に高校３年生対象)の２つから選択することができます。</p>
+              <p>当塾では、お子様に最適な学習支援が出来るよう、大別して２つをご用意しております。<br/>
+                ・集団指導コース：費用を抑えつつ効率的に学びたい方<br/>
+                ・個別指導コース：「苦手な地理を一から学びなおしたい方」「定期テスト対策で利用したい方」<br/>
+                集団指導では科目は系統地理(主に高校２年生対象)と地誌(主に高校３年生対象)の２つから選択することができます。<br/>
+                ※当塾では、入塾金5000円と毎月のコース別指導料金以外に料金は一切かかりません。
+                </p>
+
+              
+            </div>
+          </GradientStripeBox>
+
+        <GradientStripeBox
+            striped={false}
+            randomObject={false}
+            backgroundColor="#fff"
+            accentColors={["#ffffff42", "#5a80d371"]}
+            shapeType={[ "line"]}
+            squareCount={70}
+            speed={1.6}
+            opacityRange={[0.15, 0.35]}
+            blur={false}
+            mixBlend={false}
+            roundedSquares={false}
+            shadow
+          >
+            <div>
+              <div className={styles.gradientText}><strong>キャンペーン</strong></div>
+              {/* <CourseTable></CourseTable> */}
+              <p>現在、新規のお客様限定で「①入塾金無料」「②全額返金対応※」のキャンペーンを行なっております。<br/>
+                キャンペーンは予告なく終了することがございますので、お申し込みはお早めにお願いいたします。<br/>
+                ※集団指導コースにおいて指導にご満足いただけなかった場合、お申し込み後1ヶ月以内のお客様を対象に全額返金対応をいたします。
+              </p>
             </div>
           </GradientStripeBox>
 
@@ -216,11 +245,11 @@ export default function NoteListPage() {
             shadow
           >
             <div>
-              <h1 className={styles.gradientText}>系統地理(主に高校２年生対象)</h1>
+              <h1 className={styles.gradientText}>集団指導コース</h1>
+              <p>集団指導コースでは少人数の生徒に対し共通のカリキュラムに基づいた指導を１コマ2500円で行なっております。</p>
+              <p>科目は系統地理(主に高校２年生対象)と地誌(主に高校３年生対象)の２つから選択することができます。</p>
               <p>こちらのコースでは、一般的な学校の進度に合わせつつ、模試や共通テスト対策を意識した内容を取り扱っています。</p>
-              <p>定期試験はもちろん受験対策を少しずつ進めたい方におすすめです。
-              個別指導コースでは講師と生徒が１対１で、オリジナルのカリキュラムに基づいた指導を行なっております。</p>
-              <p>「この単元から試験に出やすい内容を教えて欲しい」「定期試験の復習をして欲しい」など、様々なご要望にご対応しています。</p>
+              <p>定期試験はもちろん受験対策を少しずつ進めたい方におすすめです。</p>
             </div>
           </GradientStripeBox>
 
@@ -239,13 +268,11 @@ export default function NoteListPage() {
             shadow
           >
             <div>
-              <h1 className={styles.gradientText}>地誌(主に高校３年生対象)</h1>
-              <p>こちらのコースでは、１コマ7000円から指導を承っております。定期受講をご希望のお客様は割引価格でご提供しておりますので、詳しくは下の料金表をご確認ください。</p>
-              <p>
-              当塾では、入塾金5000円と毎月のコース別指導料金以外に料金は一切かかりません。</p>
-              <p>また、現在、新規のお客様限定で「①入塾金無料」「②全額返金対応※」のキャンペーンを行なっております。キャンペーンは予告なく終了することがございますので、お申し込みはお早めにお願いいたします。</p>
-              <p>※集団指導コースにおいて指導にご満足いただけなかった場合、お申し込み後1ヶ月以内のお客様を対象に全額返金対応をいたします。
-              </p>
+              <h1 className={styles.gradientText}>個別指導コース</h1>
+              <p>個別指導コースでは講師と生徒が１対１で、オリジナルのカリキュラムに基づいた指導を行なっております。</p>
+              <p>「この単元から試験に出やすい内容を教えて欲しい」「定期試験の復習をして欲しい」など、様々なご要望にご対応しています。</p>
+              <p>こちらのコースでは、１コマ7000円から指導を承っております。</p>
+              <p>定期受講をご希望のお客様は割引価格でご提供しておりますので、詳しくは下の料金表をご確認ください。</p>
             </div>
           </GradientStripeBox>
 

@@ -29,9 +29,6 @@
   const StepFlow = dynamic(() => import('../components/StepFlow'), {
     ssr: false,
   });
-  const SurveyWidget = dynamic(() => import('../components/SurveyWidgetGeo'), {
-    ssr: false,
-  });
   const TabSwitcher = dynamic(() => import('../components/TabSwitcher'), {
     ssr: false,
   });
@@ -281,13 +278,6 @@
             </div>
           </GradientStripeBox>
           <Spacer large={150} small={30} breakpoint={760}/>
-          <SurveyWidget
-            primaryColor="#5b86e5"
-            primaryDark="#25375eff"
-            secondaryColor = "#36d1dc"
-            secondaryDark = "#1e5f73"
-            bgLight="#f0f4f8"
-          />
 
           <GradientStripeBox
             striped={true}

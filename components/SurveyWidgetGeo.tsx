@@ -1,4 +1,3 @@
-//SurveyWidgetGeo.tsx
 'use client';
 import { useState, useEffect } from 'react';
 import styles from './SurveyWidget.module.css';
@@ -75,25 +74,48 @@ export default function SurveyWidget({
   const [completed, setCompleted] = useState(false);
   const [mode, setMode] = useState<'menu' | 'form'>('menu');
 
-  // ✅ スライドイン制御用
   const [visible, setVisible] = useState(false);
   const [scrollStarted, setScrollStarted] = useState(false);
 
-  // ユーザーがスクロールを始めたら検知
+  // ▼ 初期位置 bottom = 0（画面最下部）
+  const [dynamicBottom, setDynamicBottom] = useState(0);
+
+  // ▼ 表示開始
   useEffect(() => {
     const handleScroll = () => {
       if (!scrollStarted) {
         setScrollStarted(true);
-        setTimeout(() => setVisible(true), 1000); // 1秒後に表示
+        setTimeout(() => setVisible(true), 1000);
       }
     };
     window.addEventListener('scroll', handleScroll, { once: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrollStarted]);
 
+  // ▼ フッター干渉チェック
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const overlap = window.innerHeight - entry.boundingClientRect.top;
+          setDynamicBottom(overlap + 20); // フッター回避
+        } else {
+          setDynamicBottom(0); // ← 画面最下部ぴったり！
+        }
+      },
+      { root: null, threshold: 0 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   const current = questions[step];
-  const progress = Math.round((step / questions.length) * 100);
   const selected = answers[step];
+  const progress = Math.round((step / questions.length) * 100);
 
   const handleChoice = (opt: string) => {
     if (!current.options) return;
@@ -110,69 +132,52 @@ export default function SurveyWidget({
     }
   };
 
-  const handleText = (val: string) => {
-    setAnswers({ ...answers, [step]: val });
-  };
+  const handleText = (val: string) => setAnswers({ ...answers, [step]: val });
 
   const handleNext = async () => {
     if (step < questions.length - 1) return setStep(step + 1);
+
     setLoading(true);
     try {
-      const payload = {
-        timestamp: new Date().toISOString(),
-        answers: questions.map((q, i) => ({
-          key: q.question,
-          value: Array.isArray(answers[i])
-            ? (answers[i] as string[]).join(', ')
-            : (answers[i] as string) || '',
-        })),
-      };
       await fetch('/api/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          answers: questions.map((q, i) => ({
+            key: q.question,
+            value: Array.isArray(answers[i])
+              ? (answers[i] as string[]).join(', ')
+              : (answers[i] as string) || '',
+          })),
+        }),
       });
       setCompleted(true);
     } catch (err) {
-      console.error(err);
       alert('送信中にエラーが発生しました。');
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePrev = () => setStep((s) => Math.max(0, s - 1));
-  const handleRetry = () => {
-    setCompleted(false);
-    setStep(0);
-  };
-
-  // --- 表示しない状態 ---
   if (!visible) return null;
 
-  // --- メニュー表示 ---
+  const designVars = {
+    '--color-primary': primaryColor,
+    '--color-primary-dark': primaryDark,
+    '--color-secondary': secondaryColor,
+    '--color-secondary-dark': secondaryDark,
+    '--color-bg-light': bgLight,
+    bottom: `${dynamicBottom}px`, // ← 完全に動的化
+  } as React.CSSProperties;
+
+  // --- menu ---
   if (mode === 'menu') {
     return (
-      <div
-        className={`${styles.widget} ${styles.hiddenRight}`}
-        style={
-          {
-            '--color-primary': primaryColor,
-            '--color-primary-dark': primaryDark,
-            '--color-secondary': secondaryColor,
-            '--color-secondary-dark': secondaryDark,
-            '--color-bg-light': bgLight,
-          } as React.CSSProperties
-        }
-      >
+      <div className={`${styles.widget} ${styles.hiddenRight}`} style={designVars}>
         <div className={styles.header}>お問い合わせ方法を選択</div>
         <div className={styles.body} style={{ textAlign: 'center' }}>
-          <button
-            className={styles.lineBtn}
-            onClick={() =>
-              window.open('https://lin.ee/Nwh2C8u', '_blank', 'noopener')
-            }
-          >
+          <button className={styles.lineBtn} onClick={() => window.open('https://lin.ee/Nwh2C8u', '_blank')}>
             LINEで問い合わせる
           </button>
           <button className={styles.mailBtn} onClick={() => setMode('form')}>
@@ -183,31 +188,19 @@ export default function SurveyWidget({
     );
   }
 
-  // --- フォーム ---
+  // --- form ---
   return (
-    <div
-      className={`${styles.widget} ${styles.slideIn}`}
-      style={
-        {
-          '--color-primary': primaryColor,
-          '--color-primary-dark': primaryDark,
-          '--color-secondary': secondaryColor,
-          '--color-secondary-dark': secondaryDark,
-          '--color-bg-light': bgLight,
-        } as React.CSSProperties
-      }
-    >
+    <div className={`${styles.widget} ${styles.slideIn}`} style={designVars}>
       <div className={styles.header}>
         お問い合わせ
-        <button className={styles.closeBtn} onClick={() => setMode('menu')}>
-          ×
-        </button>
+        <button className={styles.closeBtn} onClick={() => setMode('menu')}>×</button>
       </div>
+
       <div className={styles.body}>
         {completed ? (
           <div className={styles.completed}>
             <p>回答完了しました。ありがとうございます！</p>
-            <button className={styles.retryBtn} onClick={handleRetry}>
+            <button className={styles.retryBtn} onClick={() => { setCompleted(false); setStep(0); }}>
               回答を修正して再送信する
             </button>
           </div>
@@ -216,66 +209,50 @@ export default function SurveyWidget({
             <div className={styles.required}>
               {current.required && <span>必須</span>} {current.question}
             </div>
+
+            {/* 選択肢 */}
             {current.type === 'choice' && current.options && (
               <div className={styles.options}>
-                {current.options.map((opt, idx) => {
-                  const active =
-                    Array.isArray(selected) && selected.includes(opt);
-                  return (
-                    <button
-                      key={idx}
-                      onClick={() => handleChoice(opt)}
-                      className={active ? styles.selected : ''}
-                    >
-                      {opt}
-                    </button>
-                  );
-                })}
+                {current.options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleChoice(opt)}
+                    className={Array.isArray(selected) && selected.includes(opt) ? styles.selected : ''}
+                  >
+                    {opt}
+                  </button>
+                ))}
               </div>
             )}
+
+            {/* 入力 */}
             {(current.type === 'text' || current.type === 'email') && (
               <div className={styles.inputWrap}>
                 {current.type === 'text' ? (
-                  <textarea
-                    value={typeof selected === 'string' ? selected : ''}
-                    onChange={(e) => handleText(e.target.value)}
-                    placeholder="ご自由にご記入ください"
-                  />
+                  <textarea value={String(selected || '')} onChange={(e) => handleText(e.target.value)} />
                 ) : (
-                  <input
-                    type="email"
-                    value={typeof selected === 'string' ? selected : ''}
-                    onChange={(e) => handleText(e.target.value)}
-                    placeholder="your@email.com"
-                  />
+                  <input type="email" value={String(selected || '')} onChange={(e) => handleText(e.target.value)} />
                 )}
               </div>
             )}
+
+            {/* navigation */}
             <div className={styles.nav}>
-              {step > 0 && (
-                <button className={styles.prevBtn} onClick={handlePrev}>
-                  ◀ 戻る
-                </button>
-              )}
+              {step > 0 && <button className={styles.prevBtn} onClick={() => setStep(step - 1)}>◀ 戻る</button>}
               <button
                 className={styles.nextBtn}
                 onClick={handleNext}
                 disabled={current.required && !selected?.toString().trim()}
               >
-                {step < questions.length - 1
-                  ? '次へ ▶'
-                  : loading
-                  ? '送信中…'
-                  : '送信'}
+                {step < questions.length - 1 ? '次へ ▶' : loading ? '送信中…' : '送信'}
               </button>
             </div>
+
+            {/* progress */}
             <div className={styles.progress}>
               <span>{progress}%</span>
               <div className={styles.bar}>
-                <div
-                  className={styles.fill}
-                  style={{ width: `${progress}%` }}
-                />
+                <div className={styles.fill} style={{ width: `${progress}%` }} />
               </div>
             </div>
           </>

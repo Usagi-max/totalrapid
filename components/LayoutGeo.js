@@ -5,6 +5,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./layout.module.css";
+import dynamic from 'next/dynamic';
+
+const SurveyWidget = dynamic(() => import('../components/SurveyWidgetGeo'), {
+  ssr: false,
+});
 
 
 const name = "学習塾RAPID";
@@ -138,6 +143,13 @@ export default function Layout({ children, home }) {
 
       <main>{children}</main>
 
+      <SurveyWidget
+        primaryColor="#5b86e5"
+        primaryDark="#25375eff"
+        secondaryColor = "#36d1dc"
+        secondaryDark = "#1e5f73"
+        bgLight="#f0f4f8"
+      />
       {/* ===== フッター ===== */}
       <footer className={styles.footer}>
         <div className={styles.footerLinks}>
