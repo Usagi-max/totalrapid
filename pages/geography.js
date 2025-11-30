@@ -41,21 +41,21 @@
       grade: '既卒生',
       gender: '男',
       nickname: 'Nさん',
-      icon: '/images/parent_icon_dog.png',
+      icon: '/images/parent_icon_dog.webp',
       comment: '夏から始めたんですが、わずか３か月で模試の地理が60点台→80点台に！先生が「得点に直結する考え方」だけを選んで教えてくださるので、効率が抜群でした。他の科目に時間を回せたのもありがたかったです。',
     },
     {
       grade: '高3',
       gender: '女',
       nickname: 'Hさん',
-      icon: '/images/parent_icon_flower.png',
+      icon: '/images/parent_icon_flower.webp',
       comment: '理系科目中心の学習スケジュールの中で、地理を最小限の時間で仕上げたいと思って受講しました。結果、共通テスト本番では85点を取ることができ、合否にも大きく影響しました。先生のカリキュラムに出会えて本当によかったです。',
     },
     {
       grade: '高3',
       gender: '男',
       nickname: 'Tさん',
-      icon: '/images/parent_icon_brother.png',
+      icon: '/images/parent_icon_brother.webp',
       comment: 'ただの塾講師ではなく、実際に学校で地理を教えている先生という点に惹かれました。授業内容が「テストでどう出るか」を踏まえていて、学校の先生よりも分かりやすいと本人が言っています。保護者としても安心して任せられます。',
     },
     {
@@ -76,17 +76,17 @@
 
   const steps = [
     {
-      image: "/images/study__.png",
+      image: "/images/study__.webp",
       title: "体験フォームの⼊⼒",
       description: "こちらよりお名前とメールアドレスを⼊⼒してください。体験授業についてメールでご案内します。",
     },
     {
-      image: "/images/study_with.png",
+      image: "/images/study_with.webp",
       title: "体験授業への参加",
       description: "実際の授業を受講していただけます。希望があれば、授業後に保護者様も含めた個別⾯談を⾏うことも可能です。",
     },
     {
-      image: "/images/study_self.png",
+      image: "/images/study_self.webp",
       title: "受講開始",
       description: "内容に納得していただければすぐに受講を開始していただけます。また、過去の授業のアーカイブを全て視聴できるようになります。",
     },
@@ -137,11 +137,11 @@
   const tabsData = [
     {
       label: "基礎問題",
-      image: "/images/koukou_chiri_vs_kyoutsu_test_1.png"
+      image: "/images/koukou_chiri_vs_kyoutsu_test_1.webp"
     },
     {
       label: "応用問題",
-      image: "/images/koukou_chiri_vs_kyoutsu_test_2.png"
+      image: "/images/koukou_chiri_vs_kyoutsu_test_2.webp"
     }
   ];
   const qaData = [
@@ -202,15 +202,9 @@
       <Layout>
         <Head>
           <title>学習塾RAPID</title>
-          <link rel="icon" href="/images/アイコン　文字なし.png" />
+          <link rel="icon" href="/images/アイコン　文字なし.webp" />
         </Head>
         <div className={styles.body}>
-          {/* <div className={styles.lp_head_container}>
-            <picture>
-              <source srcSet="/images/geo_head.png" media="(max-width: 768px)" />
-              <img src="/images/geo_head.png" alt="Responsive" className={styles.lp_head_image} />
-            </picture>
-          </div> */}
           <div className={styles.lp_head_container}>
             {/* PC用 */}
             <div className={styles.pcImage}>
@@ -302,7 +296,7 @@
                 <div className={styles.lp_circle_item1}>
                   <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <FadeInImage
-                      src="/images/地理塾長.png" 
+                      src="/images/地理塾長.webp" 
                       alt="地理塾長"
                       width={468}         // 元画像の横幅
                       height={312}         // 元画像の高さ
@@ -352,7 +346,7 @@
                 <div className={`${styles.lp_total_item} ${styles.item2}`}>
                   <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Image
-                      src="/images/地理塾長イラスト悩む.PNG"
+                      src="/images/地理塾長イラスト悩む.webp"
                       alt="week pc"
                       width={468}         // 元画像の横幅
                       height={312}         // 元画像の高さ
@@ -383,7 +377,7 @@
                 <div className={`${styles.lp_total_item} ${styles.item3}`}>
                   <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Image
-                      src="/images/地理塾長イラスト決意.PNG"
+                      src="/images/地理塾長イラスト決意.webp"
                       alt="week pc"
                       width={468}         // 元画像の横幅
                       height={312}         // 元画像の高さ
@@ -412,7 +406,7 @@
                 <div className={`${styles.lp_total_item} ${styles.item6}`}>
                   <div style={{ position: "relative", width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
                     <Image
-                      src="/images/地理塾長イラスト基礎と演習.png"
+                      src="/images/地理塾長イラスト基礎と演習.webp"
                       alt="week pc"
                       width={468}         // 元画像の横幅
                       height={312}         // 元画像の高さ
