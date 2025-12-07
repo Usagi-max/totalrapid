@@ -8,6 +8,7 @@ import styles from "./layout.module.css";
 import SecondNav from "./secondNav";
 
 const name = "学習塾RAPID";
+export const siteTitle = "学習塾RAPID+ HP";
 const navLinks = [
   { href: "/geography", label: "TOP" },
   { href: "/geography-prices", label: "料金" },
