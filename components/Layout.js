@@ -5,9 +5,14 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./layout.module.css";
+import SecondNav from "./components/secondNav";
 
 const name = "学習塾RAPID";
-export const siteTitle = "Total Rapid Blog";
+const navLinks = [
+  { href: "/geography", label: "TOP" },
+  { href: "/geography-prices", label: "料金" },
+  { href: "https://lin.ee/Nwh2C8u", label: "公式LINE" },
+];
 
 export default function Layout({ children, home }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -139,6 +144,9 @@ export default function Layout({ children, home }) {
           </>
         )}
       </AnimatePresence>
+
+      {/* 1行目ナビのすぐ下に設置（PCのみ表示） */}
+      <SecondNav links={navLinks} topN={2} />
 
       <main>{children}</main>
 

@@ -201,7 +201,7 @@
     return (
       <Layout>
         <Head>
-          <title>学習塾RAPID</title>
+          <title>高校地理専門 学習塾RAPID+</title>
           <link rel="icon" href="/images/アイコン　文字なし.webp" />
         </Head>
         <div className={styles.body}>
@@ -254,12 +254,13 @@
             mixBlend={false}
             roundedSquares={false}
             shadow={false}
+            style={{textAlign: "center",padding:"0px"}}
           >
-            <h2 style={{textAlign: "center"}}><strong>「最低限の勉強で８割」を狙う</strong><BreakOnSmallScreen /><strong>理系受験生のためのカリキュラム</strong></h2>
+            <h2 style={{textAlign: "center",margin:"0px"}}>時間のない理系受験生が<br/><strong>最低限の勉強で「共テ地理８割」</strong><br/>を狙うのためのカリキュラム</h2>
             <div className={`${styles.lp_about_container}`}>
               <div>
                 <p>理系を目指すお子さまにとって、地理は主要科目に比べるとどうしても優先順位が下がりがちです。</p>
-                <p><Marker markers={markers} use="blueFade">英語・数学・理科にしっかりと時間を割く</Marker>ために、地理の勉強は最低限にしたいと考える受験生がほとんどだと思います。</p><br/>
+                <p>英語・数学・理科にしっかりと時間を割くために、<Marker markers={markers} use="blueFade">地理の勉強は最低限にしたい</Marker>と考える受験生がほとんどだと思います。</p><br/>
                 <p>それでは、地理の共通テストで効率良く８割を達成するためにはどのような勉強をすればいいのでしょうか？</p>
                 <p>実は、地理の共通テストの問題はいくつかの<Marker markers={markers} use="blueFade">「法則」</Marker>を身につけることで高得点が取れるように設計されています。</p><br/>
                 <p>しかし、大半の受験生はこの「法則」を知りません。</p>

@@ -1,0 +1,39 @@
+/* secondNav.module.css */
+
+/* PC以上で表示される自然スクロールアウトのナビ（固定しない） */
+.secondNav {
+  width: 100%;
+  background: var(--nav-bg, #ffffff);
+  border-bottom: 1px solid #eaeaea;
+  padding: 0.42rem 1rem;
+  position: relative; /* ←自然スクロールOUT用 */
+  z-index: 10;
+}
+
+/* 横スクロール対応 */
+.secondNavLinks {
+  display: flex;
+  gap: 1.4rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.secondNavLinks a {
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+}
+
+.activeLink {
+  border-bottom: 2px solid #5b86e5;
+  padding-bottom: 2px;
+  font-weight: 700;
+}
+
+/* スマホでは非表示 */
+@media (min-width: 768px) {
+  .secondNav {
+    display: none;
+  }
+}
