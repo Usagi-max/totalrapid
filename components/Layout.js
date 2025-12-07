@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import styles from "./layout.module.css";
-import SecondNav from "./components/secondNav";
+import SecondNav from "./secondNav";
 
 const name = "学習塾RAPID";
 const navLinks = [
