@@ -1,3 +1,7 @@
+
+/*  追記  */
+/* フォント設定 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 .container {
   padding: 0 2rem;
 }
@@ -35,9 +39,6 @@
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 }
 
-/*  追記  */
-/* フォント設定 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
 .container {
     max-width: 1200px;
