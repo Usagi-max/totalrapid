@@ -175,13 +175,13 @@ export default function SurveyWidget({
   if (mode === 'menu') {
     return (
       <div className={`${styles.widget} ${styles.hiddenRight}`} style={designVars}>
-        <div className={styles.header}>お問い合わせ方法を選択</div>
+        <div className={styles.header}>理系向け地理の勉強法を</div>
         <div className={styles.body} style={{ textAlign: 'center' }}>
           <button className={styles.lineBtn} onClick={() => window.open('https://lin.ee/Nwh2C8u', '_blank')}>
-            LINEで問い合わせる
+            LINEで無料相談する
           </button>
           <button className={styles.mailBtn} onClick={() => setMode('form')}>
-            メールで問い合わせる
+            メールで無料相談する
           </button>
         </div>
       </div>
@@ -192,7 +192,7 @@ export default function SurveyWidget({
   return (
     <div className={`${styles.widget} ${styles.slideIn}`} style={designVars}>
       <div className={styles.header}>
-        お問い合わせ
+        メールで無料相談
         <button className={styles.closeBtn} onClick={() => setMode('menu')}>×</button>
       </div>
 
