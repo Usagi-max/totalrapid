@@ -1,4 +1,6 @@
+// components/SurveyWidgetGeo.tsx
 'use client';
+
 import { useState, useEffect } from 'react';
 import styles from './SurveyWidget.module.css';
 
@@ -76,11 +78,11 @@ export default function SurveyWidget({
 
   const [visible, setVisible] = useState(false);
   const [scrollStarted, setScrollStarted] = useState(false);
-
-  // ▼ 初期位置 bottom = 0（画面最下部）
   const [dynamicBottom, setDynamicBottom] = useState(0);
 
-  // ▼ 表示開始
+  /* ===============================
+     初回スクロールで表示
+  =============================== */
   useEffect(() => {
     const handleScroll = () => {
       if (!scrollStarted) {
@@ -92,26 +94,33 @@ export default function SurveyWidget({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scrollStarted]);
 
-  // ▼ フッター干渉チェック
+  /* ===============================
+     フッター回避
+  =============================== */
   useEffect(() => {
     const footer = document.querySelector('footer');
     if (!footer) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          const overlap = window.innerHeight - entry.boundingClientRect.top;
-          setDynamicBottom(overlap + 20); // フッター回避
-        } else {
-          setDynamicBottom(0); // ← 画面最下部ぴったり！
-        }
-      },
-      { root: null, threshold: 0 }
-    );
+    const onScroll = () => {
+      const rect = footer.getBoundingClientRect();
+      const overlap = window.innerHeight - rect.top;
+      setDynamicBottom(overlap > 0 ? overlap + 20 : 0);
+    };
 
-    observer.observe(footer);
-    return () => observer.disconnect();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  if (!visible) return null;
+
+  const designVars = {
+    '--color-primary': primaryColor,
+    '--color-primary-dark': primaryDark,
+    '--color-secondary': secondaryColor,
+    '--color-secondary-dark': secondaryDark,
+    '--color-bg-light': bgLight,
+    bottom: `${dynamicBottom}px`,
+  } as React.CSSProperties;
 
   const current = questions[step];
   const selected = answers[step];
@@ -132,10 +141,14 @@ export default function SurveyWidget({
     }
   };
 
-  const handleText = (val: string) => setAnswers({ ...answers, [step]: val });
+  const handleText = (val: string) =>
+    setAnswers({ ...answers, [step]: val });
 
   const handleNext = async () => {
-    if (step < questions.length - 1) return setStep(step + 1);
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -153,34 +166,36 @@ export default function SurveyWidget({
         }),
       });
       setCompleted(true);
-    } catch (err) {
+    } catch {
       alert('送信中にエラーが発生しました。');
     } finally {
       setLoading(false);
     }
   };
 
-  if (!visible) return null;
-
-  const designVars = {
-    '--color-primary': primaryColor,
-    '--color-primary-dark': primaryDark,
-    '--color-secondary': secondaryColor,
-    '--color-secondary-dark': secondaryDark,
-    '--color-bg-light': bgLight,
-    bottom: `${dynamicBottom}px`, // ← 完全に動的化
-  } as React.CSSProperties;
-
-  // --- menu ---
+  /* ===============================
+     menu
+     ※ data-scroll-ignore が最重要
+  =============================== */
   if (mode === 'menu') {
     return (
-      <div className={`${styles.widget} ${styles.hiddenRight}`} style={designVars}>
+      <div
+        className={`${styles.widget} ${styles.hiddenRight}`}
+        style={designVars}
+        data-scroll-ignore
+      >
         <div className={styles.header}>理系向け地理の勉強法を</div>
         <div className={styles.body} style={{ textAlign: 'center' }}>
-          <button className={styles.lineBtn} onClick={() => window.open('https://lin.ee/Nwh2C8u', '_blank')}>
+          <button
+            className={styles.lineBtn}
+            onClick={() => window.open('https://lin.ee/Nwh2C8u', '_blank')}
+          >
             LINEで無料相談する
           </button>
-          <button className={styles.mailBtn} onClick={() => setMode('form')}>
+          <button
+            className={styles.mailBtn}
+            onClick={() => setMode('form')}
+          >
             メールで無料相談する
           </button>
         </div>
@@ -188,19 +203,36 @@ export default function SurveyWidget({
     );
   }
 
-  // --- form ---
+  /* ===============================
+     form
+  =============================== */
   return (
-    <div className={`${styles.widget} ${styles.slideIn}`} style={designVars}>
+    <div
+      className={`${styles.widget} ${styles.slideIn}`}
+      style={designVars}
+      data-scroll-ignore
+    >
       <div className={styles.header}>
         メールで無料相談
-        <button className={styles.closeBtn} onClick={() => setMode('menu')}>×</button>
+        <button
+          className={styles.closeBtn}
+          onClick={() => setMode('menu')}
+        >
+          ×
+        </button>
       </div>
 
       <div className={styles.body}>
         {completed ? (
           <div className={styles.completed}>
             <p>回答完了しました。ありがとうございます！</p>
-            <button className={styles.retryBtn} onClick={() => { setCompleted(false); setStep(0); }}>
+            <button
+              className={styles.retryBtn}
+              onClick={() => {
+                setCompleted(false);
+                setStep(0);
+              }}
+            >
               回答を修正して再送信する
             </button>
           </div>
@@ -210,14 +242,17 @@ export default function SurveyWidget({
               {current.required && <span>必須</span>} {current.question}
             </div>
 
-            {/* 選択肢 */}
             {current.type === 'choice' && current.options && (
               <div className={styles.options}>
                 {current.options.map((opt, i) => (
                   <button
                     key={i}
                     onClick={() => handleChoice(opt)}
-                    className={Array.isArray(selected) && selected.includes(opt) ? styles.selected : ''}
+                    className={
+                      Array.isArray(selected) && selected.includes(opt)
+                        ? styles.selected
+                        : ''
+                    }
                   >
                     {opt}
                   </button>
@@ -225,34 +260,56 @@ export default function SurveyWidget({
               </div>
             )}
 
-            {/* 入力 */}
-            {(current.type === 'text' || current.type === 'email') && (
+            {(current.type === 'text' ||
+              current.type === 'email') && (
               <div className={styles.inputWrap}>
                 {current.type === 'text' ? (
-                  <textarea value={String(selected || '')} onChange={(e) => handleText(e.target.value)} />
+                  <textarea
+                    value={String(selected || '')}
+                    onChange={(e) => handleText(e.target.value)}
+                  />
                 ) : (
-                  <input type="email" value={String(selected || '')} onChange={(e) => handleText(e.target.value)} />
+                  <input
+                    type="email"
+                    value={String(selected || '')}
+                    onChange={(e) => handleText(e.target.value)}
+                  />
                 )}
               </div>
             )}
 
-            {/* navigation */}
             <div className={styles.nav}>
-              {step > 0 && <button className={styles.prevBtn} onClick={() => setStep(step - 1)}>◀ 戻る</button>}
+              {step > 0 && (
+                <button
+                  className={styles.prevBtn}
+                  onClick={() => setStep(step - 1)}
+                >
+                  ◀ 戻る
+                </button>
+              )}
               <button
                 className={styles.nextBtn}
                 onClick={handleNext}
-                disabled={current.required && !selected?.toString().trim()}
+                disabled={
+                  current.required &&
+                  !selected?.toString().trim()
+                }
               >
-                {step < questions.length - 1 ? '次へ ▶' : loading ? '送信中…' : '送信'}
+                {step < questions.length - 1
+                  ? '次へ ▶'
+                  : loading
+                  ? '送信中…'
+                  : '送信'}
               </button>
             </div>
 
-            {/* progress */}
             <div className={styles.progress}>
               <span>{progress}%</span>
               <div className={styles.bar}>
-                <div className={styles.fill} style={{ width: `${progress}%` }} />
+                <div
+                  className={styles.fill}
+                  style={{ width: `${progress}%` }}
+                />
               </div>
             </div>
           </>

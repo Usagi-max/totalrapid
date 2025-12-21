@@ -1,4 +1,4 @@
-// LayoutGeo.js
+// components/LayoutGeo.js
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
@@ -26,7 +26,6 @@ export default function Layout({ children }) {
     { href: "https://lin.ee/Nwh2C8u", label: "公式LINE" },
   ];
 
-  // Prevent body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
   }, [menuOpen]);
@@ -38,14 +37,15 @@ export default function Layout({ children }) {
         <title>{siteTitle}</title>
       </Head>
 
-      {/* ===== 1行目：メインナビ（固定） ===== */}
-      <header className={styles.navbar}>
+      {/* ===============================
+          固定ナビ（スクロール対象から除外）
+      =============================== */}
+      <header className={styles.navbar} data-scroll-ignore>
         <div className={styles.logoArea}>
           <img src="/images/アイコン　文字なし.png" width={30} height={30} alt="Logo" />
           <span className={styles.siteTitle}>{name}</span>
         </div>
 
-        {/* PC only ナビ */}
         <nav className={styles.navLinks}>
           {navLinks.map(({ href, label }) =>
             href.startsWith("http") ? (
@@ -54,42 +54,32 @@ export default function Layout({ children }) {
               </a>
             ) : (
               <Link key={href} href={href} legacyBehavior>
-                <a className={router.pathname === href ? styles.activeLink : ""}>{label}</a>
+                <a className={router.pathname === href ? styles.activeLink : ""}>
+                  {label}
+                </a>
               </Link>
             )
           )}
         </nav>
 
-        {/* ハンバーガー（SP） */}
         <button
           className={`${styles.hamburger} ${menuOpen ? styles.hamburgerFixed : ""}`}
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
         >
-          <span
-            className={`${styles.hamburgerLine} ${styles.lineTop}`}
-            style={menuOpen ? { transform: "rotate(45deg) translateY(8px)" } : {}}
-          />
-          <span
-            className={`${styles.hamburgerLine} ${styles.lineMiddle}`}
-            style={menuOpen ? { opacity: 0 } : {}}
-          />
-          <span
-            className={`${styles.hamburgerLine} ${styles.lineBottom}`}
-            style={menuOpen ? { transform: "rotate(-45deg) translateY(-8px)" } : {}}
-          />
+          <span className={`${styles.hamburgerLine} ${styles.lineTop}`} />
+          <span className={`${styles.hamburgerLine} ${styles.lineMiddle}`} />
+          <span className={`${styles.hamburgerLine} ${styles.lineBottom}`} />
         </button>
       </header>
 
-      {/* ===== モバイルメニュー（右スライド） ===== */}
+      {/* ===============================
+          モバイルメニュー（除外）
+      =============================== */}
       {menuOpen && (
         <>
-          <div
-            className={styles.mobileMenu}
-            role="dialog"
-            {...(!menuOpen && { inert: "true" })}
-          >
+          <div className={styles.mobileMenu} role="dialog" data-scroll-ignore>
             {navLinks.map(({ href, label }) =>
               href.startsWith("http") ? (
                 <a key={href} href={href} target="_blank" onClick={() => setMenuOpen(false)}>
@@ -107,18 +97,22 @@ export default function Layout({ children }) {
               )
             )}
           </div>
-
-          {/* Overlay */}
           <div className={styles.overlay} onClick={() => setMenuOpen(false)} />
         </>
       )}
 
-      {/* 1行目ナビのすぐ下に設置（PCのみ表示） */}
-      <SecondNav links={navLinks} topN={5} />
+      {/* SecondNav も UI なので除外 */}
+      <div data-scroll-ignore>
+        <SecondNav links={navLinks} topN={5} />
+      </div>
 
+      {/* ===============================
+          ここからが「スクロール対象」
+      =============================== */}
       <main>{children}</main>
 
       <Spacer large={90} />
+
       <SurveyWidget
         primaryColor="#5b86e5"
         primaryDark="#25375eff"
@@ -127,7 +121,8 @@ export default function Layout({ children }) {
         bgLight="#f0f4f8"
       />
 
-      <footer className={styles.footer}>
+      {/* フッターも除外 */}
+      <footer className={styles.footer} data-scroll-ignore>
         <div className={styles.footerLinks}>
           <Link href="/geography">TOP</Link>
           <Link href="/geography-prices">料金</Link>
