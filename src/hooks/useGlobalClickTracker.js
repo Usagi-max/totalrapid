@@ -1,20 +1,29 @@
-// src/hooks/useGlobalClickTracker.js
-import { useEffect } from "react";
+// hooks/useGlobalClickTracker.js
+import { useEffect, useRef } from "react";
 import { v4 as uuid } from "uuid";
 
 export default function useGlobalClickTracker() {
+  const initialized = useRef(false);
+
   useEffect(() => {
+    // ===============================
+    // 二重初期化防止（StrictMode / HMR）
+    // ===============================
+    if (initialized.current) return;
     if (window.__GLOBAL_CLICK_TRACKER_INITIALIZED__) return;
+
+    initialized.current = true;
     window.__GLOBAL_CLICK_TRACKER_INITIALIZED__ = true;
 
     /* ===============================
-       Session
+       Session ID
     =============================== */
     const getSessionId = () => {
-      const found = document.cookie
+      const existing = document.cookie
         .split("; ")
-        .find((v) => v.startsWith("session_id="));
-      if (found) return found.split("=")[1];
+        .find((row) => row.startsWith("session_id="));
+
+      if (existing) return existing.split("=")[1];
 
       const id = uuid();
       document.cookie = `session_id=${id}; path=/; max-age=7200`;
@@ -22,27 +31,48 @@ export default function useGlobalClickTracker() {
     };
 
     const session_id = getSessionId();
-    const page = location.pathname;
+    const page = window.location.pathname;
     const startTime = Date.now();
 
     /* ===============================
-       utils
+       URL / parameters（★固定保持）
     =============================== */
-    const isIgnored = (el) =>
-      !el || el.closest?.("[data-scroll-ignore]");
+    const getInitialParams = () => {
+      const stored = sessionStorage.getItem("__ENTRY_PARAMS__");
+      if (stored) return stored;
 
+      const params = window.location.search || "";
+      sessionStorage.setItem("__ENTRY_PARAMS__", params);
+      return params;
+    };
+
+    const entryParams = getInitialParams();
+    const entryFullUrl = `${location.origin}${location.pathname}${entryParams}`;
+
+    /* ===============================
+       Utility
+    =============================== */
     const extractName = (el) =>
       el?.dataset?.track ||
       el?.getAttribute?.("aria-label") ||
       el?.innerText?.replace(/\s+/g, " ").trim() ||
       el?.id ||
+      el?.className ||
       "unknown";
+
+    const isIgnored = (el) =>
+      !el || el.closest?.("[data-scroll-ignore]");
 
     const send = (payload) => {
       fetch("/api/trackClick", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        keepalive: true,
+        body: JSON.stringify({
+          ...payload,
+          parameters: entryParams,
+          fullUrl: entryFullUrl,
+        }),
       });
     };
 
@@ -51,11 +81,10 @@ export default function useGlobalClickTracker() {
     =============================== */
     send({
       type: "page_enter",
-      label: "page_enter",
       timestamp: new Date().toISOString(),
       session_id,
       page,
-      fullUrl: location.href,
+      label: "page_enter",
     });
 
     /* ===============================
@@ -70,100 +99,79 @@ export default function useGlobalClickTracker() {
 
       send({
         type: "click",
-        label: extractName(target),
         timestamp: new Date().toISOString(),
         session_id,
         page,
-        fullUrl: location.href,
+        label: extractName(target),
       });
     };
 
     document.addEventListener("click", onClick);
 
     /* ===============================
-       scroll tracking
+       scroll tracking（最新要素を常に更新）
     =============================== */
-    let lastY = window.scrollY;
+    let lastScrollY = window.scrollY;
     let lastDir = null;
-    let lastReportedKey = null;
+    let lastVisibleElement = null;
 
-    let currentVisibleElement = null;
-
-    const getScrollTarget = () => {
-      const centerY = window.innerHeight * 0.45;
-
+    const getCurrentVisibleElement = () => {
       const candidates = Array.from(
         document.querySelectorAll(
           "a,button,h1,h2,h3,h4,h5,h6,[data-track]"
         )
-      ).filter((el) => !isIgnored(el));
-
-      let best = null;
-      let minDist = Infinity;
-
-      for (const el of candidates) {
+      ).filter((el) => {
+        if (isIgnored(el)) return false;
         const rect = el.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > window.innerHeight) continue;
+        return rect.top >= 0 && rect.top < window.innerHeight * 0.6;
+      });
 
-        const elCenter = rect.top + rect.height / 2;
-        const dist = Math.abs(elCenter - centerY);
-
-        if (dist < minDist) {
-          minDist = dist;
-          best = el;
-        }
-      }
-
-      return best;
+      return candidates[candidates.length - 1] || null;
     };
 
     const onScroll = () => {
       const y = window.scrollY;
-      const dir = y > lastY ? "down" : y < lastY ? "up" : null;
+      const dir = y > lastScrollY ? "down" : "up";
 
-      const target = getScrollTarget();
-      if (target) {
-        currentVisibleElement = extractName(target);
+      const currentVisible = getCurrentVisibleElement();
+      if (currentVisible) {
+        lastVisibleElement = currentVisible;
       }
 
-      if (!dir || dir === lastDir) {
-        lastY = y;
-        return;
+      if (dir !== lastDir && lastVisibleElement) {
+        send({
+          type: dir === "up" ? "scroll_turn_up" : "scroll_turn_down",
+          timestamp: new Date().toISOString(),
+          session_id,
+          page,
+          label: extractName(lastVisibleElement),
+        });
+        lastDir = dir;
       }
 
-      if (target) {
-        const key = `${dir}:${currentVisibleElement}`;
-        if (key !== lastReportedKey) {
-          send({
-            type: dir === "up" ? "scroll_turn_up" : "scroll_turn_down",
-            label: currentVisibleElement,
-            timestamp: new Date().toISOString(),
-            session_id,
-            page,
-            fullUrl: location.href,
-          });
-          lastReportedKey = key;
-        }
-      }
-
-      lastDir = dir;
-      lastY = y;
+      lastScrollY = y;
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
 
     /* ===============================
-       page_leave（常に最新の表示要素）
+       page_leave（最後に見ていた要素）
     =============================== */
+    let left = false;
+
     const leave = () => {
+      if (left) return;
+      left = true;
+
       send({
         type: "page_leave",
-        label: currentVisibleElement || "page_leave",
         timestamp: new Date().toISOString(),
         session_id,
         page,
+        label: lastVisibleElement
+          ? extractName(lastVisibleElement)
+          : "unknown",
         stayTime: Math.floor((Date.now() - startTime) / 1000),
-        fullUrl: location.href,
       });
     };
 
