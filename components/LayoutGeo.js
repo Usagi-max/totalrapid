@@ -18,12 +18,20 @@ export default function Layout({ children }) {
   const router = useRouter();
 
   const navLinks = [
-    { href: "/geography", label: "TOP" },
-    { href: "/geography-prices", label: "料金" },
-    { href: "https://note.com/tatal_rapid/n/n666a567697d7?app_launch=false", label: "参考書" },
-    { href: "https://note.com/tatal_rapid/n/n666a567697d7?app_launch=false", label: "勉強法" },
-    { href: "/geography-notes", label: "note記事" },
-    { href: "https://lin.ee/Nwh2C8u", label: "公式LINE" },
+    { href: "/geography", label: "TOP", key: "top" },
+    { href: "/geography-prices", label: "料金", key: "price" },
+    {
+      href: "https://note.com/tatal_rapid/n/n666a567697d7?app_launch=false",
+      label: "参考書",
+      key: "note-books",
+    },
+    {
+      href: "https://note.com/tatal_rapid/n/n666a567697d7?app_launch=false",
+      label: "勉強法",
+      key: "note-study",
+    },
+    { href: "/geography-notes", label: "note記事", key: "notes" },
+    { href: "https://lin.ee/Nwh2C8u", label: "公式LINE", key: "line" },
   ];
 
   useEffect(() => {
@@ -47,16 +55,14 @@ export default function Layout({ children }) {
         </div>
 
         <nav className={styles.navLinks}>
-          {navLinks.map(({ href, label }) =>
+          {navLinks.map(({ href, label, key }) =>
             href.startsWith("http") ? (
-              <a key={href} href={href} target="_blank" rel="noopener noreferrer">
+              <a key={key} href={href} target="_blank" rel="noopener noreferrer">
                 {label}
               </a>
             ) : (
-              <Link key={href} href={href} legacyBehavior>
-                <a className={router.pathname === href ? styles.activeLink : ""}>
-                  {label}
-                </a>
+              <Link key={key} href={href} legacyBehavior>
+                <a>{label}</a>
               </Link>
             )
           )}

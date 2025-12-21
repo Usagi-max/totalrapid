@@ -1,39 +1,42 @@
+// pages/api/trackClick.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { pushClickLog } from "../../lib/clickQueue";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== "POST")
+    return res.status(405).end();
 
   try {
     const {
       timestamp,
       session_id,
+      type,
       label,
       page,
       parameters,
       fullUrl,
-      type,
-    } = req.body;
+    } = req.body || {};
 
-    if (!timestamp || !session_id) {
-      return res.status(400).json({ error: "Invalid payload" });
+    if (!session_id || !type) {
+      return res.status(200).json({ ok: false });
     }
 
     pushClickLog({
       timestamp,
       session_id,
       type,
-      buttonName: label || "unknown",
+      buttonName: label,
       page,
-      parameters: parameters || "",
-      fullUrl: fullUrl || "",
+      parameters,
+      fullUrl,
     });
 
-    return res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error("trackClick error:", err);
-    return res.status(500).json({ error: "Server error" });
+    res.status(200).json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(200).json({ ok: false });
   }
 }

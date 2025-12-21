@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/hooks/useGlobalClickTracker.js"  ],
+, "src/hooks/useGlobalClickTracker.ts"  ],
   "exclude": [
     "node_modules"
   ]
