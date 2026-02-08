@@ -2,14 +2,16 @@
 "use client";
 import styles from "./DownArrow.module.css";
 
-export default function DownDoubleArrow({
+export default function DownArrow({
+  count = 2,
+  areaHeight = 48,
+
   size = 48,
-  primaryColor = "#5b86e5",   // グラデーション開始色
-  secondColor = "#36d1dc",    // グラデーション終了色
-  strokeColor = "#2196f3",    // 矢印線の色（単色フォールバック）
-  gradationType = "diagonal"  // vertical | horizontal | diagonal | radial
+  primaryColor = "#999999",
+  secondColor = "#bbbbbb",
+  strokeColor = "#999999",
+  gradationType = "diagonal"
 }) {
-  // グラデーション方向設定
   const getTransform = () => {
     switch (gradationType) {
       case "vertical":
@@ -27,13 +29,22 @@ export default function DownDoubleArrow({
 
   const gradientId = "grad-double-arrow";
 
+  /* ===== 元デザイン基準 ===== */
+  const baseY = 16;
+  const arrowHeight = 10;
+
+  /* ===== gap を areaHeight 連動で計算 ===== */
+  const availableHeight = areaHeight - baseY - arrowHeight;
+  const gap = count > 1 ? availableHeight / (count - 1) : 0;
+
   return (
     <div className={styles.arrow}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 48 48"
+        viewBox={`0 0 ${size} ${areaHeight}`}
         width={size}
-        height={size}
+        height={areaHeight}
+        preserveAspectRatio="xMidYMid meet"
         className={styles.arrowIcon}
       >
         <defs>
@@ -43,33 +54,28 @@ export default function DownDoubleArrow({
               <stop offset="100%" stopColor={secondColor} />
             </radialGradient>
           ) : (
-            <linearGradient id={gradientId} gradientTransform={getTransform()}>
+            <linearGradient
+              id={gradientId}
+              gradientTransform={getTransform()}
+            >
               <stop offset="0%" stopColor={primaryColor} />
               <stop offset="100%" stopColor={secondColor} />
             </linearGradient>
           )}
         </defs>
 
-        {/* 1本目の下向き矢印 */}
-        <path
-          d="M14 16l10 10 10-10"
-          fill="none"
-          stroke={`url(#${gradientId})`}
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* 2本目の下向き矢印 */}
-        <path
-          d="M14 26l10 10 10-10"
-          fill="none"
-          stroke={`url(#${gradientId})`}
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        {Array.from({ length: count }).map((_, i) => (
+          <path
+            key={i}
+            d={`M14 ${baseY + i * gap} l10 10 10-10`}
+            fill="none"
+            stroke={`url(#${gradientId})`}
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ))}
       </svg>
     </div>
   );
 }
-

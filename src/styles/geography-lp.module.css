@@ -1,0 +1,239 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+}
+
+/* 共通 */
+.sectionTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+
+.sectionLead {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1rem;
+}
+
+/* ① 口コミ */
+.voiceSection {
+  padding: 64px 16px;
+}
+
+.voiceList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ② 特徴 */
+.featureSection {
+  background-color: #fff9ef;
+  padding: 64px 16px;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ③ 安心 */
+.safeSection {
+  padding: 64px 16px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ④ 疑問 */
+.questionSection {
+  background-color: #fff9ef;
+  padding: 64px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ⑤ CTA */
+.ctaSection {
+  padding: 80px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.hero {
+  padding: 64px 16px;
+  text-align: center;
+}
+
+.heroBubble {
+  display: inline-block;
+  border: 2px solid #000;
+  border-radius: 20px;
+  padding: 8px 16px;
+  margin-bottom: 24px;
+}
+
+.heroTitle span {
+  background: #ffbd59;
+  padding: 4px 8px;
+}
+
+.heroTitle strong {
+  color: #e53935;
+  font-size: 1.5em;
+}
+
+.diagnosis {
+  background: #fffaf0;
+  padding: 64px 16px;
+  text-align: center;
+}
+
+.notice {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 32px auto;
+  max-width: 600px;
+}
+
+.notice span {
+  color: #e53935;
+  font-weight: bold;
+}
+
+.conditions {
+  list-style: decimal;
+  color: #e53935;
+  text-align: left;
+  max-width: 400px;
+  margin: 0 auto 24px;
+}
+.wrapper {
+  background: #fff;
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 48px 16px 40px;
+  text-align: center;
+}
+
+/* 吹き出し */
+.heroBubble {
+  display: inline-block;
+  position: relative;
+  padding: 18px 22px;
+  border: 2.5px solid #222;
+  border-radius: 22px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  background: #fff;
+}
+
+.heroBubble::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 28px;
+  border-top: 14px solid #222;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+}
+
+/* 見出し */
+.heroTitle {
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+/* オレンジ帯 */
+.heroBadge {
+  display: inline-block;
+  background: #ffb347;
+  padding: 14px 22px;
+  border-radius: 16px;
+  font-size: 24px;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+
+/* 3分 */
+.heroTime {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.heroTime span {
+  font-size: 40px;
+  font-weight: 900;
+  color: #e6452d;
+  margin-right: 4px;
+}
+
+/* イラスト */
+.heroImage {
+  margin-top: 24px;
+}
+
+/* ===== 区切り ===== */
+.split {
+  background: #f7f6ef;
+  text-align: center;
+  padding: 32px 16px;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* ===== 説明 ===== */
+.explain {
+  padding: 40px 16px;
+  text-align: center;
+}
+
+.explainRow {
+  display: inline-block;
+  width: 45%;
+  margin: 0 2%;
+}
+
+.explainRow p {
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.explainNote {
+  margin-top: 24px;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* ===== 悩み ===== */
+.problem {
+  padding: 40px 16px;
+}
+
+.problem h2 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 24px;
+}
+
+/* 共通 */
+.red {
+  color: #e6452d;
+}

@@ -1,3 +1,9 @@
+/* stylelint-disable at-rule-no-unknown */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* stylelint-enable at-rule-no-unknown */
+
 html,
 body {
   padding: 0;
@@ -30,4 +36,65 @@ img {
 :root {
   --nav-bg: #ffffff;
   --text-color: #000000;
+}
+
+/* =========================
+   CTA Block Animations
+========================= */
+
+/* フェードイン */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fadeIn {
+  animation: fadeIn 1.2s ease-out both;
+}
+
+/* スライドイン */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-slideUp {
+  animation: slideUp 1.2s ease-out both;
+}
+
+/* パルス（レイアウト非影響） */
+@keyframes softPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.animate-softPulse {
+  animation: softPulse 2s ease-in-out infinite;
+}
+
+/* シャイン */
+.cta-shine {
+  position: relative;
+  overflow: hidden;
+}
+.cta-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255,255,255,0.6),
+    transparent 70%
+  );
+  animation: ctaShine 2.8s infinite;
+}
+@keyframes ctaShine {
+  to {
+    transform: translateX(120%);
+  }
 }
