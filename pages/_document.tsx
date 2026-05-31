@@ -10,6 +10,11 @@ export default function Document() {
           name="google-site-verification"
           content="wCkf8er0uclnnIw8oBlOkUt4A8Clezs3IbkRrDw9b68"
         />
+        {/* Google AdSense */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-3723393984380742"
+        />
       </Head>
 
       <body>
