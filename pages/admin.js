@@ -12,9 +12,6 @@ import {
   saveStoredSchedules,
 } from '../lib/storageManager';
 
-const DEFAULT_ADMIN_EMAIL = 'admin@total-rapid.com';
-const DEFAULT_ADMIN_PASS = 'rapid-admin-2026!';
-
 export default function AdminPage() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [adminEmailInput, setAdminEmailInput] = useState('');
@@ -86,10 +83,6 @@ export default function AdminPage() {
       });
       return;
     }
-    const savedAdmin = typeof window !== 'undefined' ? localStorage.getItem('rapid_admin_auth') : null;
-    if (savedAdmin === 'true') {
-      setIsAdminLoggedIn(true);
-    }
     loadInitialAdminData();
   }, []);
 
@@ -148,26 +141,12 @@ export default function AdminPage() {
       return;
     }
 
-    if (
-      (adminEmailInput === DEFAULT_ADMIN_EMAIL && adminPassInput === DEFAULT_ADMIN_PASS) ||
-      (adminEmailInput === 'admin' && adminPassInput === 'admin')
-    ) {
-      setIsAdminLoggedIn(true);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('rapid_admin_auth', 'true');
-      }
-      showNotice('管理者としてログインしました');
-    } else {
-      setLoginError('IDまたはパスワードが正しくありません。');
-    }
+    setLoginError('管理者認証が設定されていません。Supabaseの管理者アカウントを設定してください。');
   };
 
   const handleAdminLogout = async () => {
     setIsAdminLoggedIn(false);
     if (isSupabaseConfigured && supabase) await supabase.auth.signOut();
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('rapid_admin_auth');
-    }
   };
 
   // ==========================================
@@ -552,7 +531,7 @@ export default function AdminPage() {
                       required
                       value={adminEmailInput}
                       onChange={(e) => setAdminEmailInput(e.target.value)}
-                      placeholder="admin@total-rapid.com"
+                      placeholder="管理者メールアドレス"
                       className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 transition"
                     />
                   </div>
@@ -580,16 +559,12 @@ export default function AdminPage() {
                   </button>
                 </form>
 
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-400 space-y-2">
-                  <div className="font-bold text-cyan-400 flex items-center gap-1.5">
-                    <svg className="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>初期管理者ログイン認証情報 (アイパス)</span>
-                  </div>
-                  <div className="font-mono text-[11px] text-slate-300 space-y-1 bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                    <div><span className="text-slate-500">ID/Email:</span> {DEFAULT_ADMIN_EMAIL}</div>
-                    <div><span className="text-slate-500">Password:</span> {DEFAULT_ADMIN_PASS}</div>
+                <div className="border-t border-slate-800 pt-5 space-y-3">
+                  <p className="text-center text-xs font-bold text-cyan-300">デモアカウントで受講画面を試す</p>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <a href="/login?demo=tutoring" className="rounded-xl border border-slate-800 bg-slate-950 px-2 py-2 text-[11px] font-bold text-cyan-300 transition hover:bg-slate-800">個別指導のみ</a>
+                    <a href="/login?demo=video" className="rounded-xl border border-slate-800 bg-slate-950 px-2 py-2 text-[11px] font-bold text-emerald-300 transition hover:bg-slate-800">動画視聴のみ</a>
+                    <a href="/login?demo=both" className="rounded-xl border border-slate-800 bg-slate-950 px-2 py-2 text-[11px] font-bold text-amber-300 transition hover:bg-slate-800">両方受講</a>
                   </div>
                 </div>
               </div>

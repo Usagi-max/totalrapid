@@ -1,6 +1,7 @@
 // pages/login.js
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Layout from '../components/LayoutGeo';
 import TutoringSection from '../components/TutoringSection';
 import VideoSection from '../components/VideoSection';
@@ -10,6 +11,7 @@ import { getStoredStudents, getStoredVideos, getStoredSchedules, getDemoSessionU
 import { renderTextWithLinks } from '../lib/textLinks';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState('tutoring'); // 'tutoring' | 'video'
   const [loading, setLoading] = useState(false);
@@ -56,6 +58,13 @@ export default function LoginPage() {
       if (storedUser) restoreDemoUser(storedUser);
     }
   }, []);
+
+  useEffect(() => {
+    const demoType = router.query.demo;
+    if (!router.isReady || !demoType || isSupabaseConfigured || !MOCK_USERS[demoType]) return;
+    loginAsDemoUser(demoType);
+    router.replace('/login', undefined, { shallow: true });
+  }, [router.isReady, router.query.demo]);
 
   // Fetch Supabase User Data
   const fetchSupabaseUserData = async (authUser) => {
@@ -421,15 +430,10 @@ export default function LoginPage() {
                     </a>
                     へご連絡ください。
                   </p>
-                  <div className="pt-1">
-                    <a href="/admin" className="text-[11px] text-slate-500 hover:text-cyan-400 font-semibold underline transition">
-                      管理者用ログイン画面（管理コンソール）はこちら
-                    </a>
-                  </div>
                 </div>
 
                 {/* ワンタップ デモアカウント試用切替バー */}
-                <div className="pt-4 border-t border-slate-800 space-y-2">
+                <div className="hidden" aria-hidden="true">
                   <span className="text-[11px] text-slate-400 font-semibold block text-center flex items-center justify-center gap-1.5">
                     <svg className="w-3.5 h-3.5 text-cyan-400 stroke-current" fill="none" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
