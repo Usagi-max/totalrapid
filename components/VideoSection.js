@@ -4,7 +4,7 @@ import StealthPlayer from './StealthPlayer';
 import VideoQuiz from './VideoQuiz';
 import { renderTextWithLinks } from '../lib/textLinks';
 
-export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, registrationDate, onSaveProgress, onSaveMemo, onDownloadDocument }) {
+export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, onSaveProgress, onSaveMemo, onDownloadDocument }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activeCategory, setActiveCategory] = useState('すべて');
   const [memoText, setMemoText] = useState('');
@@ -13,6 +13,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
   const [progressState, setProgressState] = useState(userProgress);
   const [memosState, setMemosState] = useState(userMemos);
   const [actualDurations, setActualDurations] = useState({});
+  const [quizScoresState, setQuizScoresState] = useState(quizScores);
 
   useEffect(() => {
     setProgressState(userProgress);
@@ -21,6 +22,10 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
   useEffect(() => {
     setMemosState(userMemos);
   }, [userMemos]);
+
+  useEffect(() => {
+    setQuizScoresState(quizScores);
+  }, [quizScores]);
 
   // Calculate unlocked status and dates for all videos
   const processedVideos = videos.map((vid) => {
@@ -195,8 +200,6 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                   captionsEnabled={selectedVideo.captions_enabled !== false}
                 />
 
-                <VideoQuiz videoId={selectedVideo.id} />
-
                 {/* 動画タイトル・説明 */}
                 <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -261,6 +264,14 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                     className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs md:text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-cyan-400 transition"
                   />
                 </div>
+
+                <VideoQuiz
+                  videoId={selectedVideo.id}
+                  onResult={(quizResult) => setQuizScoresState((previous) => ({
+                    ...previous,
+                    [selectedVideo.id]: quizResult.best_score,
+                  }))}
+                />
               </div>
             ) : (
               /* 未公開（ロック中）カード */
@@ -413,6 +424,11 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                                 )}%`}
                           </span>
                         </div>
+                      )}
+                      {vid.isUnlocked && Number.isFinite(quizScoresState[vid.id]) && (
+                        <p className="pt-1 text-[10px] font-semibold text-emerald-300">
+                          理解度テスト最高点: {quizScoresState[vid.id]}点
+                        </p>
                       )}
                     </div>
                   </div>

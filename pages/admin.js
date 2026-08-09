@@ -175,7 +175,8 @@ export default function AdminPage() {
     const plans = student.plans || student.user_plans || [];
     setStudentForm({
       email: student.email || '',
-      password: student.password || '',
+      // Supabase Auth passwords cannot be read back. Leave blank unless resetting.
+      password: '',
       full_name: student.full_name || '',
       address: student.address || '',
       phone_number: student.phone_number || '',
@@ -218,6 +219,20 @@ export default function AdminPage() {
         if (profileError) { await loadInitialAdminData(); showNotice('受講者情報を保存できませんでした。管理者権限を確認してください。'); return; }
         const { error: deletePlansError } = await supabase.from('user_plans').delete().eq('user_id', editingStudent.id);
         if (deletePlansError) { await loadInitialAdminData(); showNotice('受講プランを保存できませんでした。'); return; }
+        if (studentForm.password) {
+          const { data: { session } } = await supabase.auth.getSession();
+          const response = await fetch('/api/admin/reset-student-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}) },
+            body: JSON.stringify({ userId: editingStudent.id, password: studentForm.password }),
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            await loadInitialAdminData();
+            showNotice(`パスワードを更新できませんでした: ${payload.error || '設定を確認してください'}`);
+            return;
+          }
+        }
         if (planList.length) {
           const { error: plansError } = await supabase.from('user_plans').insert(planList.map((plan) => ({ ...plan, user_id: editingStudent.id })));
           if (plansError) { await loadInitialAdminData(); showNotice('受講プランを保存できませんでした。'); return; }
@@ -504,6 +519,13 @@ export default function AdminPage() {
         correct_option: Number(row[index('correct_option')]), order_index,
       })).filter((question) => question.question_text && question.options.every(Boolean) && question.correct_option >= 1 && question.correct_option <= 4);
       if (!questions.length) throw new Error('CSVに有効な問題がありません');
+      const { error: sourceError } = await supabase.from('video_quiz_sources').upsert({
+        video_id: editingVideo.id,
+        csv_content: csv,
+        file_name: quizFile.name,
+        updated_at: new Date().toISOString(),
+      });
+      if (sourceError) throw sourceError;
       const { error: deleteError } = await supabase.from('video_quiz_questions').delete().eq('video_id', editingVideo.id);
       if (deleteError) throw deleteError;
       const { error: insertError } = await supabase.from('video_quiz_questions').insert(questions);
@@ -936,11 +958,11 @@ export default function AdminPage() {
                       <div className="space-y-1">
                         <label className="font-bold text-slate-300">ログインパスワード</label>
                         <input
-                          type="text"
-                          required
+                          type="password"
+                          required={!editingStudent}
                           value={studentForm.password}
                           onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
-                          placeholder="rapid2026"
+                          placeholder={editingStudent ? '8文字以上（変更時のみ）' : '初期パスワード'}
                           className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white font-mono"
                         />
                       </div>

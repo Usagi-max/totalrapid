@@ -30,6 +30,7 @@ export default function LoginPage() {
   const [userMemos, setUserMemos] = useState({});
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [documentsByVideo, setDocumentsByVideo] = useState({});
+  const [quizScores, setQuizScores] = useState({});
 
   // Check existing session
   useEffect(() => {
@@ -111,6 +112,11 @@ export default function LoginPage() {
         .select('*')
         .eq('user_id', authUser.id);
 
+      const { data: quizAttemptsData } = await supabase
+        .from('video_quiz_attempts')
+        .select('video_id, score')
+        .eq('user_id', authUser.id);
+
       const { data: docsData } = await supabase
         .from('video_documents')
         .select('*')
@@ -124,6 +130,11 @@ export default function LoginPage() {
       const memoMap = {};
       (memoData || []).forEach((m) => {
         memoMap[m.video_id] = m.content;
+      });
+
+      const quizScoreMap = {};
+      (quizAttemptsData || []).forEach((attempt) => {
+        quizScoreMap[attempt.video_id] = Math.max(quizScoreMap[attempt.video_id] ?? 0, attempt.score);
       });
 
       const activeUserProfile = profData || {
@@ -147,6 +158,7 @@ export default function LoginPage() {
       setVideos(vidsData && vidsData.length > 0 ? vidsData : getStoredVideos());
       setUserProgress(progMap);
       setUserMemos(memoMap);
+      setQuizScores(quizScoreMap);
       const docsMap = {};
       (docsData || []).forEach((document) => {
         (docsMap[document.video_id] ||= []).push(document);
@@ -561,6 +573,7 @@ export default function LoginPage() {
                   documentsByVideo={documentsByVideo}
                   userProgress={userProgress}
                   userMemos={userMemos}
+                  quizScores={quizScores}
                   registrationDate={profile?.registration_date}
                   onSaveProgress={handleSaveProgress}
                   onSaveMemo={handleSaveMemo}

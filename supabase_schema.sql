@@ -132,6 +132,13 @@ CREATE TABLE IF NOT EXISTS public.video_quiz_attempts (
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS public.video_quiz_sources (
+  video_id UUID PRIMARY KEY REFERENCES public.videos(id) ON DELETE CASCADE,
+  csv_content TEXT NOT NULL,
+  file_name TEXT NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT now() NOT NULL
+);
+
 -- Row Level Security (RLS) 有効化
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_plans ENABLE ROW LEVEL SECURITY;
@@ -141,6 +148,7 @@ ALTER TABLE public.video_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.video_memos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.video_quiz_questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.video_quiz_attempts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.video_quiz_sources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.student_documents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.video_documents ENABLE ROW LEVEL SECURITY;
 
@@ -179,6 +187,8 @@ CREATE POLICY "Admins manage quiz questions" ON public.video_quiz_questions
   FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
 CREATE POLICY "Users view own quiz attempts" ON public.video_quiz_attempts
   FOR SELECT USING (auth.uid() = user_id OR public.is_app_admin());
+CREATE POLICY "Admins manage quiz sources" ON public.video_quiz_sources
+  FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
 
 CREATE OR REPLACE FUNCTION public.get_video_quiz(p_video_id UUID)
 RETURNS TABLE(id UUID, question_text TEXT, options JSONB, order_index INT)
