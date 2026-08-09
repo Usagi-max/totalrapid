@@ -259,6 +259,32 @@ export default function AdminPage() {
       saveStoredStudents(nextStudents);
 
       if (isSupabaseConfigured && supabase) {
+        const { data: { session } } = await supabase.auth.getSession();
+        const response = await fetch('/api/admin/create-student', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}) },
+          body: JSON.stringify({
+            email: studentForm.email,
+            password: studentForm.password,
+            full_name: studentForm.full_name,
+            address: studentForm.address,
+            phone_number: studentForm.phone_number,
+            registration_date: studentForm.registration_date,
+            notes: studentForm.notes,
+            plans: planList,
+          }),
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          await loadInitialAdminData();
+          showNotice(`受講者アカウントを発行できませんでした: ${payload.error || '設定を確認してください'}`);
+          return;
+        }
+        await loadInitialAdminData();
+        showNotice('受講者アカウントを発行しました。設定したパスワードですぐにログインできます。');
+        setShowStudentModal(false);
+        return;
+
         const { data: authData } = await supabase.auth.signUp({
           email: studentForm.email,
           password: studentForm.password || 'rapid2026',
