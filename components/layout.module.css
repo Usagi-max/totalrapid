@@ -22,6 +22,16 @@
   z-index: 50;
 }
 
+.portalNav {
+  --nav-bg: #020617;
+  color: #ffffff;
+  border-bottom-color: #1e293b;
+}
+
+.portalNav .hamburgerLine {
+  background-color: #ffffff;
+}
+
 .logoArea {
   display: flex;
   align-items: center;
@@ -114,6 +124,11 @@
   z-index: 1500;
 }
 
+.portalMenu {
+  background: #020617;
+  color: #ffffff;
+}
+
 .mobileMenu a {
   font-size: 1.05rem;
   text-decoration: none;
@@ -148,6 +163,16 @@
   padding: 0.5rem;
   text-align: center;
   font-size: 0.7rem;
+}
+
+.portalFooter {
+  background: #020617;
+  color: #ffffff;
+  border-top-color: #1e293b;
+}
+
+.portalFooter a {
+  color: inherit;
 }
 
 .footerLinks {

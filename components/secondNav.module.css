@@ -10,6 +10,16 @@
   z-index: 10;
 }
 
+.portalNav {
+  --nav-bg: #020617;
+  color: #ffffff;
+  border-bottom-color: #1e293b;
+}
+
+.portalNav .activeLink {
+  border-bottom-color: #ffffff;
+}
+
 /* 横スクロール対応 */
 .secondNavLinks {
   display: flex;

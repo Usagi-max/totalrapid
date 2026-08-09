@@ -13,9 +13,15 @@ const Spacer = dynamic(() => import("../components/Spacer"), { ssr: false });
 const name = "高校地理専門塾 RAPID+";
 export const siteTitle = "学習塾RAPID+ HP";
 
-export default function Layout({ children }) {
+export default function Layout({ children, hideSurveyWidget = false, hideSecondNav = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
+  const isPortalPage =
+    router.pathname === "/login" ||
+    router.pathname === "/mypage" ||
+    router.pathname.startsWith("/mypage/") ||
+    router.pathname === "/admin" ||
+    router.pathname.startsWith("/admin/");
 
   const navLinks = [
     { href: "/geography", label: "TOP", key: "top" },
@@ -31,6 +37,7 @@ export default function Layout({ children }) {
       key: "note-study",
     },
     { href: "/geography-notes", label: "note記事", key: "notes" },
+    { href: "/login", label: "マイページ", key: "mypage" },
     { href: "https://lin.ee/Nwh2C8u", label: "公式LINE", key: "line" },
   ];
 
@@ -48,7 +55,7 @@ export default function Layout({ children }) {
       {/* ===============================
           固定ナビ（スクロール対象から除外）
       =============================== */}
-      <header className={styles.navbar} data-scroll-ignore>
+      <header className={`${styles.navbar} ${isPortalPage ? styles.portalNav : ""}`} data-scroll-ignore>
         <div className={styles.logoArea}>
           <img src="/images/アイコン　文字なし.png" width={30} height={30} alt="Logo" />
           <span className={styles.siteTitle}>{name}</span>
@@ -85,7 +92,7 @@ export default function Layout({ children }) {
       =============================== */}
       {menuOpen && (
         <>
-          <div className={styles.mobileMenu} role="dialog" data-scroll-ignore>
+          <div className={`${styles.mobileMenu} ${isPortalPage ? styles.portalMenu : ""}`} role="dialog" data-scroll-ignore>
             {navLinks.map(({ href, label }) =>
               href.startsWith("http") ? (
                 <a key={href} href={href} target="_blank" onClick={() => setMenuOpen(false)}>
@@ -107,28 +114,32 @@ export default function Layout({ children }) {
         </>
       )}
 
-      {/* SecondNav も UI なので除外 */}
-      <div data-scroll-ignore>
-        <SecondNav links={navLinks} topN={5} />
-      </div>
+      {/* SecondNav も UI なので除外 (hideSecondNavがtrueの場合は非表示) */}
+      {!hideSecondNav && (
+        <div data-scroll-ignore>
+          <SecondNav links={navLinks} topN={5} />
+        </div>
+      )}
 
       {/* ===============================
           ここからが「スクロール対象」
       =============================== */}
       <main>{children}</main>
 
-      <Spacer large={90} />
+      {!isPortalPage && <Spacer large={90} />}
 
-      <SurveyWidget
-        primaryColor="#5b86e5"
-        primaryDark="#25375eff"
-        secondaryColor="#36d1dc"
-        secondaryDark="#1e5f73"
-        bgLight="#f0f4f8"
-      />
+      {!hideSurveyWidget && (
+        <SurveyWidget
+          primaryColor="#5b86e5"
+          primaryDark="#25375eff"
+          secondaryColor="#36d1dc"
+          secondaryDark="#1e5f73"
+          bgLight="#f0f4f8"
+        />
+      )}
 
       {/* フッターも除外 */}
-      <footer className={styles.footer} data-scroll-ignore>
+      <footer className={`${styles.footer} ${isPortalPage ? styles.portalFooter : ""}`} data-scroll-ignore>
         <div className={styles.footerLinks}>
           <Link href="/geography">TOP</Link>
           <Link href="/geography-prices">料金</Link>
