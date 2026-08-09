@@ -217,6 +217,22 @@ RETURNS BOOLEAN AS $$
   SELECT COALESCE(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'admin';
 $$ LANGUAGE sql STABLE;
 
+-- Management-console access. These policies are required in addition to each
+-- student's own-row policies; otherwise a UI update appears to work locally
+-- but is rejected by RLS and disappears after a reload.
+DROP POLICY IF EXISTS "Admins manage profiles" ON public.profiles;
+CREATE POLICY "Admins manage profiles" ON public.profiles FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
+DROP POLICY IF EXISTS "Admins manage plans" ON public.user_plans;
+CREATE POLICY "Admins manage plans" ON public.user_plans FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
+DROP POLICY IF EXISTS "Admins manage schedules" ON public.tutoring_schedules;
+CREATE POLICY "Admins manage schedules" ON public.tutoring_schedules FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
+DROP POLICY IF EXISTS "Admins manage videos" ON public.videos;
+CREATE POLICY "Admins manage videos" ON public.videos FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
+DROP POLICY IF EXISTS "Admins view video progress" ON public.video_progress;
+CREATE POLICY "Admins view video progress" ON public.video_progress FOR SELECT USING (public.is_app_admin());
+DROP POLICY IF EXISTS "Admins view video memos" ON public.video_memos;
+CREATE POLICY "Admins view video memos" ON public.video_memos FOR SELECT USING (public.is_app_admin());
+
 CREATE POLICY "Users can view own documents" ON public.student_documents
   FOR SELECT USING (auth.uid() = user_id OR public.is_app_admin());
 CREATE POLICY "Admins manage student documents" ON public.student_documents

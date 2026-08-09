@@ -205,7 +205,7 @@ export default function AdminPage() {
       saveStoredStudents(nextStudents);
 
       if (isSupabaseConfigured && supabase) {
-        await supabase
+        const { error: profileError } = await supabase
           .from('profiles')
           .update({
             full_name: studentForm.full_name,
@@ -215,6 +215,13 @@ export default function AdminPage() {
             notes: studentForm.notes,
           })
           .eq('id', editingStudent.id);
+        if (profileError) { await loadInitialAdminData(); showNotice('受講者情報を保存できませんでした。管理者権限を確認してください。'); return; }
+        const { error: deletePlansError } = await supabase.from('user_plans').delete().eq('user_id', editingStudent.id);
+        if (deletePlansError) { await loadInitialAdminData(); showNotice('受講プランを保存できませんでした。'); return; }
+        if (planList.length) {
+          const { error: plansError } = await supabase.from('user_plans').insert(planList.map((plan) => ({ ...plan, user_id: editingStudent.id })));
+          if (plansError) { await loadInitialAdminData(); showNotice('受講プランを保存できませんでした。'); return; }
+        }
       }
       showNotice('生徒情報を更新しました');
     } else {
@@ -375,13 +382,13 @@ export default function AdminPage() {
     e.preventDefault();
     let nextVideos = [];
     if (editingVideo) {
+      if (isSupabaseConfigured && supabase) {
+        const { error } = await supabase.from('videos').update(videoForm).eq('id', editingVideo.id);
+        if (error) { showNotice(`動画を保存できませんでした: ${error.message}`); return; }
+      }
       nextVideos = videosList.map((v) => (v.id === editingVideo.id ? { ...v, ...videoForm } : v));
       setVideosList(nextVideos);
       saveStoredVideos(nextVideos);
-
-      if (isSupabaseConfigured && supabase) {
-        await supabase.from('videos').update(videoForm).eq('id', editingVideo.id);
-      }
       showNotice('動画マスター情報を更新しました');
     } else {
       const newVid = {
@@ -389,13 +396,15 @@ export default function AdminPage() {
         ...videoForm,
         duration_seconds: 1200,
       };
-      nextVideos = [...videosList, newVid];
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase.from('videos').insert(videoForm).select().single();
+        if (error) { showNotice(`動画を追加できませんでした: ${error.message}`); return; }
+        nextVideos = [...videosList, data];
+      } else {
+        nextVideos = [...videosList, newVid];
+      }
       setVideosList(nextVideos);
       saveStoredVideos(nextVideos);
-
-      if (isSupabaseConfigured && supabase) {
-        await supabase.from('videos').insert(videoForm);
-      }
       showNotice('新規動画・ドリップ設定を追加しました');
     }
     setShowVideoModal(false);
