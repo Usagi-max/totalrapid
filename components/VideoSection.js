@@ -1,6 +1,7 @@
 // components/VideoSection.js
 import { useState, useEffect } from 'react';
 import StealthPlayer from './StealthPlayer';
+import VideoQuiz from './VideoQuiz';
 import { renderTextWithLinks } from '../lib/textLinks';
 
 export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, registrationDate, onSaveProgress, onSaveMemo, onDownloadDocument }) {
@@ -193,6 +194,8 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                   onDurationChange={handleDurationChange}
                   captionsEnabled={selectedVideo.captions_enabled !== false}
                 />
+
+                <VideoQuiz videoId={selectedVideo.id} />
 
                 {/* 動画タイトル・説明 */}
                 <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">

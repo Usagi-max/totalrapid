@@ -29,6 +29,8 @@ export default function AdminPage() {
   const [documentVideoId, setDocumentVideoId] = useState('');
   const [documentFile, setDocumentFile] = useState(null);
   const [documentBusy, setDocumentBusy] = useState(false);
+  const [quizFile, setQuizFile] = useState(null);
+  const [quizBusy, setQuizBusy] = useState(false);
   const [replacingDocument, setReplacingDocument] = useState(null);
 
   // Modals / Forms
@@ -476,6 +478,30 @@ export default function AdminPage() {
       console.error('Document delete error:', error);
       showNotice('資料を削除できませんでした。');
     }
+  };
+
+  const handleImportQuiz = async () => {
+    if (!editingVideo || !quizFile || !isSupabaseConfigured || !supabase) return;
+    setQuizBusy(true);
+    try {
+      const csv = (await quizFile.text()).replace(/^\uFEFF/, '');
+      const rows = csv.trim().split(/\r?\n/).map((line) => line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map((value) => value.replace(/^"|"$/g, '').replace(/""/g, '"')));
+      const headers = rows.shift().map((header) => header.trim());
+      const index = (name) => headers.indexOf(name);
+      const questions = rows.map((row, order_index) => ({
+        video_id: editingVideo.id,
+        question_text: row[index('question')]?.trim(),
+        options: [row[index('option_1')]?.trim(), row[index('option_2')]?.trim(), row[index('option_3')]?.trim(), row[index('option_4')]?.trim()],
+        correct_option: Number(row[index('correct_option')]), order_index,
+      })).filter((question) => question.question_text && question.options.every(Boolean) && question.correct_option >= 1 && question.correct_option <= 4);
+      if (!questions.length) throw new Error('CSVに有効な問題がありません');
+      const { error: deleteError } = await supabase.from('video_quiz_questions').delete().eq('video_id', editingVideo.id);
+      if (deleteError) throw deleteError;
+      const { error: insertError } = await supabase.from('video_quiz_questions').insert(questions);
+      if (insertError) throw insertError;
+      showNotice(`${questions.length}問の理解度チェックを登録しました`); setQuizFile(null);
+    } catch (error) { showNotice(error.message || 'CSVの登録に失敗しました'); }
+    finally { setQuizBusy(false); }
   };
 
   return (
@@ -1202,6 +1228,8 @@ export default function AdminPage() {
                           {replacingDocument && <button type="button" onClick={() => setReplacingDocument(null)} className="text-left text-[11px] text-amber-200 underline">差し替えを取り消す</button>}
                         </div>
                       )}
+
+                      {editingVideo && <div className="space-y-2 rounded-2xl border border-slate-700 bg-slate-950/60 p-4"><p className="font-bold text-cyan-300">理解度チェック CSV</p><p className="text-[11px] text-slate-400">question, option_1〜4, correct_option（1〜4）のCSVを登録します。再登録するとこの講座の問題を置き換えます。</p><div className="flex flex-col gap-2 sm:flex-row"><input type="file" accept=".csv,text/csv" onChange={(event) => setQuizFile(event.target.files?.[0] || null)} className="min-w-0 flex-1 rounded-xl border border-slate-800 bg-slate-900 p-2 text-xs text-slate-300"/><button type="button" disabled={!quizFile || quizBusy} onClick={handleImportQuiz} className="rounded-xl bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 disabled:opacity-50">{quizBusy ? '登録中…' : 'CSVを登録'}</button></div></div>}
 
                       <button
                         type="submit"
