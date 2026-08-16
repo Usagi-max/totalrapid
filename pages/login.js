@@ -333,12 +333,41 @@ export default function LoginPage() {
     saveDemoSessionUserId(null);
   };
 
-  const handleDownloadDocument = async (document) => {
+  const handleDownloadDocument = async (courseDocument) => {
     if (!isSupabaseConfigured || !supabase) return;
+
+    // Keep the name selected by the administrator separate from the signed URL.
+    // Passing it as a `download` query parameter can leave percent-encoded text
+    // in the Content-Disposition filename returned by Storage.
+    const rawFileName = courseDocument.file_name || courseDocument.storage_path?.split('/').pop() || 'download.pdf';
+    let fileName = rawFileName;
+    try {
+      fileName = decodeURIComponent(rawFileName);
+    } catch {
+      // A normal filename is not necessarily URI-encoded, so keep it unchanged.
+    }
+    fileName = fileName.replace(/[\\/:*?"<>|\u0000-\u001F]/g, '_').trim() || 'download.pdf';
+
     // RLS verifies the active video plan before a signed URL can be issued.
-    const { data, error } = await supabase.storage.from('course-documents').createSignedUrl(document.storage_path, 60, { download: document.file_name });
+    const { data, error } = await supabase.storage.from('course-documents').createSignedUrl(courseDocument.storage_path, 60);
     if (!error && data?.signedUrl) {
-      window.location.assign(data.signedUrl);
+      try {
+        const response = await fetch(data.signedUrl);
+        if (!response.ok) throw new Error(`Download failed: ${response.status}`);
+
+        const blobUrl = URL.createObjectURL(await response.blob());
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = fileName;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      } catch (downloadError) {
+        console.error('Document download error:', downloadError);
+        setErrorMessage('資料をダウンロードできませんでした。時間をおいてもう一度お試しください。');
+      }
     } else if (/bucket not found/i.test(String(error?.message || ''))) {
       setErrorMessage('PDF保存先が未設定です。管理者へお問い合わせください。');
     } else {
