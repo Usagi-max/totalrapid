@@ -9,6 +9,7 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { MOCK_USERS, MOCK_TUTORING_SCHEDULES, MOCK_VIDEOS, MOCK_PROGRESS, MOCK_MEMOS } from '../lib/mockData';
 import { getStoredStudents, getStoredVideos, getStoredSchedules, getDemoSessionUserId, saveDemoSessionUserId } from '../lib/storageManager';
 import { renderTextWithLinks } from '../lib/textLinks';
+import { getTokyoDateString } from '../lib/tokyoDate';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -186,7 +187,7 @@ export default function LoginPage() {
         id: authUser.id,
         email: authUser.email,
         full_name: authUser.user_metadata?.full_name || '生徒',
-        registration_date: new Date().toISOString().split('T')[0],
+        registration_date: getTokyoDateString(),
       };
 
       // In Supabase mode, only saved active plans grant access to course content.

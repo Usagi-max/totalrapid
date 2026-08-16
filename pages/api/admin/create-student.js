@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { getTokyoDateString } from '../../../lib/tokyoDate';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -31,7 +32,7 @@ export default async function handler(req, res) {
   const userId = created.user.id;
   const { error: profileError } = await adminClient.from('profiles').upsert({
     id: userId, email: email.trim(), full_name: full_name || '', address: address || '',
-    phone_number: phone_number || '', registration_date: registration_date || new Date().toISOString().slice(0, 10), notes: notes || '',
+    phone_number: phone_number || '', registration_date: registration_date || getTokyoDateString(), notes: notes || '',
   });
   if (profileError) {
     await adminClient.auth.admin.deleteUser(userId);

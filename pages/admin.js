@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Layout from '../components/LayoutGeo';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { getTokyoDateString } from '../lib/tokyoDate';
 import {
   getStoredStudents,
   saveStoredStudents,
@@ -45,7 +46,7 @@ export default function AdminPage() {
     full_name: '',
     address: '',
     phone_number: '',
-    registration_date: new Date().toISOString().split('T')[0],
+    registration_date: getTokyoDateString(),
     notes: '',
     hasTutoring: true,
     hasVideo: true,
@@ -196,7 +197,7 @@ export default function AdminPage() {
       full_name: '',
       address: '',
       phone_number: '',
-      registration_date: new Date().toISOString().split('T')[0],
+      registration_date: getTokyoDateString(),
       notes: '',
       hasTutoring: true,
       hasVideo: true,
@@ -214,7 +215,7 @@ export default function AdminPage() {
       full_name: student.full_name || '',
       address: student.address || '',
       phone_number: student.phone_number || '',
-      registration_date: student.registration_date || new Date().toISOString().split('T')[0],
+      registration_date: student.registration_date || getTokyoDateString(),
       notes: student.notes || '',
       hasTutoring: plans.some((p) => (p.plan_type || p) === 'tutoring'),
       hasVideo: plans.some((p) => (p.plan_type || p) === 'video'),

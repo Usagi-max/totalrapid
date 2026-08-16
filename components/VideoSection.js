@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import StealthPlayer from './StealthPlayer';
 import VideoQuiz from './VideoQuiz';
 import { renderTextWithLinks } from '../lib/textLinks';
+import { formatTokyoDate, getTokyoDateString, getTokyoMidnight } from '../lib/tokyoDate';
 
 export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, onSaveProgress, onSaveMemo, onWatchTime, onDownloadDocument }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -29,9 +30,8 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
 
   // Calculate unlocked status and dates for all videos
   const processedVideos = videos.map((vid) => {
-    const regDateObj = registrationDate ? new Date(registrationDate) : new Date();
-    const unlockDate = new Date(regDateObj);
-    unlockDate.setDate(unlockDate.getDate() + (vid.days_after_registration || 0));
+    const registrationDay = registrationDate || getTokyoDateString();
+    const unlockDate = getTokyoMidnight(registrationDay, vid.days_after_registration);
 
     const now = new Date();
     const isUnlocked = now >= unlockDate;
@@ -131,7 +131,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
 
   const formatDate = (d) => {
     if (!d) return '';
-    return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
+    return formatTokyoDate(d);
   };
 
   const formatDuration = (seconds) => {
