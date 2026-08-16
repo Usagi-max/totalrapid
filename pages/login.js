@@ -672,6 +672,7 @@ export default function LoginPage() {
                   userMemos={userMemos}
                   quizScores={quizScores}
                   registrationDate={profile?.registration_date}
+                  userId={currentUser?.id || profile?.id}
                   onSaveProgress={handleSaveProgress}
                   onSaveMemo={handleSaveMemo}
                   onWatchTime={handleWatchTime}

@@ -5,7 +5,7 @@ import VideoQuiz from './VideoQuiz';
 import { renderTextWithLinks } from '../lib/textLinks';
 import { formatTokyoDate, getTokyoDateString, getTokyoMidnight } from '../lib/tokyoDate';
 
-export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, onSaveProgress, onSaveMemo, onWatchTime, onDownloadDocument }) {
+export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, userId, onSaveProgress, onSaveMemo, onWatchTime, onDownloadDocument }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activeCategory, setActiveCategory] = useState('すべて');
   const [memoText, setMemoText] = useState('');
@@ -49,13 +49,37 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
     };
   });
 
-  // Select first unlocked video by default
-  useEffect(() => {
-    if (!selectedVideo && processedVideos.length > 0) {
-      const firstUnlocked = processedVideos.find((v) => v.isUnlocked) || processedVideos[0];
-      setSelectedVideo(firstUnlocked);
+  const lastOpenedVideoKey = `rapid:last-opened-video:${userId || 'guest'}`;
+
+  const selectVideo = (video) => {
+    setSelectedVideo(video);
+    try {
+      window.localStorage.setItem(lastOpenedVideoKey, video.id);
+    } catch {
+      // Keep the video usable when browser storage is unavailable.
     }
-  }, [videos, registrationDate]);
+  };
+
+  // Reset the selection when another user logs in on the same browser.
+  useEffect(() => {
+    setSelectedVideo(null);
+  }, [userId]);
+
+  // Restore the user's last opened video. Fall back to the first available one.
+  useEffect(() => {
+    if (!processedVideos.length) return;
+    if (selectedVideo && processedVideos.some((video) => video.id === selectedVideo.id)) return;
+
+    let lastOpenedVideoId = null;
+    try {
+      lastOpenedVideoId = window.localStorage.getItem(lastOpenedVideoKey);
+    } catch {
+      // Use the default selection if browser storage is unavailable.
+    }
+    const lastOpenedVideo = processedVideos.find((video) => String(video.id) === lastOpenedVideoId);
+    const firstUnlocked = processedVideos.find((video) => video.isUnlocked) || processedVideos[0];
+    selectVideo(lastOpenedVideo || firstUnlocked);
+  }, [videos, registrationDate, userId, selectedVideo]);
 
   // Update memo text when selected video changes
   useEffect(() => {
@@ -339,7 +363,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
               return (
                 <div
                   key={vid.id}
-                  onClick={() => setSelectedVideo(vid)}
+                  onClick={() => selectVideo(vid)}
                   className={`relative p-4 rounded-2xl border transition cursor-pointer select-none ${
                     isSelected
                       ? 'bg-gradient-to-r from-slate-900 to-blue-950/80 border-cyan-400/80 shadow-lg ring-1 ring-cyan-400/50'
