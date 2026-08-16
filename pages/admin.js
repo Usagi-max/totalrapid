@@ -19,7 +19,7 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState('');
 
   // Admin Active Tab
-  const [adminTab, setAdminTab] = useState('students'); // 'students' | 'schedules' | 'videos' | 'documents'
+  const [adminTab, setAdminTab] = useState('students'); // students | schedules | videos | documents | analytics
 
   // Data state
   const [students, setStudents] = useState([]);
@@ -32,6 +32,9 @@ export default function AdminPage() {
   const [quizFile, setQuizFile] = useState(null);
   const [quizBusy, setQuizBusy] = useState(false);
   const [replacingDocument, setReplacingDocument] = useState(null);
+  const [activitySessions, setActivitySessions] = useState([]);
+  const [videoProgressRows, setVideoProgressRows] = useState([]);
+  const [videoWatchEvents, setVideoWatchEvents] = useState([]);
 
   // Modals / Forms
   const [showStudentModal, setShowStudentModal] = useState(false);
@@ -95,6 +98,9 @@ export default function AdminPage() {
         const { data: scheds } = await supabase.from('tutoring_schedules').select('*, profiles(full_name)');
         const { data: vids } = await supabase.from('videos').select('*').order('order_index', { ascending: true });
         const { data: docs } = await supabase.from('video_documents').select('*').order('created_at', { ascending: false });
+        const { data: sessions } = await supabase.from('user_activity_sessions').select('*').order('started_at', { ascending: false });
+        const { data: progressRows } = await supabase.from('video_progress').select('*');
+        const { data: watchEvents } = await supabase.from('video_watch_events').select('*');
 
         if (profs && profs.length > 0) setStudents(profs);
         else setStudents(getStoredStudents());
@@ -105,6 +111,9 @@ export default function AdminPage() {
         if (vids && vids.length > 0) setVideosList(vids);
         else setVideosList(getStoredVideos());
         setDocuments(docs || []);
+        setActivitySessions(sessions || []);
+        setVideoProgressRows(progressRows || []);
+        setVideoWatchEvents(watchEvents || []);
       } catch (e) {
         setStudents(getStoredStudents());
         setSchedules(getStoredSchedules());
@@ -121,6 +130,31 @@ export default function AdminPage() {
     setNotification(msg);
     setTimeout(() => setNotification(''), 3000);
   };
+
+  const formatMinutes = (seconds) => {
+    const minutes = Math.floor((Number(seconds) || 0) / 60);
+    return minutes >= 60 ? `${Math.floor(minutes / 60)}時間${minutes % 60}分` : `${minutes}分`;
+  };
+
+  const analyticsRows = students.map((student) => {
+    const sessions = activitySessions.filter((session) => session.user_id === student.id);
+    const loginDays = new Set(sessions.map((session) => String(session.started_at || '').slice(0, 10)).filter(Boolean));
+    const useSeconds = sessions.reduce((total, session) => {
+      const start = new Date(session.started_at).getTime();
+      const end = new Date(session.last_seen_at || session.started_at).getTime();
+      return total + Math.max(0, Math.min(end - start, 12 * 60 * 60 * 1000)) / 1000;
+    }, 0);
+    const watchByVideo = videosList.map((video) => ({
+      title: video.title,
+      seconds: videoWatchEvents.filter((event) => event.user_id === student.id && event.video_id === video.id)
+        .reduce((total, event) => total + Number(event.watched_seconds || 0), 0),
+    })).filter((entry) => entry.seconds > 0);
+    const progressByVideo = videoProgressRows.filter((row) => row.user_id === student.id);
+    const weekday = Array(7).fill(0);
+    sessions.forEach((session) => { weekday[new Date(session.started_at).getDay()] += 1; });
+    const peakDay = ['日', '月', '火', '水', '木', '金', '土'][weekday.indexOf(Math.max(...weekday))];
+    return { student, loginDays: loginDays.size, useSeconds, watchByVideo, progressByVideo, weekday, peakDay: sessions.length ? peakDay : '—' };
+  });
 
   // Admin Login Handler
   const handleAdminLogin = async (e) => {
@@ -468,8 +502,13 @@ export default function AdminPage() {
     event?.preventDefault();
     const targetVideoId = editingVideo?.id || documentVideoId;
     if (!targetVideoId || !documentFile) return;
-    if (documentFile.type !== 'application/pdf') {
+    const isPdf = documentFile.type === 'application/pdf' || documentFile.name.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
       showNotice('PDFファイルを選択してください。');
+      return;
+    }
+    if (documentFile.size > 20 * 1024 * 1024) {
+      showNotice('PDFは20MB以下のファイルを選択してください。');
       return;
     }
     if (!isSupabaseConfigured || !supabase) {
@@ -509,6 +548,10 @@ export default function AdminPage() {
       showNotice(replacingDocument ? '講義資料を差し替えました。' : '講義資料を登録しました。');
     } catch (error) {
       console.error('Document upload error:', error);
+      if (/bucket not found/i.test(String(error?.message || ''))) {
+        showNotice('PDF保存先が未設定です。Supabase SQL EditorでPDF資料用マイグレーションを実行してください。');
+        return;
+      }
       showNotice('資料を登録できませんでした。管理者権限とStorage設定を確認してください。');
     } finally {
       setDocumentBusy(false);
@@ -739,6 +782,12 @@ export default function AdminPage() {
                 >
                   <span>講義資料PDF ({documents.length})</span>
                 </button>
+                <button
+                  onClick={() => setAdminTab('analytics')}
+                  className={`px-5 py-2.5 rounded-xl font-bold text-sm transition flex items-center gap-2 cursor-pointer ${adminTab === 'analytics' ? 'bg-cyan-400 text-slate-950 font-extrabold shadow-lg' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}`}
+                >
+                  利用分析
+                </button>
               </div>
 
               {/* ========================================================
@@ -800,6 +849,14 @@ export default function AdminPage() {
                                 </td>
                                 <td className="p-4 font-mono text-slate-300">{st.registration_date}</td>
                                 <td className="p-4 text-right space-x-2">
+                                  <a
+                                    href={`/login?email=${encodeURIComponent(st.email || '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-200 border border-blue-400/30 transition"
+                                  >
+                                    ログイン画面
+                                  </a>
                                   <button
                                     onClick={() => openEditStudentModal(st)}
                                     className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition"
@@ -941,6 +998,36 @@ export default function AdminPage() {
               {/* ========================================================
                   新規生徒発行・編集モーダル
               ======================================================== */}
+              {adminTab === 'analytics' && (
+                <div className="space-y-5">
+                  <div className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+                    <h3 className="text-xl font-bold text-white">受講者の利用分析</h3>
+                    <p className="mt-2 text-xs text-slate-400">ログイン日数は同日の再ログインを1回として集計。利用時間は受講画面を開いていた時間、視聴時間は実際に再生された時間です。</p>
+                  </div>
+                  <div className="space-y-4">
+                    {analyticsRows.map(({ student, loginDays, useSeconds, watchByVideo, progressByVideo, weekday, peakDay }) => (
+                      <article key={student.id} className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
+                        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+                          <div><h4 className="font-bold text-white">{student.full_name || student.email}</h4><p className="mt-1 text-xs text-cyan-300">{student.email}</p></div>
+                          <a href={`/login?email=${encodeURIComponent(student.email || '')}`} target="_blank" rel="noopener noreferrer" className="rounded-xl border border-cyan-400/30 bg-cyan-500/10 px-3 py-2 text-xs font-bold text-cyan-200">ログイン画面を開く</a>
+                        </div>
+                        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+                          <div className="rounded-xl bg-slate-950 p-3"><p className="text-[11px] text-slate-400">ログイン日数</p><p className="mt-1 font-bold text-white">{loginDays}日</p></div>
+                          <div className="rounded-xl bg-slate-950 p-3"><p className="text-[11px] text-slate-400">総利用時間</p><p className="mt-1 font-bold text-white">{formatMinutes(useSeconds)}</p></div>
+                          <div className="rounded-xl bg-slate-950 p-3"><p className="text-[11px] text-slate-400">総視聴時間</p><p className="mt-1 font-bold text-white">{formatMinutes(watchByVideo.reduce((total, item) => total + item.seconds, 0))}</p></div>
+                          <div className="rounded-xl bg-slate-950 p-3"><p className="text-[11px] text-slate-400">利用が多い曜日</p><p className="mt-1 font-bold text-white">{peakDay}曜日</p></div>
+                        </div>
+                        <div className="mt-4 border-t border-slate-800 pt-4"><p className="text-xs font-bold text-slate-300">講座別視聴時間</p>
+                          {watchByVideo.length ? <ul className="mt-2 space-y-1 text-xs text-slate-400">{watchByVideo.map((item) => <li key={item.title} className="flex justify-between gap-3"><span className="truncate">{item.title}</span><b className="shrink-0 text-cyan-300">{formatMinutes(item.seconds)}</b></li>)}</ul> : <p className="mt-2 text-xs text-slate-500">視聴記録はまだありません。</p>}
+                          {progressByVideo.length > 0 && <p className="mt-3 text-[11px] text-slate-500">進捗登録済み講座: {progressByVideo.length}件</p>}
+                          <p className="mt-3 text-[11px] text-slate-500">曜日別ログイン: {['日', '月', '火', '水', '木', '金', '土'].map((day, index) => `${day}${weekday[index]}`).join(' / ')}</p>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {showStudentModal && (
                 <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md p-3 sm:p-6">
                   <div className="mx-auto flex min-h-full items-center justify-center">

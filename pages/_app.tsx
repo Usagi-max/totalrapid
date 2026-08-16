@@ -28,6 +28,11 @@ export default function App({ Component, pageProps }) {
     if (typeof window === "undefined") return;
     if (redirectedRef.current) return;
 
+    // Authentication and administration routes must remain directly accessible.
+    if (router.pathname === "/login" || router.pathname === "/admin" || router.pathname.startsWith("/admin/")) {
+      return;
+    }
+
     const visited = sessionStorage.getItem("visited");
     if (!visited) {
       redirectedRef.current = true;

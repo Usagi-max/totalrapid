@@ -9,6 +9,7 @@ export default function StealthPlayer({
   initialPosition = 0,
   isCompleted = false,
   onProgressUpdate,
+  onWatchTime,
   onCompletedChange,
   onDurationChange,
   captionsEnabled = true,
@@ -16,6 +17,9 @@ export default function StealthPlayer({
   const playerRef = useRef(null);
   const containerRef = useRef(null);
   const intervalRef = useRef(null);
+  const trackingRef = useRef(false);
+  const lastTrackedTimeRef = useRef(null);
+  const resumeChoiceRequiredRef = useRef(initialPosition > 10);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(initialPosition);
@@ -86,7 +90,12 @@ export default function StealthPlayer({
             if (event.target.setPlaybackRate) event.target.setPlaybackRate(initialRate);
             setSelectedPlaybackRate(initialRate);
 
-            if (initialPosition > 0) {
+            // Do not restore or play a saved position until the learner makes a choice.
+            if (resumeChoiceRequiredRef.current) {
+              event.target.pauseVideo();
+              event.target.seekTo(0, true);
+              setCurrentTime(0);
+            } else if (initialPosition > 0) {
               event.target.seekTo(initialPosition, true);
               setCurrentTime(initialPosition);
             }
@@ -94,6 +103,10 @@ export default function StealthPlayer({
           onStateChange: (event) => {
             if (!isMounted) return;
             if (event.data === window.YT.PlayerState.PLAYING) {
+              if (resumeChoiceRequiredRef.current) {
+                event.target.pauseVideo();
+                return;
+              }
               setIsPlaying(true);
               startTracking();
             } else if (event.data === window.YT.PlayerState.PAUSED) {
@@ -132,12 +145,15 @@ export default function StealthPlayer({
 
   const startTracking = () => {
     stopTracking();
+    trackingRef.current = true;
+    lastTrackedTimeRef.current = Math.floor(playerRef.current?.getCurrentTime?.() || 0);
     intervalRef.current = setInterval(() => {
       syncCurrentTime();
     }, 3000);
   };
 
   const stopTracking = () => {
+    trackingRef.current = false;
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -148,6 +164,12 @@ export default function StealthPlayer({
     if (playerRef.current && playerRef.current.getCurrentTime) {
       const time = Math.floor(playerRef.current.getCurrentTime() || 0);
       const dur = Math.floor(playerRef.current.getDuration() || duration);
+      const previousTime = lastTrackedTimeRef.current;
+      if (trackingRef.current && previousTime !== null) {
+        const watchedSeconds = time - previousTime;
+        if (watchedSeconds > 0 && watchedSeconds <= 8) onWatchTime?.(videoId, watchedSeconds);
+      }
+      lastTrackedTimeRef.current = time;
       setCurrentTime(time);
       if (dur > 0 && dur !== duration) {
         setDuration(dur);
@@ -185,6 +207,7 @@ export default function StealthPlayer({
   };
 
   const handleResumeChoice = (resume) => {
+    resumeChoiceRequiredRef.current = false;
     setShowResumeModal(false);
     if (!playerRef.current) return;
 

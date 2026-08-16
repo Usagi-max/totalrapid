@@ -4,7 +4,7 @@ import StealthPlayer from './StealthPlayer';
 import VideoQuiz from './VideoQuiz';
 import { renderTextWithLinks } from '../lib/textLinks';
 
-export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, onSaveProgress, onSaveMemo, onDownloadDocument }) {
+export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, onSaveProgress, onSaveMemo, onWatchTime, onDownloadDocument }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activeCategory, setActiveCategory] = useState('すべて');
   const [memoText, setMemoText] = useState('');
@@ -195,6 +195,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                   initialPosition={selectedVideo.progress.last_position_seconds}
                   isCompleted={selectedVideo.progress.is_completed}
                   onProgressUpdate={handleProgressUpdate}
+                  onWatchTime={onWatchTime}
                   onCompletedChange={handleCompletedChange}
                   onDurationChange={handleDurationChange}
                   captionsEnabled={selectedVideo.captions_enabled !== false}

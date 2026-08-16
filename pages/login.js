@@ -1,5 +1,5 @@
 // pages/login.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Layout from '../components/LayoutGeo';
@@ -13,6 +13,7 @@ import { renderTextWithLinks } from '../lib/textLinks';
 export default function LoginPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
   const [activeTab, setActiveTab] = useState('tutoring'); // 'tutoring' | 'video'
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,6 +32,44 @@ export default function LoginPage() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [documentsByVideo, setDocumentsByVideo] = useState({});
   const [quizScores, setQuizScores] = useState({});
+  const watchBufferRef = useRef({});
+  const isAdmin = currentUser?.app_metadata?.role === 'admin';
+
+  useEffect(() => {
+    if (router.isReady && typeof router.query.email === 'string' && !currentUser) {
+      setEmail(router.query.email);
+    }
+  }, [router.isReady, router.query.email, currentUser]);
+
+  // Records a portal session for administrator usage analytics.
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase || !currentUser?.id) return undefined;
+    const sessionId = crypto.randomUUID();
+    const now = () => new Date().toISOString();
+    const heartbeat = () => supabase.from('user_activity_sessions').update({ last_seen_at: now() }).eq('id', sessionId);
+    supabase.from('user_activity_sessions').insert({ id: sessionId, user_id: currentUser.id, started_at: now(), last_seen_at: now() }).then(() => {});
+    const interval = window.setInterval(heartbeat, 60_000);
+    document.addEventListener('visibilitychange', heartbeat);
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener('visibilitychange', heartbeat);
+      heartbeat();
+    };
+  }, [currentUser?.id]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !supabase || !currentUser?.id) return undefined;
+    const flushWatchTime = async () => {
+      const buffered = watchBufferRef.current;
+      watchBufferRef.current = {};
+      const rows = Object.entries(buffered)
+        .filter(([, watchedSeconds]) => watchedSeconds > 0)
+        .map(([video_id, watched_seconds]) => ({ user_id: currentUser.id, video_id, watched_seconds: Math.round(watched_seconds) }));
+      if (rows.length) await supabase.from('video_watch_events').insert(rows);
+    };
+    const interval = window.setInterval(flushWatchTime, 30_000);
+    return () => { window.clearInterval(interval); flushWatchTime(); };
+  }, [currentUser?.id]);
 
   // Check existing session
   useEffect(() => {
@@ -38,15 +77,20 @@ export default function LoginPage() {
       supabase.auth.getSession().then(({ data: { session } }) => {
         if (session?.user) {
           fetchSupabaseUserData(session.user);
+        } else {
+          setAuthReady(true);
         }
       });
 
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'INITIAL_SESSION') return;
         if (session?.user) {
+          setAuthReady(false);
           fetchSupabaseUserData(session.user);
         } else {
           setCurrentUser(null);
           setProfile(null);
+          setAuthReady(true);
         }
       });
 
@@ -58,6 +102,7 @@ export default function LoginPage() {
       const storedUser = getStoredStudents().find((student) => student.id === storedUserId);
       if (storedUser) restoreDemoUser(storedUser);
     }
+    setAuthReady(true);
   }, []);
 
   useEffect(() => {
@@ -144,12 +189,8 @@ export default function LoginPage() {
         registration_date: new Date().toISOString().split('T')[0],
       };
 
-      const activePlans = (plansData && plansData.length > 0)
-        ? plansData
-        : [
-            { plan_type: 'video', contract_start_date: new Date().toISOString().split('T')[0], status: 'active' },
-            { plan_type: 'tutoring', contract_start_date: new Date().toISOString().split('T')[0], status: 'active' }
-          ];
+      // In Supabase mode, only saved active plans grant access to course content.
+      const activePlans = plansData || [];
 
       setCurrentUser(authUser);
       setProfile(activeUserProfile);
@@ -175,6 +216,7 @@ export default function LoginPage() {
       console.error(err);
     } finally {
       setLoading(false);
+      setAuthReady(true);
     }
   };
 
@@ -189,10 +231,12 @@ export default function LoginPage() {
 
     if (isSupabaseConfigured && supabase) {
       setLoading(true);
+      setAuthReady(false);
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       setLoading(false);
 
       if (error) {
+        setAuthReady(true);
         setErrorMessage('ログインに失敗しました。メールアドレスまたはパスワードをご確認ください。');
       } else if (data.user) {
         fetchSupabaseUserData(data.user);
@@ -293,8 +337,13 @@ export default function LoginPage() {
     if (!isSupabaseConfigured || !supabase) return;
     // RLS verifies the active video plan before a signed URL can be issued.
     const { data, error } = await supabase.storage.from('course-documents').createSignedUrl(document.storage_path, 60, { download: document.file_name });
-    if (!error && data?.signedUrl) window.location.assign(data.signedUrl);
-    else setErrorMessage('資料をダウンロードできませんでした。時間をおいてもう一度お試しください。');
+    if (!error && data?.signedUrl) {
+      window.location.assign(data.signedUrl);
+    } else if (/bucket not found/i.test(String(error?.message || ''))) {
+      setErrorMessage('PDF保存先が未設定です。管理者へお問い合わせください。');
+    } else {
+      setErrorMessage('資料をダウンロードできませんでした。時間をおいてもう一度お試しください。');
+    }
   };
 
   // Progress Save Callback (Supabase + Local)
@@ -351,6 +400,11 @@ export default function LoginPage() {
     }
   };
 
+  const handleWatchTime = (videoId, watchedSeconds) => {
+    if (!videoId || !Number.isFinite(watchedSeconds) || watchedSeconds <= 0) return;
+    watchBufferRef.current[videoId] = (watchBufferRef.current[videoId] || 0) + watchedSeconds;
+  };
+
   const hasTutoringPlan = userPlans.some((p) => p.plan_type === 'tutoring');
   const hasVideoPlan = userPlans.some((p) => p.plan_type === 'video');
 
@@ -366,7 +420,12 @@ export default function LoginPage() {
           {/* ========================================================
               1. 未ログイン時：ログインカード表示画面
           ======================================================== */}
-          {!currentUser ? (
+          {!authReady ? (
+            <div className="mx-auto flex min-h-[50vh] max-w-md flex-col items-center justify-center gap-4 text-center" aria-live="polite">
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-700 border-t-cyan-400" />
+              <p className="text-sm text-slate-400">ログイン状態を確認しています…</p>
+            </div>
+          ) : !currentUser ? (
             <div className="max-w-md mx-auto animate-fadeIn py-8 space-y-6">
               <div className="text-center space-y-3">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 p-0.5 mx-auto shadow-xl">
@@ -518,6 +577,14 @@ export default function LoginPage() {
                     </svg>
                     会員登録情報
                   </button>
+                  {isAdmin && (
+                    <button
+                      onClick={() => router.push('/admin')}
+                      className="px-4 py-2.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-400/30 text-cyan-200 font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer"
+                    >
+                      管理画面を確認
+                    </button>
+                  )}
                   <button
                     onClick={handleLogout}
                     className="px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer"
@@ -577,6 +644,7 @@ export default function LoginPage() {
                   registrationDate={profile?.registration_date}
                   onSaveProgress={handleSaveProgress}
                   onSaveMemo={handleSaveMemo}
+                  onWatchTime={handleWatchTime}
                   onDownloadDocument={handleDownloadDocument}
                 />
               )}
