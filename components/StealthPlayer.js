@@ -414,19 +414,24 @@ export default function StealthPlayer({
                 className="w-16 h-1 bg-slate-800 rounded appearance-none accent-cyan-400 cursor-pointer opacity-70 group-hover/vol:opacity-100 transition"
               />
             </div>
-            <label className="flex items-center gap-1.5 text-xs text-slate-300">
-              <span className="sr-only">再生速度</span>
+            <div className="flex items-center gap-1.5 text-xs text-slate-300 bg-slate-900/90 border border-slate-700/80 rounded-lg px-2 py-0.5 shadow-inner">
+              <svg className="w-3.5 h-3.5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span className="text-[11px] font-medium text-slate-400 hidden sm:inline">速度:</span>
               <select
                 value={selectedPlaybackRate}
                 onChange={handlePlaybackRateChange}
                 aria-label="再生速度"
-                className="bg-slate-800 border border-slate-700 rounded-md px-1.5 py-1 text-xs text-white cursor-pointer"
+                className="bg-transparent text-xs text-cyan-300 font-bold cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyan-400 rounded"
               >
-                {[0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].map((rate) => (
-                  <option key={rate} value={rate}>{rate}x</option>
+                {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map((rate) => (
+                  <option key={rate} value={rate} className="bg-slate-900 text-white">
+                    {rate === 1 ? '1.0x (標準)' : `${rate}x`}
+                  </option>
                 ))}
               </select>
-            </label>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">

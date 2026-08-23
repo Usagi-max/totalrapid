@@ -1,0 +1,1451 @@
+/* miyazaki-online.module.css - Warm Gothic Theme (#ff7e5f & #feb47b) */
+
+.page {
+  --warm-orange: #ff7e5f;
+  --warm-gold: #feb47b;
+  --warm-amber: #f97316;
+  --warm-deep: #ea580c;
+  --text-dark: #1c1917;
+  --text-main: #292524;
+  --text-muted: #44403c;
+  --text-light: #78716c;
+  --paper-bg: #ffffff;
+  --warm-wash: #fff7ed;
+  --gold-wash: #fffbeeb;
+  --amber-wash: #ffedd5;
+  --line-green: #06c755;
+  --line-green-hover: #05b34c;
+  
+  color: var(--text-main);
+  background: var(--paper-bg);
+  font-family: "Zen Kaku Gothic New", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page :is(h1, h2, h3, strong) {
+  font-family: "Zen Kaku Gothic New", "Noto Sans JP", sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.spOnly {
+  display: none;
+}
+
+/* ---------- Header ---------- */
+.header {
+  height: 76px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.98);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #fed7aa;
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brandLogoImg {
+  object-fit: contain;
+  height: 36px;
+  width: auto;
+}
+
+.brandNameText {
+  font-family: "Zen Kaku Gothic New", "Noto Sans JP", sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  gap: 32px;
+}
+
+.nav a {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.nav a:hover {
+  color: var(--warm-orange);
+}
+
+.headerLine {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--line-green);
+  border-radius: 50px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(6, 199, 85, 0.25);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.headerLine:hover {
+  background: var(--line-green-hover);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   1. HERO SECTION (center.jpeg 右側視認性クッキリ ＋ 暖色サンセットグラデーション)
+   ========================================================================== */
+.heroSection {
+  position: relative;
+  min-height: auto;
+  padding: 56px 5vw 44px;
+  display: flex;
+  align-items: center;
+  color: var(--text-dark);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.heroBgWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* 右側の勉強中の女性をはっきりと鮮明に見せるための透過設定 */
+.heroBgImage {
+  object-fit: cover;
+  object-position: 78% center;
+  opacity: 0.92;
+}
+
+/* 左側文字領域の可読性を保ちつつ、右半分の画像をクッキリ見えるように薄くしたグラデーション */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.98) 0%, 
+    rgba(255, 247, 237, 0.92) 42%, 
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+
+.heroContainer {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 36px;
+  align-items: end;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.eyebrowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: #ffffff;
+  border: 1.5px solid #fed7aa;
+  border-radius: 50px;
+  color: var(--warm-deep);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(255, 126, 95, 0.12);
+}
+
+.heroTitle {
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.45;
+  color: var(--text-dark);
+  margin: 0 0 20px;
+  font-weight: 900;
+}
+
+.heroHighlight {
+  color: var(--warm-deep);
+  background: linear-gradient(180deg, transparent 60%, #ffedd5 60%);
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+.heroLead {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+  max-width: 540px;
+  font-weight: 500;
+}
+
+.heroLead strong {
+  color: var(--text-dark);
+  font-weight: 800;
+}
+
+.heroPriceCard {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 22px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.5px solid #fed7aa;
+  border-left: 5px solid var(--warm-orange);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(255, 126, 95, 0.12);
+}
+
+.priceTag {
+  background: linear-gradient(135deg, var(--warm-orange), var(--warm-gold));
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 800;
+  padding: 5px 14px;
+  border-radius: 4px;
+}
+
+.priceBody {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.priceDuration {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.priceAmount {
+  font-size: 32px;
+  color: var(--text-dark);
+  font-weight: 900;
+  font-family: "Zen Kaku Gothic New", sans-serif;
+}
+
+.priceAmount small {
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.heroMetaBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.heroMetaBadges span {
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.heroCtaArea {
+  width: 100%;
+  max-width: 440px;
+}
+
+.heroSubText {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.cta {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 28px;
+  border-radius: 12px;
+  background: var(--line-green);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 16.5px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 25px rgba(6, 199, 85, 0.35);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.cta:hover {
+  background: var(--line-green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(6, 199, 85, 0.45);
+}
+
+/* 冒頭セクションの訴求カード */
+.heroVisualCardsWrap {
+  width: 100%;
+  align-self: end;
+}
+
+.heroVisualCardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.glassCardItem {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.5px solid #fed7aa;
+  border-radius: 16px;
+  min-width: 0;
+  padding: 8px;
+  box-shadow: 0 12px 28px rgba(255, 126, 95, 0.15);
+  backdrop-filter: blur(12px);
+  transition: transform 0.2s;
+}
+
+.glassCardItem:hover {
+  transform: translateY(-3px);
+}
+
+.cardImageHeader {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.cardPhoto {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.photoCaption {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: linear-gradient(135deg, var(--warm-orange), var(--warm-gold));
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cardTextContent {
+  padding: 10px 4px 4px;
+}
+
+.cardTextContent h3 {
+  font-size: 14.5px;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+  font-weight: 800;
+}
+
+.cardTextContent p {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.glassCardContainer {
+  background: rgba(15, 25, 47, 0.8);
+  border: 1px solid rgba(54, 209, 220, 0.3);
+  border-radius: 20px;
+  padding: 14px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+.cardImageHeader {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cardPhoto {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.photoCaption {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(15, 25, 47, 0.9);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--warm-orange), var(--warm-gold));
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.cardTextContent {
+  padding: 10px 4px 4px;
+}
+
+.cardTextContent h3 {
+  font-size: 14px;
+  color: var(--text-dark);
+  margin: 0 0 6px;
+  font-weight: 900;
+}
+
+.cardTextContent p {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   2. BENEFITS SECTION (サービス特長)
+   暖色ウォッシュ ＋ 半透明背景画像 (onthebook.webp)
+   ========================================================================== */
+.benefitsSection {
+  padding: 72px 5vw;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 247, 237, 0.95) 100%),
+              url('/images/onthebook.webp') center / cover no-repeat;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.benefitsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.benefitCard {
+  padding: 26px 24px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  border: 1.5px solid #fed7aa;
+  box-shadow: 0 4px 16px rgba(255, 126, 95, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.benefitCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(255, 126, 95, 0.16);
+}
+
+.iconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 126, 95, 0.15), rgba(254, 180, 123, 0.25));
+  color: var(--warm-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.benefitCard h2 {
+  font-size: 18.5px;
+  color: var(--text-dark);
+  margin: 0 0 10px;
+  font-weight: 800;
+}
+
+.benefitCard p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   3. WORRY / CONCEPT SECTION (学習の駆け込み寺)
+   暖色ウォッシュ ＋ 半透明背景画像 (cherryblossom_and_sky.png)
+   ========================================================================== */
+.worrySection {
+  padding: 88px 5vw;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 237, 0.94) 100%),
+              url('/images/cherryblossom_and_sky.png') center / cover no-repeat;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.sectionInner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.sectionSubTitle {
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--warm-deep);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.sectionHeader h2 {
+  font-size: clamp(24px, 2.5vw, 34px);
+  color: var(--text-dark);
+  margin: 0 0 12px;
+  font-weight: 900;
+}
+
+.sectionHeader p {
+  font-size: 15.5px;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 600;
+}
+
+.worryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 44px;
+}
+
+.worryCard {
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  border: 1.5px solid #fed7aa;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text-dark);
+  box-shadow: 0 4px 12px rgba(255, 126, 95, 0.06);
+}
+
+.maruIcon {
+  color: var(--warm-orange);
+  flex-shrink: 0;
+}
+
+.maruIconSmall {
+  color: var(--warm-orange);
+  flex-shrink: 0;
+}
+
+.templeBanner {
+  background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+  border: 2px solid #fed7aa;
+  color: var(--text-dark);
+  padding: 36px 40px;
+  border-radius: 20px;
+  box-shadow: 0 16px 32px rgba(255, 126, 95, 0.12);
+}
+
+.templeInner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.templeKicker {
+  color: var(--warm-deep);
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.templeTitle {
+  font-size: 24px;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--text-dark);
+  font-weight: 900;
+}
+
+.templeTitle strong {
+  color: var(--warm-deep);
+  font-size: 28px;
+}
+
+/* ==========================================================================
+   4. FLEXIBLE FEATURE SECTION (必要なときだけ1コマ〜)
+   暖色ウォッシュ ＋ 半透明背景画像 (using pc.jpg)
+   ========================================================================== */
+.darkSection {
+  padding: 96px 5vw;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 237, 0.94) 100%),
+              url('/images/using pc.jpg') center / cover no-repeat;
+  color: var(--text-dark);
+  border-bottom: 1px solid #fed7aa;
+}
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.badgeLabel {
+  display: inline-block;
+  color: var(--warm-deep);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  margin-bottom: 12px;
+}
+
+.splitText h2 {
+  font-size: clamp(24px, 2.5vw, 34px);
+  line-height: 1.6;
+  margin: 0 0 20px;
+  color: var(--text-dark);
+  font-weight: 900;
+}
+
+.darkCopy {
+  font-size: 15.5px;
+  line-height: 1.9;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.darkCopy strong {
+  color: var(--text-dark);
+  border-bottom: 3px solid #fed7aa;
+  font-weight: 800;
+}
+
+.useCaseCardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.useCaseCard {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1.5px solid #fed7aa;
+  border-top: 4px solid var(--warm-orange);
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(255, 126, 95, 0.08);
+}
+
+.useCaseNumber {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--warm-deep);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.useCaseCard p {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   5. CLASSROOM SECTION (学校の教材そのまま)
+   onthebook.webp Translucent + Cyan Wash
+   ========================================================================== */
+.classroomSection {
+  padding: 96px 5vw;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 237, 0.94) 100%),
+              url('/images/onthebook.webp') right bottom / 420px no-repeat;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.classroomGrid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.classroomImageWrap {
+  position: relative;
+}
+
+.imageFrame {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(124, 45, 18, 0.12);
+  border: 1px solid #fed7aa;
+  background: #ffffff;
+}
+
+.classroomImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.imageBadge {
+  position: absolute;
+  bottom: -16px;
+  right: 20px;
+  background: var(--warm-deep);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 237, 213, 0.8);
+}
+
+.classroomContent h2 {
+  font-size: clamp(24px, 2.5vw, 34px);
+  color: var(--text-dark);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.sectionDesc {
+  font-size: 15.5px;
+  line-height: 1.85;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.materialList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.materialList li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #fed7aa;
+}
+
+.materialCallout {
+  padding: 16px 20px;
+  background: var(--amber-wash);
+  border-left: 4px solid var(--warm-orange);
+  border-radius: 8px;
+  color: var(--text-dark);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. FLOW SECTION (受講の流れ)
+   ========================================================================== */
+.flowSection {
+  padding: 96px 5vw;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border-bottom: 1px solid #fed7aa;
+}
+
+.flowGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.flowCard {
+  padding: 28px 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  border: 1px solid #fed7aa;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.08);
+  position: relative;
+}
+
+.flowStepBadge {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--warm-deep);
+  background: var(--amber-wash);
+  padding: 4px 12px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.flowCard h3 {
+  font-size: 16px;
+  color: var(--text-dark);
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.flowCard p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ==========================================================================
+   7. DIRECT GUIDANCE SECTION (塾長直接指導)
+   ========================================================================== */
+.directSection {
+  padding: 96px 5vw;
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 50%, #ea580c 100%);
+  color: #ffffff;
+}
+
+.directGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 32px;
+}
+
+.directMainCard {
+  padding: 44px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 237, 213, 0.5);
+  color: #ffffff;
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+}
+
+.directBadge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fed7aa;
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.directMainCard h2 {
+  font-size: 28px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  color: #ffffff;
+}
+
+.directCopy {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #fff7ed;
+  margin-bottom: 28px;
+}
+
+.reasonPills {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.reasonPills span {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 237, 213, 0.35);
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.limitBox {
+  padding: 40px 32px;
+  background: linear-gradient(135deg, #fff7ed, #ffedd5);
+  border: 2px solid var(--warm-orange);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.limitHeader small {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--warm-deep);
+  letter-spacing: 0.1em;
+}
+
+.limitNumber {
+  font-family: "Shippori Mincho", serif;
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--warm-deep);
+  line-height: 1;
+  margin: 8px 0;
+}
+
+.limitNumber small {
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.limitDesc {
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--text-dark);
+  margin: 16px 0 0;
+}
+
+/* ==========================================================================
+   8. PROFILE SECTION (講師紹介)
+   ========================================================================== */
+.profileSection {
+  padding: 96px 5vw;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 237, 0.94) 100%),
+              url('/images/connection.webp') left center / 380px no-repeat;
+  border-bottom: 1px solid #fed7aa;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.profilePhotoWrap {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(15, 25, 47, 0.12);
+  border: 1px solid #fed7aa;
+  background: #ffffff;
+}
+
+.profileImg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.profileContent h2 {
+  font-size: 28px;
+  color: var(--text-dark);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.profileIntro {
+  font-size: 15.5px;
+  line-height: 1.85;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.careerBox {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #fed7aa;
+}
+
+.careerBox h3 {
+  font-size: 16px;
+  color: var(--text-dark);
+  margin: 0 0 14px;
+}
+
+.careerBox ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.careerBox li {
+  padding: 10px 0;
+  border-bottom: 1px solid #fed7aa;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.careerBox li:last-child {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   9. STARTUP PROMOTION (宮崎市先行)
+   ========================================================================== */
+.startupSection {
+  padding: 72px 5vw;
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%);
+  color: #ffffff;
+}
+
+.startupCard {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.startupCard h2 {
+  font-size: 26px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  color: #ffffff;
+}
+
+.startupCard p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #fff7ed;
+  margin: 0 0 16px;
+}
+
+.startupNotice {
+  color: #fed7aa !important;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   10. PRICE SECTION (料金体系)
+   ========================================================================== */
+.priceSection {
+  padding: 96px 5vw;
+  background: linear-gradient(180deg, #ffffff 0%, #fff7ed 100%);
+  border-bottom: 1px solid #fed7aa;
+}
+
+.priceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  max-width: 840px;
+  margin: 0 auto 36px;
+}
+
+.priceCard {
+  padding: 40px 32px;
+  border-radius: 20px;
+  border: 1px solid #fed7aa;
+  background: rgba(255, 255, 255, 0.95);
+  text-align: center;
+}
+
+.priceTrial {
+  border-color: #fed7aa;
+}
+
+.priceRegular {
+  border-color: var(--warm-orange);
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(234, 88, 12, 0.15);
+}
+
+.priceBadge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 50px;
+  background: #e2e8f0;
+  color: var(--text-muted);
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.priceBadgeMain {
+  background: linear-gradient(135deg, var(--warm-orange), var(--warm-deep));
+  color: #ffffff;
+}
+
+.priceCard h3 {
+  font-size: 20px;
+  color: var(--text-dark);
+  margin: 0 0 16px;
+}
+
+.priceVal {
+  margin-bottom: 16px;
+  color: var(--text-dark);
+}
+
+.priceVal strong {
+  font-family: "Shippori Mincho", serif;
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.priceVal span {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+
+.priceCard p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.priceFeatureRow {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.priceFeatureRow span {
+  padding: 8px 16px;
+  background: #ffffff;
+  border: 1px solid #fed7aa;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* ==========================================================================
+   11. RECOMMEND SECTION (こんな方におすすめ)
+   ========================================================================== */
+.recommendSection {
+  padding: 96px 5vw;
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%);
+  color: #ffffff;
+}
+
+.recommendGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.recommendTitleBox h2 {
+  font-size: 28px;
+  color: #ffffff;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.recommendList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.recommendItem {
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 237, 213, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+}
+
+/* ==========================================================================
+   12. FINAL CTA SECTION (ページの最下部)
+   ========================================================================== */
+.finalCtaSection {
+  position: relative;
+  padding: 108px 5vw;
+  color: #ffffff;
+  text-align: center;
+  overflow: hidden;
+}
+
+.finalCtaBg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.finalCtaImg {
+  object-fit: cover;
+}
+
+.finalCtaOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(124, 45, 18, 0.92) 0%, rgba(194, 65, 12, 0.96) 100%);
+}
+
+.finalCtaContent {
+  position: relative;
+  z-index: 10;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.finalCtaContent h2 {
+  font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.6;
+  margin: 0 0 20px;
+  color: #ffffff;
+}
+
+.finalCtaContent p {
+  font-size: 16px;
+  line-height: 1.9;
+  color: #fff7ed;
+  margin-bottom: 28px;
+}
+
+.finalCtaContent p strong {
+  color: #ffffff;
+}
+
+.finalPriceTag {
+  font-size: 16px;
+  color: #ffedd5;
+  margin-bottom: 24px;
+}
+
+.finalPriceTag strong {
+  font-family: "Shippori Mincho", serif;
+  font-size: 28px;
+  color: #ffffff;
+  margin-left: 6px;
+}
+
+.finalCtaButtonWrap {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.finalLimitNotice {
+  display: block;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #fed7aa;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  background: #7c2d12;
+  color: #ffedd5;
+  padding: 40px 5vw;
+  border-top: 1px solid #ea580c;
+}
+
+.footerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.footerBrand img {
+  height: 32px;
+  width: auto;
+}
+
+.footerLinks a {
+  color: #ffedd5;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.footerLinks a:hover {
+  color: #ffffff;
+}
+
+.copyright {
+  font-size: 12px;
+}
+
+/* ---------- Mobile Responsiveness ---------- */
+@media (max-width: 820px) {
+  .spOnly {
+    display: inline;
+  }
+
+  .header {
+    height: 64px;
+    padding: 0 16px;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .brandLogoImg {
+    height: 28px;
+  }
+
+  .headerLine {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .heroSection {
+    padding: 40px 16px 60px;
+    min-height: auto;
+  }
+
+  .heroBgImage {
+    object-position: center center;
+  }
+
+  .heroContainer {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .heroVisualCard {
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .heroVisualCardGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .glassCardItem {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .cardImageHeader {
+    aspect-ratio: 1 / 1;
+  }
+
+  .heroTitle {
+    font-size: 24px;
+  }
+
+  .heroLead {
+    font-size: 14.5px;
+    margin-bottom: 20px;
+  }
+
+  .heroPriceCard {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .priceAmount {
+    font-size: 26px;
+  }
+
+  .cta {
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+
+  .benefitsContainer {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .benefitCard {
+    padding: 18px;
+  }
+
+  .worryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .templeInner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .templeTitle {
+    font-size: 20px;
+  }
+
+  .splitGrid,
+  .classroomGrid,
+  .directGrid,
+  .profileGrid,
+  .recommendGrid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .useCaseCardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .flowGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .reasonPills {
+    grid-template-columns: 1fr;
+  }
+
+  .materialList {
+    grid-template-columns: 1fr;
+  }
+
+  .priceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .footerInner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+}

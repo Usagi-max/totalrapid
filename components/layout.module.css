@@ -23,9 +23,19 @@
 }
 
 .portalNav {
-  --nav-bg: #020617;
+  --nav-bg: #0f172a;
+  background-color: #0f172a !important;
   color: #ffffff;
   border-bottom-color: #1e293b;
+}
+
+.portalNav .siteTitle,
+.portalNav .navLinks a {
+  color: #ffffff !important;
+}
+
+.portalNav .navLinks a:hover {
+  color: #38bdf8 !important;
 }
 
 .portalNav .hamburgerLine {

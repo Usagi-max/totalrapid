@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS public.videos (
   thumbnail_url TEXT,
   duration_seconds INT DEFAULT 0 NOT NULL,
   days_after_registration INT DEFAULT 0 NOT NULL, -- 登録から公開までの日数
-  category TEXT DEFAULT '共通テスト対策',
+  category TEXT DEFAULT '演習',
   order_index INT DEFAULT 0 NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );

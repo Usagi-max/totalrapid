@@ -13,6 +13,23 @@ import {
   saveStoredSchedules,
 } from '../lib/storageManager';
 
+const weekdayLabels = ['日', '月', '火', '水', '木', '金', '土'];
+
+const getTokyoDate = (value) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : getTokyoDateString(date);
+};
+
+const getTokyoWeekday = (value) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  const weekday = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Tokyo',
+    weekday: 'short',
+  }).format(date);
+  return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(weekday);
+};
+
 export default function AdminPage() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [adminEmailInput, setAdminEmailInput] = useState('');
@@ -139,22 +156,52 @@ export default function AdminPage() {
 
   const analyticsRows = students.map((student) => {
     const sessions = activitySessions.filter((session) => session.user_id === student.id);
-    const loginDays = new Set(sessions.map((session) => String(session.started_at || '').slice(0, 10)).filter(Boolean));
+    const dailyUsage = new Map();
+    const addDailyUsage = (date, field, value) => {
+      if (!date || !Number.isFinite(value)) return;
+      const current = dailyUsage.get(date) || { date, useSeconds: 0, loginCount: 0, watchSeconds: 0 };
+      current[field] += value;
+      dailyUsage.set(date, current);
+    };
     const useSeconds = sessions.reduce((total, session) => {
       const start = new Date(session.started_at).getTime();
       const end = new Date(session.last_seen_at || session.started_at).getTime();
-      return total + Math.max(0, Math.min(end - start, 12 * 60 * 60 * 1000)) / 1000;
+      const sessionSeconds = Number.isFinite(start) && Number.isFinite(end)
+        ? Math.max(0, Math.min(end - start, 12 * 60 * 60 * 1000)) / 1000
+        : 0;
+      const date = getTokyoDate(session.started_at);
+      addDailyUsage(date, 'useSeconds', sessionSeconds);
+      addDailyUsage(date, 'loginCount', 1);
+      return total + sessionSeconds;
     }, 0);
+    const studentWatchEvents = videoWatchEvents.filter((event) => event.user_id === student.id);
+    studentWatchEvents.forEach((event) => {
+      addDailyUsage(getTokyoDate(event.created_at), 'watchSeconds', Number(event.watched_seconds || 0));
+    });
     const watchByVideo = videosList.map((video) => ({
       title: video.title,
-      seconds: videoWatchEvents.filter((event) => event.user_id === student.id && event.video_id === video.id)
+      seconds: studentWatchEvents.filter((event) => event.video_id === video.id)
         .reduce((total, event) => total + Number(event.watched_seconds || 0), 0),
     })).filter((entry) => entry.seconds > 0);
     const progressByVideo = videoProgressRows.filter((row) => row.user_id === student.id);
     const weekday = Array(7).fill(0);
-    sessions.forEach((session) => { weekday[new Date(session.started_at).getDay()] += 1; });
-    const peakDay = ['日', '月', '火', '水', '木', '金', '土'][weekday.indexOf(Math.max(...weekday))];
-    return { student, loginDays: loginDays.size, useSeconds, watchByVideo, progressByVideo, weekday, peakDay: sessions.length ? peakDay : '—' };
+    sessions.forEach((session) => {
+      const day = getTokyoWeekday(session.started_at);
+      if (day !== null && day >= 0) weekday[day] += 1;
+    });
+    const dailyStats = Array.from(dailyUsage.values()).sort((a, b) => b.date.localeCompare(a.date));
+    const peakDayIndex = weekday.indexOf(Math.max(...weekday));
+    const hasWeekdayData = weekday.some((count) => count > 0);
+    return {
+      student,
+      loginDays: dailyStats.filter((day) => day.loginCount > 0).length,
+      useSeconds,
+      watchByVideo,
+      progressByVideo,
+      weekday,
+      dailyStats,
+      peakDay: hasWeekdayData ? weekdayLabels[peakDayIndex] : '—',
+    };
   });
 
   // Admin Login Handler
@@ -1006,7 +1053,7 @@ export default function AdminPage() {
                     <p className="mt-2 text-xs text-slate-400">ログイン日数は同日の再ログインを1回として集計。利用時間は受講画面を開いていた時間、視聴時間は実際に再生された時間です。</p>
                   </div>
                   <div className="space-y-4">
-                    {analyticsRows.map(({ student, loginDays, useSeconds, watchByVideo, progressByVideo, weekday, peakDay }) => (
+                    {analyticsRows.map(({ student, loginDays, useSeconds, watchByVideo, progressByVideo, weekday, dailyStats, peakDay }) => (
                       <article key={student.id} className="rounded-3xl border border-slate-800 bg-slate-900 p-5 sm:p-6">
                         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                           <div><h4 className="font-bold text-white">{student.full_name || student.email}</h4><p className="mt-1 text-xs text-cyan-300">{student.email}</p></div>
@@ -1021,7 +1068,22 @@ export default function AdminPage() {
                         <div className="mt-4 border-t border-slate-800 pt-4"><p className="text-xs font-bold text-slate-300">講座別視聴時間</p>
                           {watchByVideo.length ? <ul className="mt-2 space-y-1 text-xs text-slate-400">{watchByVideo.map((item) => <li key={item.title} className="flex justify-between gap-3"><span className="truncate">{item.title}</span><b className="shrink-0 text-cyan-300">{formatMinutes(item.seconds)}</b></li>)}</ul> : <p className="mt-2 text-xs text-slate-500">視聴記録はまだありません。</p>}
                           {progressByVideo.length > 0 && <p className="mt-3 text-[11px] text-slate-500">進捗登録済み講座: {progressByVideo.length}件</p>}
-                          <p className="mt-3 text-[11px] text-slate-500">曜日別ログイン: {['日', '月', '火', '水', '木', '金', '土'].map((day, index) => `${day}${weekday[index]}`).join(' / ')}</p>
+                          <p className="mt-3 text-[11px] text-slate-500">曜日別ログイン: {weekdayLabels.map((day, index) => `${day}${weekday[index]}`).join(' / ')}</p>
+                        </div>
+                        <div className="mt-4 border-t border-slate-800 pt-4">
+                          <p className="text-xs font-bold text-slate-300">日別利用状況</p>
+                          {dailyStats.length ? (
+                            <ul className="mt-2 space-y-1 text-xs text-slate-400">
+                              {dailyStats.map((day) => (
+                                <li key={day.date} className="grid grid-cols-[5.8rem_1fr] gap-x-3 gap-y-1 rounded-lg bg-slate-950 px-3 py-2 sm:grid-cols-[6.5rem_1fr_1fr_1fr]">
+                                  <span className="font-semibold text-slate-200">{day.date}</span>
+                                  <span>利用 {day.loginCount}回</span>
+                                  <span>利用時間 {formatMinutes(day.useSeconds)}</span>
+                                  <span>視聴時間 {formatMinutes(day.watchSeconds)}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : <p className="mt-2 text-xs text-slate-500">日別の利用記録はまだありません。</p>}
                         </div>
                       </article>
                     ))}
@@ -1031,8 +1093,8 @@ export default function AdminPage() {
 
               {showStudentModal && (
                 <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md p-3 sm:p-6">
-                  <div className="mx-auto flex min-h-full items-center justify-center">
-                    <div role="dialog" aria-modal="true" className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] p-5 sm:p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto">
+                  <div className="mx-auto flex min-h-full items-start sm:items-center justify-center py-6 sm:py-10">
+                    <div role="dialog" aria-modal="true" className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full max-h-[calc(100vh-3rem)] p-5 sm:p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto my-auto">
                     <button
                       onClick={() => setShowStudentModal(false)}
                       className="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800"
@@ -1164,8 +1226,8 @@ export default function AdminPage() {
               {/* 指導日程登録 モーダル */}
               {showScheduleModal && (
                 <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md p-3 sm:p-6">
-                  <div className="mx-auto flex min-h-full items-center justify-center">
-                    <div role="dialog" aria-modal="true" className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] p-5 sm:p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto">
+                  <div className="mx-auto flex min-h-full items-start sm:items-center justify-center py-6 sm:py-10">
+                    <div role="dialog" aria-modal="true" className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full max-h-[calc(100vh-3rem)] p-5 sm:p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto my-auto">
                     <button
                       onClick={() => setShowScheduleModal(false)}
                       className="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800"
@@ -1251,8 +1313,8 @@ export default function AdminPage() {
               {/* 動画・ドリップ設定 モーダル */}
               {showVideoModal && (
                 <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md p-3 sm:p-6">
-                  <div className="mx-auto flex min-h-full items-center justify-center">
-                    <div role="dialog" aria-modal="true" className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)] p-5 sm:p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto">
+                  <div className="mx-auto flex min-h-full items-start sm:items-center justify-center py-6 sm:py-10">
+                    <div role="dialog" aria-modal="true" className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full max-h-[calc(100vh-3rem)] p-5 sm:p-6 md:p-8 space-y-6 shadow-2xl relative overflow-y-auto my-auto">
                     <button
                       onClick={() => setShowVideoModal(false)}
                       className="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800"
@@ -1337,7 +1399,7 @@ export default function AdminPage() {
                           <option value="ガイダンス">ガイダンス</option>
                           <option value="系統地理">系統地理</option>
                           <option value="地誌">地誌</option>
-                          <option value="共通テスト対策">共通テスト対策</option>
+                          <option value="演習">演習</option>
                         </select>
                       </div>
 
