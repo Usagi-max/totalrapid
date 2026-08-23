@@ -195,11 +195,16 @@ RETURNS TABLE(id UUID, question_text TEXT, options JSONB, order_index INT)
 LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
   SELECT question.id, question.question_text, question.options, question.order_index
   FROM public.video_quiz_questions question
-  JOIN public.videos video ON video.id = question.video_id
-  JOIN public.profiles profile ON profile.id = auth.uid()
   WHERE question.video_id = p_video_id
-    AND EXISTS (SELECT 1 FROM public.user_plans plan WHERE plan.user_id = auth.uid() AND plan.plan_type = 'video' AND plan.status = 'active')
-    AND CURRENT_DATE >= profile.registration_date + video.days_after_registration
+    AND (
+      public.is_app_admin()
+      OR EXISTS (
+        SELECT 1 FROM public.user_plans plan
+        WHERE plan.user_id = auth.uid()
+          AND plan.plan_type = 'video'
+          AND plan.status = 'active'
+      )
+    )
   ORDER BY question.order_index, question.created_at;
 $$;
 
@@ -208,7 +213,7 @@ RETURNS TABLE(score INT, total_questions INT, best_score INT)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 DECLARE calculated_score INT; calculated_total INT; calculated_best INT;
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM public.user_plans WHERE user_id = auth.uid() AND plan_type = 'video' AND status = 'active') THEN RAISE EXCEPTION 'Not authorized'; END IF;
+  IF NOT public.is_app_admin() AND NOT EXISTS (SELECT 1 FROM public.user_plans WHERE user_id = auth.uid() AND plan_type = 'video' AND status = 'active') THEN RAISE EXCEPTION 'Not authorized'; END IF;
   SELECT COUNT(*), COUNT(*) FILTER (WHERE (p_answers ->> question.id::text) ~ '^[1-4]$' AND (p_answers ->> question.id::text)::INT = question.correct_option)
   INTO calculated_total, calculated_score FROM public.video_quiz_questions question WHERE question.video_id = p_video_id;
   IF calculated_total = 0 THEN RAISE EXCEPTION 'Quiz not configured'; END IF;

@@ -35,12 +35,12 @@ DROP POLICY IF EXISTS "Admins manage quiz sources" ON public.video_quiz_sources;
 CREATE POLICY "Admins manage quiz sources" ON public.video_quiz_sources FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
 
 CREATE OR REPLACE FUNCTION public.get_video_quiz(p_video_id UUID) RETURNS TABLE(id UUID, question_text TEXT, options JSONB, order_index INT) LANGUAGE sql SECURITY DEFINER SET search_path = public AS $$
- SELECT q.id,q.question_text,q.options,q.order_index FROM public.video_quiz_questions q JOIN public.videos v ON v.id=q.video_id JOIN public.profiles p ON p.id=auth.uid()
- WHERE q.video_id=p_video_id AND EXISTS (SELECT 1 FROM public.user_plans plan WHERE plan.user_id=auth.uid() AND plan.plan_type='video' AND plan.status='active') AND CURRENT_DATE >= p.registration_date + v.days_after_registration ORDER BY q.order_index,q.created_at;
+ SELECT q.id,q.question_text,q.options,q.order_index FROM public.video_quiz_questions q
+ WHERE q.video_id=p_video_id AND (public.is_app_admin() OR EXISTS (SELECT 1 FROM public.user_plans plan WHERE plan.user_id=auth.uid() AND plan.plan_type='video' AND plan.status='active')) ORDER BY q.order_index,q.created_at;
 $$;
 CREATE OR REPLACE FUNCTION public.submit_video_quiz(p_video_id UUID,p_answers JSONB) RETURNS TABLE(score INT,total_questions INT,best_score INT) LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 DECLARE s INT; t INT; b INT; BEGIN
- IF NOT EXISTS (SELECT 1 FROM public.user_plans WHERE user_id=auth.uid() AND plan_type='video' AND status='active') THEN RAISE EXCEPTION 'Not authorized'; END IF;
+ IF NOT public.is_app_admin() AND NOT EXISTS (SELECT 1 FROM public.user_plans WHERE user_id=auth.uid() AND plan_type='video' AND status='active') THEN RAISE EXCEPTION 'Not authorized'; END IF;
  SELECT COUNT(*),COUNT(*) FILTER (WHERE (p_answers->>q.id::text) ~ '^[1-4]$' AND (p_answers->>q.id::text)::INT=q.correct_option) INTO t,s FROM public.video_quiz_questions q WHERE q.video_id=p_video_id;
  IF t=0 THEN RAISE EXCEPTION 'Quiz not configured'; END IF;
  INSERT INTO public.video_quiz_attempts(user_id,video_id,score,total_questions) VALUES(auth.uid(),p_video_id,s,t);
@@ -57,15 +57,12 @@ CREATE OR REPLACE FUNCTION public.submit_video_quiz_with_results(
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 DECLARE s INT; t INT; b INT; a JSONB;
 BEGIN
-  IF NOT EXISTS (
+  IF NOT public.is_app_admin() AND NOT EXISTS (
     SELECT 1
     FROM public.user_plans plan
-    JOIN public.videos v ON v.id = p_video_id
-    JOIN public.profiles p ON p.id = auth.uid()
     WHERE plan.user_id = auth.uid()
       AND plan.plan_type = 'video'
       AND plan.status = 'active'
-      AND CURRENT_DATE >= p.registration_date + v.days_after_registration
   ) THEN
     RAISE EXCEPTION 'Not authorized or the course is not yet available';
   END IF;
