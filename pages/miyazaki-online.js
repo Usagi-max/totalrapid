@@ -193,7 +193,7 @@ export default function MiyazakiOnlinePage() {
                   <span>入会金 0円</span>
                   <span>月額固定費 0円</span>
                   <span>1コマ〜都度受講</span>
-                  <span>中学生5教科対応</span>
+                  <span>5教科対応</span>
                 </div>
 
                 <div className={styles.heroCtaArea}>
@@ -244,7 +244,7 @@ export default function MiyazakiOnlinePage() {
                   <div className={styles.glassCardItem}>
                     <div className={styles.cardImageHeader}>
                       <Image
-                        src="/images/center.jpeg"
+                        src="/images/宮崎県.png"
                         alt="宮崎県の中学生に寄り添う地域密着型のオンライン指導"
                         width={240}
                         height={160}
