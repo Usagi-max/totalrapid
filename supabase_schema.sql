@@ -232,6 +232,27 @@ RETURNS BOOLEAN AS $$
   SELECT COALESCE(auth.jwt() -> 'app_metadata' ->> 'role', '') = 'admin';
 $$ LANGUAGE sql STABLE;
 
+-- Use one authorization function for both document metadata and Storage files.
+-- SECURITY DEFINER avoids applying the profiles RLS policy a second time from
+-- inside a document policy, which previously caused regular users to miss
+-- materials even though administrators could see them.
+CREATE OR REPLACE FUNCTION public.can_view_course_document(p_video_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
+  SELECT public.is_app_admin() OR EXISTS (
+    SELECT 1
+    FROM public.user_plans AS plan
+    JOIN public.profiles AS profile ON profile.id = plan.user_id
+    JOIN public.videos AS video ON video.id = p_video_id
+    WHERE plan.user_id = auth.uid()
+      AND plan.plan_type = 'video'
+      AND plan.status = 'active'
+      AND (now() AT TIME ZONE 'Asia/Tokyo')::date >= profile.registration_date + COALESCE(video.days_after_registration, 0)
+  );
+$$;
+REVOKE ALL ON FUNCTION public.can_view_course_document(UUID) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.can_view_course_document(UUID) TO authenticated;
+
 -- Management-console access. These policies are required in addition to each
 -- student's own-row policies; otherwise a UI update appears to work locally
 -- but is rejected by RLS and disappears after a reload.
@@ -257,16 +278,7 @@ CREATE POLICY "Admins manage student documents" ON public.student_documents
 -- and only after the associated lecture has been released to them.
 CREATE POLICY "Video students can view released course documents" ON public.video_documents
   FOR SELECT USING (
-    public.is_app_admin() OR EXISTS (
-      SELECT 1
-      FROM public.user_plans plan
-      JOIN public.profiles profile ON profile.id = plan.user_id
-      JOIN public.videos video ON video.id = video_documents.video_id
-      WHERE plan.user_id = auth.uid()
-        AND plan.plan_type = 'video'
-        AND plan.status = 'active'
-        AND CURRENT_DATE >= profile.registration_date + video.days_after_registration
-    )
+    public.can_view_course_document(video_id)
   );
 CREATE POLICY "Admins manage course documents" ON public.video_documents
   FOR ALL USING (public.is_app_admin()) WITH CHECK (public.is_app_admin());
@@ -284,18 +296,11 @@ CREATE POLICY "Admins delete student documents" ON storage.objects
 
 CREATE POLICY "Authorized students download released course documents" ON storage.objects
   FOR SELECT USING (
-    bucket_id = 'course-documents' AND (
-      public.is_app_admin() OR EXISTS (
-        SELECT 1
-        FROM public.video_documents document
-        JOIN public.videos video ON video.id = document.video_id
-        JOIN public.user_plans plan ON plan.user_id = auth.uid()
-        JOIN public.profiles profile ON profile.id = plan.user_id
-        WHERE document.storage_path = name
-          AND plan.plan_type = 'video'
-          AND plan.status = 'active'
-          AND CURRENT_DATE >= profile.registration_date + video.days_after_registration
-      )
+    bucket_id = 'course-documents' AND EXISTS (
+      SELECT 1
+      FROM public.video_documents document
+      WHERE document.storage_path = name
+        AND public.can_view_course_document(document.video_id)
     )
   );
 CREATE POLICY "Admins upload course documents" ON storage.objects

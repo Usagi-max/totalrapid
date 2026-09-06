@@ -49,6 +49,8 @@ export default function AdminPage() {
   const [documentBusy, setDocumentBusy] = useState(false);
   const [quizFile, setQuizFile] = useState(null);
   const [quizBusy, setQuizBusy] = useState(false);
+  const [quizSource, setQuizSource] = useState(null);
+  const [quizSourceLoading, setQuizSourceLoading] = useState(false);
   const [replacingDocument, setReplacingDocument] = useState(null);
   const [activitySessions, setActivitySessions] = useState([]);
   const [videoProgressRows, setVideoProgressRows] = useState([]);
@@ -488,6 +490,7 @@ export default function AdminPage() {
     setDocumentVideoId(vid.id);
     setDocumentFile(null);
     setReplacingDocument(null);
+    loadQuizSource(vid.id);
     setVideoForm({
       title: vid.title || '',
       description: vid.description || '',
@@ -499,6 +502,54 @@ export default function AdminPage() {
       order_index: vid.order_index || 1,
     });
     setShowVideoModal(true);
+  };
+
+  const loadQuizSource = async (videoId) => {
+    setQuizSource(null);
+    if (!isSupabaseConfigured || !supabase || !videoId) return;
+    setQuizSourceLoading(true);
+    try {
+      const { data, error } = await supabase.from('video_quiz_sources').select('csv_content,file_name,updated_at').eq('video_id', videoId).maybeSingle();
+      if (error) throw error;
+      setQuizSource(data || null);
+    } catch (error) {
+      console.error('Quiz source load error:', error);
+      showNotice('理解度チェックCSVを読み込めませんでした。');
+    } finally {
+      setQuizSourceLoading(false);
+    }
+  };
+
+  const openDocument = async (document, download = false) => {
+    if (!isSupabaseConfigured || !supabase || !document?.storage_path) return;
+    try {
+      const { data, error } = await supabase.storage.from('course-documents').createSignedUrl(document.storage_path, 60 * 60);
+      if (error || !data?.signedUrl) throw error || new Error('署名付きURLを作成できませんでした');
+      if (download) {
+        const link = window.document.createElement('a');
+        link.href = data.signedUrl;
+        link.download = document.file_name || 'lecture-material.pdf';
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.click();
+      } else {
+        window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+      }
+    } catch (error) {
+      console.error('Document URL error:', error);
+      showNotice('講義資料を開けませんでした。');
+    }
+  };
+
+  const downloadQuizCsv = () => {
+    if (!quizSource?.csv_content) return;
+    const blob = new Blob([quizSource.csv_content], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = window.document.createElement('a');
+    link.href = url;
+    link.download = quizSource.file_name || `${editingVideo?.title || 'understanding-check'}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleSaveVideo = async (e) => {
@@ -1423,6 +1474,8 @@ export default function AdminPage() {
                             <div key={document.id} className="flex flex-col gap-2 rounded-xl border border-slate-800 bg-slate-900 p-3 sm:flex-row sm:items-center sm:justify-between">
                               <span className="break-all text-slate-200">{document.file_name}</span>
                               <div className="flex gap-2 shrink-0">
+                                <button type="button" onClick={() => openDocument(document)} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-cyan-200 transition hover:bg-cyan-500/20">プレビュー</button>
+                                <button type="button" onClick={() => openDocument(document, true)} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-slate-200 transition hover:bg-slate-700">ダウンロード</button>
                                 <button type="button" onClick={() => { setReplacingDocument(document); setDocumentFile(null); }} className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-cyan-300 transition hover:bg-slate-700">差し替え</button>
                                 <button type="button" onClick={() => handleDeleteDocument(document)} className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-1.5 text-rose-300 transition hover:bg-rose-500/20">削除</button>
                               </div>
@@ -1436,7 +1489,7 @@ export default function AdminPage() {
                         </div>
                       )}
 
-                      {editingVideo && <div className="space-y-2 rounded-2xl border border-slate-700 bg-slate-950/60 p-4"><p className="font-bold text-cyan-300">理解度チェック CSV</p><p className="text-[11px] text-slate-400">question, option_1〜4, correct_option（1〜4）のCSVを登録します。再登録するとこの講座の問題を置き換えます。</p><div className="flex flex-col gap-2 sm:flex-row"><input type="file" accept=".csv,text/csv" onChange={(event) => setQuizFile(event.target.files?.[0] || null)} className="min-w-0 flex-1 rounded-xl border border-slate-800 bg-slate-900 p-2 text-xs text-slate-300"/><button type="button" disabled={!quizFile || quizBusy} onClick={handleImportQuiz} className="rounded-xl bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 disabled:opacity-50">{quizBusy ? '登録中…' : 'CSVを登録'}</button></div></div>}
+                      {editingVideo && <div className="space-y-3 rounded-2xl border border-slate-700 bg-slate-950/60 p-4"><div><p className="font-bold text-cyan-300">理解度チェック CSV</p><p className="text-[11px] text-slate-400">question, option_1〜4, correct_option（1〜4）のCSVを登録します。再登録するとこの講座の問題を置き換えます。</p></div><div className="flex flex-col gap-2 sm:flex-row"><input type="file" accept=".csv,text/csv" onChange={(event) => setQuizFile(event.target.files?.[0] || null)} className="min-w-0 flex-1 rounded-xl border border-slate-800 bg-slate-900 p-2 text-xs text-slate-300"/><button type="button" disabled={!quizFile || quizBusy} onClick={handleImportQuiz} className="rounded-xl bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 disabled:opacity-50">{quizBusy ? '登録中…' : 'CSVを登録'}</button></div>{quizSourceLoading && <p className="text-xs text-slate-400">登録済みCSVを読み込み中…</p>}{quizSource && <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-900 p-3"><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-bold text-slate-200">登録済み: {quizSource.file_name || '理解度チェックCSV'}</p><p className="text-[11px] text-slate-500">{quizSource.updated_at ? new Date(quizSource.updated_at).toLocaleString('ja-JP') : ''}</p></div><button type="button" onClick={downloadQuizCsv} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-cyan-200 transition hover:bg-cyan-500/20">CSVをダウンロード</button></div><details><summary className="cursor-pointer text-xs font-bold text-cyan-300">CSVをプレビュー</summary><pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-all rounded-lg bg-slate-950 p-3 text-[11px] leading-relaxed text-slate-300">{quizSource.csv_content}</pre></details></div>}{!quizSourceLoading && !quizSource && <p className="text-xs text-slate-500">この動画には登録済みCSVがありません。</p>}</div>}
 
                       <button
                         type="submit"

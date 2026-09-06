@@ -1,6 +1,6 @@
 // pages/_app.tsx
 import Head from "next/head";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Script from "next/script";
 import "../src/styles/globals.css";
@@ -9,7 +9,6 @@ import useGlobalClickTracker from "../src/hooks/useGlobalClickTracker";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  const redirectedRef = useRef(false);
 
   // 全ページ共通トラッカー
   useGlobalClickTracker();
@@ -22,24 +21,6 @@ export default function App({ Component, pageProps }) {
       sessionStorage.setItem("saved_params", params);
     }
   }, [router.asPath]);
-
-  // 初回のみ geography へ
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (redirectedRef.current) return;
-
-    // Authentication and administration routes must remain directly accessible.
-    if (router.pathname === "/login" || router.pathname === "/admin" || router.pathname.startsWith("/admin/")) {
-      return;
-    }
-
-    const visited = sessionStorage.getItem("visited");
-    if (!visited) {
-      redirectedRef.current = true;
-      sessionStorage.setItem("visited", "true");
-      router.replace("/geography");
-    }
-  }, [router]);
 
   // GA4 pageview
   useEffect(() => {
