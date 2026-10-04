@@ -1533,11 +1533,20 @@
 .pillarSection, .strategySection, .lessonSection, .archiveSection { padding: 96px 5vw; border-bottom: 1px solid #fed7aa; }
 .pillarSection { background: linear-gradient(180deg, #fff 0%, #fff7ed 100%); }
 .pillarGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.pillarCard { position: relative; padding: 32px 28px; min-height: 210px; background: #fff; border: 1.5px solid #fed7aa; border-radius: 18px; box-shadow: 0 12px 28px rgba(124,45,18,.08); }
-.pillarNum { display: block; color: var(--warm-orange); font: 900 38px/1 "Zen Kaku Gothic New", sans-serif; letter-spacing: .06em; }
-.pillarType { display: inline-block; margin: 15px 0 7px; padding: 4px 10px; background: #ffedd5; color: var(--warm-deep); border-radius: 4px; font-size: 12px; font-weight: 900; letter-spacing: .12em; }
+.pillarCard { position: relative; display: flex; flex-direction: column; padding: 32px 28px 26px; min-height: 210px; background: #fff; border: 1.5px solid #fed7aa; border-radius: 18px; box-shadow: 0 12px 28px rgba(124,45,18,.08); transition: transform .25s ease, box-shadow .25s ease; }
+.pillarCard:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(124,45,18,.13); }
+.pillarCardMeta { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.pillarNum { color: var(--warm-orange); font: 900 38px/1 "Zen Kaku Gothic New", sans-serif; letter-spacing: .06em; }
+.pillarType { color: #78716c; font-size: 13px; font-weight: 700; letter-spacing: .12em; }
 .pillarCard h3 { margin: 0 0 10px; font-size: 20px; color: var(--text-dark); }
-.pillarCard p { margin: 0; color: var(--text-muted); line-height: 1.7; font-weight: 600; }
+.pillarCard p { margin: 0; color: var(--text-muted); line-height: 1.8; font-weight: 500; letter-spacing: .04em; word-break: auto-phrase; text-wrap: pretty; }
+.pillarPoints { display: grid; gap: 8px; margin: 18px 0 20px; padding: 16px 0 0; border-top: 1px dashed #fed7aa; list-style: none; }
+.pillarPoints li { display: flex; align-items: flex-start; gap: 8px; color: var(--text-dark); font-size: 14px; font-weight: 700; line-height: 1.6; word-break: auto-phrase; text-wrap: pretty; }
+.pillarPoints .checkIcon { width: 18px; height: 18px; margin-top: 2px; }
+.pillarLink { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; align-self: flex-start; color: #c2410c; font-size: 14px; font-weight: 700; text-decoration: none; }
+.pillarLink span { transition: transform .2s ease; }
+.pillarCard:hover .pillarLink span { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) { .pillarCard, .pillarLink span { transition: none; } .pillarCard:hover { transform: none; } }
 .directPortrait { display: flex; justify-content: center; align-items: end; min-height: 360px; overflow: hidden; border-radius: 22px; background: rgba(255,255,255,.1); }
 .directPortrait .profileImg { width: 100%; height: 440px; object-fit: contain; object-position: bottom; }
 .strategySection { background: #fffaf5; }
@@ -2069,4 +2078,115 @@
   .problemResolve .templeInner { gap: 10px; }
   .problemResolve .templeKicker { font-size: 11px; }
   .problemResolve .templeTitle { font-size: 21px; }
+}
+
+/* PILLARS: the single-session offer is the conclusion of the three pillars. */
+.pillarNote { position: relative; max-width: 860px; margin: 48px auto 0; padding: 34px 32px 28px; text-align: center; background: #fff; border: 2px solid var(--warm-orange); border-radius: 20px; box-shadow: 0 14px 32px rgba(234, 88, 12, .12); }
+.pillarNoteBadge { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); padding: 6px 20px; color: #fff; background: linear-gradient(135deg, var(--warm-orange), var(--warm-deep)); border-radius: 999px; font-size: 14px; font-weight: 900; letter-spacing: .1em; white-space: nowrap; box-shadow: 0 6px 14px rgba(234, 88, 12, .25); }
+.pillarNoteLead { margin: 0; color: var(--text-dark); font-size: clamp(18px, 2.2vw, 24px); font-weight: 700; line-height: 1.6; word-break: auto-phrase; text-wrap: pretty; }
+.pillarNoteLead strong { color: #c2410c; font-weight: 900; background: linear-gradient(transparent 64%, #ffedd5 64%); }
+.pillarNoteTags { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; margin: 18px 0 0; padding: 0; list-style: none; }
+.pillarNoteTags li { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dark); font-size: 15px; font-weight: 700; }
+.pillarNoteLink { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; color: #c2410c; font-size: 14px; font-weight: 700; text-decoration: none; }
+.pillarNoteLink span { transition: transform .2s ease; }
+.pillarNoteLink:hover span { transform: translateX(4px); }
+
+/* EXPERIENCE → LEARNING LIBRARY: lesson, review and extension as one cycle. */
+.learningCycle { max-width: 1000px; margin: 64px auto 0; padding-top: 56px; border-top: 1px dashed #fed7aa; scroll-margin-top: 80px; }
+.learningCycleHeading { margin-bottom: 36px; text-align: center; }
+.cycleRing { --tilt: 60deg; --node: 164px; --depth: 18px; max-width: 780px; margin: 0 auto; padding-top: calc(var(--node) / 2 + 8px); }
+/* The ring shape is pre-projected in the page (cycleSegmentPath); CSS only sizes the plane. */
+/* The plane is squashed to cos(--tilt), so the ring reads as lying on a tilted floor. */
+.cyclePlane { position: relative; aspect-ratio: 1 / cos(var(--tilt)); margin-bottom: calc(var(--depth) + 32px); }
+.cycleRingStage { position: absolute; inset: 0; }
+/* Ring segments: the arrow shape comes from cycleSegmentPath() in the page. */
+.cycleSegment,
+.cycleSegmentDepth { position: absolute; inset: 0; }
+.cycleSegmentDepth { background: #9a3412; opacity: .4; transform: translateY(var(--depth)); }
+.cycleCenter { position: absolute; top: 50%; left: 50%; display: flex; align-items: center; gap: 10px; transform: translate(-50%, -50%); white-space: nowrap; }
+.cycleCenter p { margin: 0; color: var(--text-dark); font-size: 19px; font-weight: 900; line-height: 1.45; }
+.cycleNodes { margin: 0; padding: 0; list-style: none; }
+/* Nodes stay upright; left/top come from cycleNodeStyle() in the page. */
+.cycleNode { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; width: var(--node); height: var(--node); padding: 16px; box-sizing: border-box; text-align: center; background: #fff; border: 3px solid var(--warm-orange); border-radius: 50%; box-shadow: 0 12px 26px rgba(124, 45, 18, .16); transform: translate(-50%, -50%); }
+.cycleNodeNum { display: flex; align-items: baseline; gap: 6px; color: var(--warm-orange); font: 900 22px/1 "Zen Kaku Gothic New", sans-serif; letter-spacing: .04em; }
+.cycleNodeNum small { color: #78716c; font: 700 11px/1 "Noto Sans JP", sans-serif; letter-spacing: .1em; }
+.cycleNode h4 { margin: 6px 0 4px; color: var(--text-dark); font-size: 15px; font-weight: 900; line-height: 1.35; }
+.cycleNode p { margin: 0; color: var(--text-muted); font-size: 11.5px; font-weight: 500; line-height: 1.55; word-break: auto-phrase; }
+.cycleNotes { display: none; }
+
+/* PRICING: explains that every lesson can be booked one at a time. */
+.singleSession { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 32px; align-items: center; max-width: 840px; margin: 0 auto 32px; padding: 32px; background: #fff; border-radius: 20px; box-shadow: 0 10px 24px rgba(124, 45, 18, .08); }
+.singleSessionBadge { display: inline-block; margin-bottom: 12px; padding: 4px 14px; color: #fff; background: linear-gradient(135deg, var(--warm-orange), var(--warm-deep)); border-radius: 999px; font-size: 13px; font-weight: 900; letter-spacing: .1em; }
+.singleSessionHead h3 { margin: 0 0 10px; color: var(--text-dark); font-size: 21px; font-weight: 900; line-height: 1.5; word-break: auto-phrase; }
+.singleSessionHead p { margin: 0; color: var(--text-muted); font-size: 14px; font-weight: 500; line-height: 1.8; word-break: auto-phrase; text-wrap: pretty; }
+.singleSessionSteps { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.singleSessionSteps li { display: grid; grid-template-columns: 32px 1fr; gap: 2px 12px; align-items: center; padding: 14px 16px; background: #fffaf5; border-radius: 12px; }
+.singleSessionSteps b { grid-row: span 2; display: grid; place-items: center; width: 32px; height: 32px; color: #fff; background: var(--warm-orange); border-radius: 50%; font-size: 15px; font-weight: 900; }
+.singleSessionSteps strong { color: var(--text-dark); font-size: 15px; font-weight: 900; }
+.singleSessionSteps span { color: var(--text-muted); font-size: 13px; font-weight: 500; line-height: 1.6; }
+
+@media (max-width: 820px) {
+  .pillarNote { margin-top: 40px; padding: 30px 18px 24px; }
+  .pillarNoteTags { flex-direction: column; align-items: center; gap: 8px; }
+  .learningCycle { margin-top: 48px; padding-top: 44px; }
+  /* Small screens keep the ring as a map; the detail text moves into a list below it. */
+  .cycleRing { --tilt: 45deg; --node: 88px; --depth: 8px; padding-inline: calc(var(--node) / 2); }
+  .cycleNode { padding: 8px; border-width: 2px; }
+  .cycleNodeNum { font-size: 17px; }
+  .cycleNode h4 { margin: 4px 0 0; font-size: 12px; word-break: auto-phrase; }
+  .cycleNode p { display: none; }
+  .cycleCenter img { display: none; }
+  .cycleCenter p { font-size: 13px; text-align: center; }
+  .cycleNotes { display: grid; gap: 10px; margin: 0 calc(var(--node) / -2); padding: 0; list-style: none; }
+  .cycleNotes li { display: grid; grid-template-columns: 30px 1fr; gap: 2px 10px; align-items: center; padding: 12px 14px; background: #fff; border-radius: 12px; box-shadow: 0 6px 16px rgba(124, 45, 18, .06); }
+  .cycleNotes b { grid-row: span 2; display: grid; place-items: center; width: 30px; height: 30px; color: #fff; background: var(--warm-orange); border-radius: 50%; font-size: 13px; font-weight: 900; }
+  .cycleNotes strong { color: var(--text-dark); font-size: 14px; font-weight: 900; }
+  .cycleNotes span { color: var(--text-muted); font-size: 13px; font-weight: 500; line-height: 1.6; }
+  .singleSession { grid-template-columns: 1fr; gap: 22px; padding: 24px 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) { .pillarNoteLink span { transition: none; } }
+
+/* STRATEGY: an analysis-report layout — evidence (visual + stat) beside the decision steps. */
+.strategySection { background-color: #fffaf5; background-image: radial-gradient(rgba(234, 88, 12, .12) 1px, transparent 1px); background-size: 22px 22px; }
+.strategyLayout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px; align-items: center; max-width: 1040px; margin: 0 auto; }
+.strategyVisual { position: relative; margin: 0; }
+/* Drop the generated image at /images/strategy-analysis.webp; the gradient shows until then. */
+.strategyVisualImage { aspect-ratio: 4 / 5; border-radius: 24px; background: url('/images/strategy-analysis.webp') center / cover no-repeat, linear-gradient(150deg, #ffedd5 0%, #fdba74 55%, #ea580c 100%); box-shadow: 0 24px 48px rgba(124, 45, 18, .16); }
+.strategyStat { position: absolute; left: 24px; bottom: 24px; display: grid; gap: 2px; min-width: 210px; padding: 18px 22px; color: var(--text-muted); background: rgba(255, 255, 255, .94); border-radius: 18px; box-shadow: 0 16px 36px rgba(124, 45, 18, .18); backdrop-filter: blur(8px); font-size: 12px; font-weight: 700; line-height: 1.5; }
+.strategyStat strong { color: var(--warm-deep); font: 900 56px/1 "Zen Kaku Gothic New", sans-serif; letter-spacing: -.02em; }
+.strategyStat small { margin-left: 4px; color: var(--text-dark); font-size: 18px; font-weight: 900; letter-spacing: 0; }
+.strategySteps { position: relative; display: grid; gap: 30px; margin: 0; padding: 0; list-style: none; }
+/* Vertical guide line that ties the four decisions together. */
+.strategySteps::before { content: ""; position: absolute; top: 24px; bottom: 24px; left: 23px; width: 2px; background: linear-gradient(#fed7aa, var(--warm-orange)); }
+.strategySteps li { position: relative; display: grid; grid-template-columns: 48px 1fr; gap: 20px; align-items: start; }
+.strategyStepNum { display: grid; place-items: center; width: 48px; height: 48px; color: var(--warm-deep); background: #fff; border: 2px solid #fdba74; border-radius: 50%; font: 900 16px/1 "Zen Kaku Gothic New", sans-serif; letter-spacing: .04em; }
+.strategySteps h3 { margin: 4px 0 4px; color: var(--text-dark); font-size: 19px; font-weight: 900; line-height: 1.5; }
+.strategySteps p { margin: 0; color: var(--text-muted); font-size: 14.5px; font-weight: 500; line-height: 1.8; word-break: auto-phrase; text-wrap: pretty; }
+/* The last step is the outcome, so it carries the emphasis. */
+.strategySteps li:last-child > div { margin-top: -6px; padding: 14px 20px 16px; background: #fff; border-radius: 16px; box-shadow: 0 12px 28px rgba(234, 88, 12, .14); }
+.strategySteps li:last-child .strategyStepNum { color: #fff; background: linear-gradient(135deg, var(--warm-orange), var(--warm-deep)); border-color: transparent; box-shadow: 0 8px 18px rgba(234, 88, 12, .3); }
+.strategySteps li:last-child h3 { color: #c2410c; }
+.strategyStatement { max-width: 760px; margin: 72px auto 0; text-align: center; }
+.strategyStatement::before { content: ""; display: block; width: 48px; height: 3px; margin: 0 auto 26px; background: var(--warm-orange); border-radius: 2px; }
+.strategyStatement p { margin: 0; color: var(--text-muted); font-size: 16px; font-weight: 500; line-height: 2; word-break: auto-phrase; }
+.strategyStatement .strategyStatementLead { margin-bottom: 10px; color: var(--text-dark); font-size: clamp(22px, 2.6vw, 30px); font-weight: 900; line-height: 1.5; }
+.strategyStatement strong { color: var(--text-dark); font-weight: 900; background: linear-gradient(transparent 62%, #ffedd5 62%); }
+
+@media (max-width: 820px) {
+  .strategySection { background-size: 18px 18px; }
+  .strategyLayout { grid-template-columns: 1fr; gap: 40px; }
+  .strategyVisualImage { aspect-ratio: 16 / 11; border-radius: 18px; }
+  .strategyStat { left: 12px; bottom: -24px; min-width: 0; padding: 12px 16px; font-size: 11px; }
+  .strategyStat strong { font-size: 40px; }
+  .strategySteps { gap: 22px; margin-top: 12px; }
+  .strategySteps::before { left: 19px; }
+  .strategySteps li { grid-template-columns: 40px 1fr; gap: 14px; }
+  .strategyStepNum { width: 40px; height: 40px; font-size: 14px; }
+  .strategySteps h3 { margin-top: 2px; font-size: 17px; }
+  .strategySteps p { font-size: 14px; }
+  .strategySteps li:last-child > div { padding: 12px 16px 14px; }
+  .strategyStatement { margin-top: 52px; text-align: left; }
+  .strategyStatement::before { margin-left: 0; }
+  .strategyStatement p { font-size: 15px; }
 }

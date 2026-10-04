@@ -19,7 +19,7 @@ export default function SectionTitle({
       {backdrop && <span className={styles.backdrop} aria-hidden="true" style={{ color: palette.accent, opacity: backdropOpacity }}>{backdrop}</span>}
       {kicker && <span className={styles.kicker} style={{ color: palette.accent }}>{kicker}</span>}
       <Title className={styles.title} style={{ color: palette.text }}>{title}</Title>
-      {description && <p className={styles.description} style={{ color: palette.accent }}>{description}</p>}
+      {description && <p className={styles.description} style={{ color: palette.description ?? palette.accent }}>{description}</p>}
     </div>
   );
 }
@@ -29,7 +29,7 @@ SectionTitle.propTypes = {
   title: PropTypes.node.isRequired,
   description: PropTypes.node,
   backdrop: PropTypes.node,
-  colors: PropTypes.shape({ accent: PropTypes.string, text: PropTypes.string }),
+  colors: PropTypes.shape({ accent: PropTypes.string, text: PropTypes.string, description: PropTypes.string }),
   backdropOpacity: PropTypes.number,
   className: PropTypes.string,
   titleAs: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4']),
