@@ -12,10 +12,11 @@ export default function SectionTitle({
   backdropOpacity = 0.08,
   className = '',
   titleAs: Title = 'h2',
+  ...rest
 }) {
   const palette = { ...defaultColors, ...colors };
   return (
-    <div className={`${styles.root} ${className}`.trim()} style={{ '--section-title-accent': palette.accent, '--section-title-text': palette.text }}>
+    <div {...rest} className={`${styles.root} ${className}`.trim()} style={{ '--section-title-accent': palette.accent, '--section-title-text': palette.text }}>
       {backdrop && <span className={styles.backdrop} aria-hidden="true" style={{ color: palette.accent, opacity: backdropOpacity }}>{backdrop}</span>}
       {kicker && <span className={styles.kicker} style={{ color: palette.accent }}>{kicker}</span>}
       <Title className={styles.title} style={{ color: palette.text }}>{title}</Title>
