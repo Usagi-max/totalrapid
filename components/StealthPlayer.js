@@ -33,6 +33,8 @@ export default function StealthPlayer({
   // Resume modal state
   const [showResumeModal, setShowResumeModal] = useState(initialPosition > 10);
   const [playerReady, setPlayerReady] = useState(false);
+  // A missing / malformed YouTube ID makes YT.Player throw; show a message instead of crashing the page.
+  const [playerError, setPlayerError] = useState(false);
 
   const decodedYtId = useRef(youtubeVideoId).current;
 
@@ -62,6 +64,8 @@ export default function StealthPlayer({
 
     const initPlayer = () => {
       if (!isMounted || playerRef.current) return;
+      if (!/^[A-Za-z0-9_-]{11}$/.test(String(decodedYtId || '').trim())) { setPlayerError(true); return; }
+      try {
 
       playerRef.current = new window.YT.Player(`yt-stealth-player-${videoId}`, {
         videoId: decodedYtId,
@@ -121,6 +125,11 @@ export default function StealthPlayer({
           },
         },
       });
+      } catch (error) {
+        console.error('YouTube player init failed', error);
+        playerRef.current = null;
+        setPlayerError(true);
+      }
     };
 
     loadYT();
@@ -271,6 +280,14 @@ export default function StealthPlayer({
     const s = Math.floor(secs % 60);
     return `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
   };
+
+  if (playerError) {
+    return (
+      <div className="flex aspect-video w-full items-center justify-center rounded-2xl border border-amber-400/30 bg-amber-500/10 p-6 text-center text-sm text-amber-200">
+        この講義の動画を読み込めませんでした。動画IDが未設定か正しくない可能性があります。講師にお知らせください。
+      </div>
+    );
+  }
 
   return (
     <div
