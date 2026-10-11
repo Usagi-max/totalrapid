@@ -1,6 +1,29 @@
 import { useEffect, useState } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
+// Quiz images live in a private bucket; fetch a short-lived signed URL per image.
+function QuizImage({ path }) {
+  const [url, setUrl] = useState('');
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setUrl(''); setFailed(false);
+    if (!path || !supabase) return undefined;
+    supabase.storage.from('quiz-images').createSignedUrl(path, 3600).then(({ data, error }) => {
+      if (cancelled) return;
+      if (error || !data?.signedUrl) setFailed(true);
+      else setUrl(data.signedUrl);
+    });
+    return () => { cancelled = true; };
+  }, [path]);
+
+  if (!path) return null;
+  if (failed) return <p className="mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-200">画像を読み込めませんでした。ページを再読み込みしてください。問題文と選択肢はそのまま回答できます。</p>;
+  if (!url) return <div className="mt-3 h-40 w-full animate-pulse rounded-xl bg-slate-800" aria-hidden="true" />;
+  return <img src={url} alt="問題の図" onError={() => setFailed(true)} className="mt-3 max-h-80 w-full rounded-xl bg-slate-950 object-contain" />;
+}
+
 export default function VideoQuiz({ videoId, onResult }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -57,7 +80,7 @@ export default function VideoQuiz({ videoId, onResult }) {
     </div>
     {submitError && <p role="alert" className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-200">{submitError}</p>}
     {result && <div className="space-y-4 rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4 text-sm text-emerald-100">
-      <p>今回の得点: <b>{result.score} / {result.total_questions}点</b>　最高得点: <b>{result.best_score}点</b></p>
+      <p>今回の得点: <b>{result.score} / {result.total_questions}点</b>　最高: <b>{result.best_score}/{result.total_questions}点</b></p>
       <div className="space-y-3">
         {questions.map((question, index) => {
           const correctOption = Number(result.correct_answers?.[question.id]);
@@ -65,8 +88,10 @@ export default function VideoQuiz({ videoId, onResult }) {
           const correct = selectedOption === correctOption;
           return <div key={question.id} className={`rounded-xl border p-3 ${correct ? 'border-emerald-400/30 bg-emerald-500/10' : 'border-rose-400/30 bg-rose-500/10'}`}>
             <p className="font-semibold text-white">{index + 1}. {correct ? '正解' : '不正解'} — {question.question_text}</p>
+            <QuizImage path={question.image_path} />
             <p className="mt-1 text-xs">あなたの回答: {selectedOption}. {question.options?.[selectedOption - 1] || '未回答'}</p>
             {!correct && <p className="mt-1 text-xs text-emerald-200">正解: {correctOption}. {question.options?.[correctOption - 1]}</p>}
+            {result.explanations?.[question.id] && <p className="mt-2 rounded-lg bg-slate-950/60 p-2 text-xs leading-relaxed text-slate-200"><span className="font-bold text-cyan-200">解説　</span>{result.explanations[question.id]}</p>}
           </div>;
         })}
       </div>
@@ -78,6 +103,7 @@ export default function VideoQuiz({ videoId, onResult }) {
     {started && !result && <div className="space-y-5">
       {questions.map((question, index) => <fieldset key={question.id} className="border-t border-slate-800 pt-4">
         <legend className="text-sm font-semibold text-white">{index + 1}. {question.question_text}</legend>
+        <QuizImage path={question.image_path} />
         <div className="mt-3 grid gap-2">{(question.options || []).map((option, optionIndex) => <label key={optionIndex} className={`cursor-pointer rounded-xl border p-3 text-xs ${answers[question.id] === optionIndex + 1 ? 'border-cyan-400 bg-cyan-400/10 text-cyan-100' : 'border-slate-700 text-slate-300'}`}>
           <input className="sr-only" type="radio" name={question.id} checked={answers[question.id] === optionIndex + 1} onChange={() => setAnswers({ ...answers, [question.id]: optionIndex + 1 })} />
           {optionIndex + 1}. {option}

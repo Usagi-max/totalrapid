@@ -118,7 +118,10 @@ CREATE TABLE IF NOT EXISTS public.video_quiz_questions (
   video_id UUID NOT NULL REFERENCES public.videos(id) ON DELETE CASCADE,
   question_text TEXT NOT NULL,
   options JSONB NOT NULL,
-  correct_option SMALLINT NOT NULL CHECK (correct_option BETWEEN 1 AND 4),
+  correct_option SMALLINT NOT NULL CHECK (correct_option >= 1),
+  question_type TEXT NOT NULL DEFAULT 'single' CHECK (question_type IN ('single', 'image')),
+  image_path TEXT,
+  explanation TEXT,
   order_index INT DEFAULT 0 NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );

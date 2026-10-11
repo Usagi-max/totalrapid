@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Layout from '../components/LayoutGeo';
 import TutoringSection from '../components/TutoringSection';
 import VideoSection from '../components/VideoSection';
+import LearningStats from '../components/LearningStats';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { MOCK_USERS, MOCK_TUTORING_SCHEDULES, MOCK_VIDEOS, MOCK_PROGRESS, MOCK_MEMOS } from '../lib/mockData';
 import { getStoredStudents, getStoredVideos, getStoredSchedules, getDemoSessionUserId, saveDemoSessionUserId } from '../lib/storageManager';
@@ -33,7 +34,12 @@ export default function LoginPage() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [documentsByVideo, setDocumentsByVideo] = useState({});
   const [quizScores, setQuizScores] = useState({});
+  const [watchedByVideo, setWatchedByVideo] = useState({});
+  const [quizByVideo, setQuizByVideo] = useState({});
+  const [statsAvailable, setStatsAvailable] = useState(false);
+  const [openRequest, setOpenRequest] = useState(null);
   const watchBufferRef = useRef({});
+  const loadedUserIdRef = useRef(null); // user whose data is already loaded / loading
   const isAdmin = currentUser?.app_metadata?.role === 'admin';
 
   useEffect(() => {
@@ -86,9 +92,13 @@ export default function LoginPage() {
       const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'INITIAL_SESSION') return;
         if (session?.user) {
+          // Supabase re-emits SIGNED_IN / TOKEN_REFRESHED when the tab regains focus.
+          // The same user is already on screen, so do not reload everything (no loading flash).
+          if (loadedUserIdRef.current === session.user.id) return;
           setAuthReady(false);
           fetchSupabaseUserData(session.user);
         } else {
+          loadedUserIdRef.current = null;
           setCurrentUser(null);
           setProfile(null);
           setAuthReady(true);
@@ -115,6 +125,7 @@ export default function LoginPage() {
 
   // Fetch Supabase User Data
   const fetchSupabaseUserData = async (authUser) => {
+    loadedUserIdRef.current = authUser.id;
     setLoading(true);
     try {
       // 1. Profile
@@ -168,6 +179,26 @@ export default function LoginPage() {
         .select('*')
         .order('created_at', { ascending: false });
 
+      // Learning stats RPCs (supabase_quiz_v2_migration.sql). Fail soft if not deployed yet.
+      let watchedMap = {};
+      let quizAvailabilityMap = {};
+      let statsOk = false;
+      try {
+        const [watchResult, availabilityResult] = await Promise.all([
+          supabase.rpc('get_my_watch_summary'),
+          supabase.rpc('get_quiz_availability'),
+        ]);
+        if (!watchResult.error && !availabilityResult.error) {
+          (watchResult.data || []).forEach((row) => {
+            watchedMap[row.video_id] = { seconds: Number(row.watched_seconds) || 0, days: Number(row.watch_days) || 0, lastAt: row.last_watched_at || null };
+          });
+          (availabilityResult.data || []).forEach((row) => { quizAvailabilityMap[row.video_id] = row; });
+          statsOk = true;
+        }
+      } catch (statsError) {
+        console.error(statsError);
+      }
+
       const progMap = {};
       (progData || []).forEach((p) => {
         progMap[p.video_id] = p;
@@ -201,6 +232,9 @@ export default function LoginPage() {
       setUserProgress(progMap);
       setUserMemos(memoMap);
       setQuizScores(quizScoreMap);
+      setWatchedByVideo(watchedMap);
+      setQuizByVideo(quizAvailabilityMap);
+      setStatsAvailable(statsOk);
       const docsMap = {};
       (docsData || []).forEach((document) => {
         (docsMap[document.video_id] ||= []).push(document);
@@ -434,6 +468,18 @@ export default function LoginPage() {
     if (!videoId || !Number.isFinite(watchedSeconds) || watchedSeconds <= 0) return;
     watchBufferRef.current[videoId] = (watchBufferRef.current[videoId] || 0) + watchedSeconds;
   };
+
+  // Open a lecture (or its quiz) from the My Page stats popup or a ?video=<id> link.
+  const handleOpenVideo = (videoId, target = 'video') => {
+    setActiveTab('video');
+    setOpenRequest({ videoId, target, nonce: Date.now() });
+  };
+
+  useEffect(() => {
+    if (!router.isReady || !authReady || !currentUser) return;
+    const { video, target } = router.query;
+    if (typeof video === 'string' && video) handleOpenVideo(video, target === 'quiz' ? 'quiz' : 'video');
+  }, [router.isReady, authReady, currentUser?.id]);
 
   const hasTutoringPlan = userPlans.some((p) => p.plan_type === 'tutoring');
   const hasVideoPlan = userPlans.some((p) => p.plan_type === 'video');
@@ -671,6 +717,21 @@ export default function LoginPage() {
                   userProgress={userProgress}
                   userMemos={userMemos}
                   quizScores={quizScores}
+                  openRequest={openRequest}
+                  quizByVideo={quizByVideo}
+                  totalStudySeconds={statsAvailable ? Object.values(watchedByVideo).reduce((sum, entry) => sum + (entry?.seconds || 0), 0) : null}
+                  statsSlot={isSupabaseConfigured ? (
+                    <LearningStats
+                      embedded
+                      videos={videos}
+                      registrationDate={profile?.registration_date}
+                      watchedByVideo={watchedByVideo}
+                      quizByVideo={quizByVideo}
+                      progressByVideo={userProgress}
+                      statsAvailable={statsAvailable}
+                      onOpenVideo={handleOpenVideo}
+                    />
+                  ) : null}
                   registrationDate={profile?.registration_date}
                   userId={currentUser?.id || profile?.id}
                   onSaveProgress={handleSaveProgress}

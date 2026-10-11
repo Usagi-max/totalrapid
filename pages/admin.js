@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Layout from '../components/LayoutGeo';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { getTokyoDateString } from '../lib/tokyoDate';
+import QuizImportPanel from '../components/QuizImportPanel';
 import {
   getStoredStudents,
   saveStoredStudents,
@@ -47,8 +48,6 @@ export default function AdminPage() {
   const [documentVideoId, setDocumentVideoId] = useState('');
   const [documentFile, setDocumentFile] = useState(null);
   const [documentBusy, setDocumentBusy] = useState(false);
-  const [quizFile, setQuizFile] = useState(null);
-  const [quizBusy, setQuizBusy] = useState(false);
   const [quizSource, setQuizSource] = useState(null);
   const [quizSourceLoading, setQuizSourceLoading] = useState(false);
   const [replacingDocument, setReplacingDocument] = useState(null);
@@ -672,36 +671,6 @@ export default function AdminPage() {
     }
   };
 
-  const handleImportQuiz = async () => {
-    if (!editingVideo || !quizFile || !isSupabaseConfigured || !supabase) return;
-    setQuizBusy(true);
-    try {
-      const csv = (await quizFile.text()).replace(/^\uFEFF/, '');
-      const rows = csv.trim().split(/\r?\n/).map((line) => line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map((value) => value.replace(/^"|"$/g, '').replace(/""/g, '"')));
-      const headers = rows.shift().map((header) => header.trim());
-      const index = (name) => headers.indexOf(name);
-      const questions = rows.map((row, order_index) => ({
-        video_id: editingVideo.id,
-        question_text: row[index('question')]?.trim(),
-        options: [row[index('option_1')]?.trim(), row[index('option_2')]?.trim(), row[index('option_3')]?.trim(), row[index('option_4')]?.trim()],
-        correct_option: Number(row[index('correct_option')]), order_index,
-      })).filter((question) => question.question_text && question.options.every(Boolean) && question.correct_option >= 1 && question.correct_option <= 4);
-      if (!questions.length) throw new Error('CSVに有効な問題がありません');
-      const { error: sourceError } = await supabase.from('video_quiz_sources').upsert({
-        video_id: editingVideo.id,
-        csv_content: csv,
-        file_name: quizFile.name,
-        updated_at: new Date().toISOString(),
-      });
-      if (sourceError) throw sourceError;
-      const { error: deleteError } = await supabase.from('video_quiz_questions').delete().eq('video_id', editingVideo.id);
-      if (deleteError) throw deleteError;
-      const { error: insertError } = await supabase.from('video_quiz_questions').insert(questions);
-      if (insertError) throw insertError;
-      showNotice(`${questions.length}問の理解度チェックを登録しました`); setQuizFile(null);
-    } catch (error) { showNotice(error.message || 'CSVの登録に失敗しました'); }
-    finally { setQuizBusy(false); }
-  };
 
   return (
     <Layout hideSurveyWidget={true} hideSecondNav={true}>
@@ -1489,7 +1458,7 @@ export default function AdminPage() {
                         </div>
                       )}
 
-                      {editingVideo && <div className="space-y-3 rounded-2xl border border-slate-700 bg-slate-950/60 p-4"><div><p className="font-bold text-cyan-300">理解度チェック CSV</p><p className="text-[11px] text-slate-400">question, option_1〜4, correct_option（1〜4）のCSVを登録します。再登録するとこの講座の問題を置き換えます。</p></div><div className="flex flex-col gap-2 sm:flex-row"><input type="file" accept=".csv,text/csv" onChange={(event) => setQuizFile(event.target.files?.[0] || null)} className="min-w-0 flex-1 rounded-xl border border-slate-800 bg-slate-900 p-2 text-xs text-slate-300"/><button type="button" disabled={!quizFile || quizBusy} onClick={handleImportQuiz} className="rounded-xl bg-cyan-500 px-4 py-2 text-xs font-bold text-slate-950 disabled:opacity-50">{quizBusy ? '登録中…' : 'CSVを登録'}</button></div>{quizSourceLoading && <p className="text-xs text-slate-400">登録済みCSVを読み込み中…</p>}{quizSource && <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-900 p-3"><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-bold text-slate-200">登録済み: {quizSource.file_name || '理解度チェックCSV'}</p><p className="text-[11px] text-slate-500">{quizSource.updated_at ? new Date(quizSource.updated_at).toLocaleString('ja-JP') : ''}</p></div><button type="button" onClick={downloadQuizCsv} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-cyan-200 transition hover:bg-cyan-500/20">CSVをダウンロード</button></div><details><summary className="cursor-pointer text-xs font-bold text-cyan-300">CSVをプレビュー</summary><pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap break-all rounded-lg bg-slate-950 p-3 text-[11px] leading-relaxed text-slate-300">{quizSource.csv_content}</pre></details></div>}{!quizSourceLoading && !quizSource && <p className="text-xs text-slate-500">この動画には登録済みCSVがありません。</p>}</div>}
+                      {editingVideo && <QuizImportPanel video={editingVideo} quizSource={quizSource} quizSourceLoading={quizSourceLoading} onDownload={downloadQuizCsv} onImported={() => loadQuizSource(editingVideo.id)} showNotice={showNotice} supabase={supabase} />}
 
                       <button
                         type="submit"

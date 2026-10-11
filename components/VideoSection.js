@@ -5,7 +5,7 @@ import VideoQuiz from './VideoQuiz';
 import { renderTextWithLinks } from '../lib/textLinks';
 import { formatTokyoDate, getTokyoDateString, getTokyoMidnight } from '../lib/tokyoDate';
 
-export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, registrationDate, userId, onSaveProgress, onSaveMemo, onWatchTime, onDownloadDocument }) {
+export default function VideoSection({ videos = [], documentsByVideo = {}, userProgress = {}, userMemos = {}, quizScores = {}, quizByVideo = {}, statsSlot = null, totalStudySeconds = null, openRequest = null, registrationDate, userId, onSaveProgress, onSaveMemo, onWatchTime, onDownloadDocument }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [activeCategory, setActiveCategory] = useState('すべて');
   const [memoText, setMemoText] = useState('');
@@ -15,6 +15,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
   const [memosState, setMemosState] = useState(userMemos);
   const [actualDurations, setActualDurations] = useState({});
   const [quizScoresState, setQuizScoresState] = useState(quizScores);
+  const [quizFlash, setQuizFlash] = useState(false);
 
   useEffect(() => {
     setProgressState(userProgress);
@@ -80,6 +81,39 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
     const firstUnlocked = processedVideos.find((video) => video.isUnlocked) || processedVideos[0];
     selectVideo(lastOpenedVideo || firstUnlocked);
   }, [videos, registrationDate, userId, selectedVideo]);
+
+  // Jump to a lecture requested from the My Page stats (or ?video=<id>).
+  // The page keeps growing while the player / quiz load, so the scroll position is re-checked a few times.
+  useEffect(() => {
+    if (!openRequest || !processedVideos.length) return undefined;
+    const requested = processedVideos.find((video) => String(video.id) === String(openRequest.videoId));
+    if (!requested || !requested.isUnlocked) return undefined;
+    selectVideo(requested);
+    setActiveCategory('すべて');
+
+    const isQuiz = openRequest.target === 'quiz';
+    const elementId = isQuiz ? 'video-quiz-section' : 'video-player-section';
+    // Leave room for the fixed site header plus a peek of the UI just above the target.
+    const scrollOffset = 150;
+    const alignTarget = (force) => {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      const top = element.getBoundingClientRect().top;
+      if (force || Math.abs(top - scrollOffset) > 40) {
+        window.scrollTo({ top: Math.max(0, window.scrollY + top - scrollOffset), behavior: 'smooth' });
+      }
+    };
+    const timers = [
+      setTimeout(() => alignTarget(true), 200),
+      setTimeout(() => alignTarget(false), 800),
+      setTimeout(() => alignTarget(false), 1500),
+    ];
+    if (isQuiz) {
+      timers.push(setTimeout(() => setQuizFlash(true), 450));
+      timers.push(setTimeout(() => setQuizFlash(false), 4200));
+    }
+    return () => { timers.forEach(clearTimeout); setQuizFlash(false); };
+  }, [openRequest, videos]);
 
   // Update memo text when selected video changes
   useEffect(() => {
@@ -171,35 +205,73 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
   };
 
   return (
-    <div className="space-y-8 animate-fadeIn">
-      {/* 視聴進捗率サマリーバー */}
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 text-white">
-        <div className="space-y-1">
-          <h3 className="text-lg font-bold flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 flex items-center justify-center">
-              <svg className="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24">
+    <div id="video-library-top" className="space-y-8 animate-fadeIn">
+      <style>{`
+        @keyframes quizFlashRing {
+          0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75); background-color: rgba(34, 211, 238, 0.14); }
+          70% { box-shadow: 0 0 0 16px rgba(34, 211, 238, 0); background-color: rgba(34, 211, 238, 0.04); }
+          100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); background-color: rgba(34, 211, 238, 0); }
+        }
+        .quiz-flash { animation: quizFlashRing 1.2s ease-out 3; }
+        @media (prefers-reduced-motion: reduce) { .quiz-flash { animation: none; box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.7); } }
+      `}</style>
+      {/* 視聴進捗率サマリー + 学習状況(同じカードにまとめる) */}
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl shadow-xl text-white">
+      <div className="space-y-4 p-5 md:p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <h3 className="flex items-center gap-3 text-lg font-bold">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-500/20 text-cyan-300">
+              <svg className="h-4 w-4 stroke-current" fill="none" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
             <span>【地理動画視聴】全ステップ学習進捗</span>
           </h3>
-          <p className="text-xs text-slate-400">
-            全{totalCount}講座中 <span className="font-bold text-cyan-300">{completedCount}</span> 講座完了
-          </p>
+
+          <dl className="grid grid-cols-2 gap-3 lg:w-auto lg:min-w-[22rem]">
+            <div className="rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-2.5">
+              <dt className="text-[11px] font-semibold text-slate-400">完了した講座</dt>
+              <dd className="mt-0.5 font-extrabold text-white">
+                <span className="text-2xl text-cyan-300">{completedCount}</span>
+                <span className="ml-1 text-xs font-semibold text-slate-400">/ {totalCount}講座</span>
+              </dd>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-950/60 px-4 py-2.5">
+              <dt className="text-[11px] font-semibold text-slate-400">総学習時間(実視聴)</dt>
+              <dd className="mt-0.5 font-extrabold text-white">
+                {totalStudySeconds === null ? (
+                  <span className="text-2xl text-slate-600">—</span>
+                ) : (
+                  <>
+                    {totalStudySeconds >= 3600 && (
+                      <>
+                        <span className="text-2xl text-cyan-300">{Math.floor(totalStudySeconds / 3600)}</span>
+                        <span className="mx-1 text-xs font-semibold text-slate-400">時間</span>
+                      </>
+                    )}
+                    <span className="text-2xl text-cyan-300">{Math.floor((totalStudySeconds % 3600) / 60)}</span>
+                    <span className="ml-1 text-xs font-semibold text-slate-400">分</span>
+                  </>
+                )}
+              </dd>
+            </div>
+          </dl>
         </div>
 
-        <div className="w-full md:w-72 space-y-1.5">
-          <div className="flex justify-between text-xs font-semibold">
-            <span className="text-slate-400">総合達成度</span>
-            <span className="text-cyan-400 font-mono">{completionPercentage}%</span>
+        <div className="space-y-1.5">
+          <div className="flex items-baseline justify-between text-xs font-semibold">
+            <span className="text-slate-300">総合達成度</span>
+            <span className="font-mono text-base font-extrabold text-cyan-300">{completionPercentage}%</span>
           </div>
-          <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
+          <div className="h-3 w-full overflow-hidden rounded-full border border-slate-800 bg-slate-950 p-0.5" role="progressbar" aria-valuenow={completionPercentage} aria-valuemin={0} aria-valuemax={100} aria-label="総合達成度">
             <div
-              className="h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 rounded-full transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 transition-all duration-500"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
         </div>
+      </div>
+      {statsSlot}
       </div>
 
       {/* メイン動画プレイヤー & 右側リスト レイアウト */}
@@ -208,7 +280,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
         <div className="lg:col-span-8 space-y-6">
           {selectedVideo ? (
             selectedVideo.isUnlocked ? (
-              <div className="space-y-6">
+              <div id="video-player-section" className="space-y-6">
                 {/* ステルスプレイヤー */}
                 <StealthPlayer
                   key={selectedVideo.id}
@@ -290,6 +362,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                   />
                 </div>
 
+                <div id="video-quiz-section" className={`rounded-2xl ${quizFlash ? 'quiz-flash' : ''}`}>
                 <VideoQuiz
                   videoId={selectedVideo.id}
                   onResult={(quizResult) => setQuizScoresState((previous) => ({
@@ -297,6 +370,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                     [selectedVideo.id]: quizResult.best_score,
                   }))}
                 />
+                </div>
               </div>
             ) : (
               /* 未公開（ロック中）カード */
@@ -450,11 +524,23 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                           </span>
                         </div>
                       )}
-                      {vid.isUnlocked && Number.isFinite(quizScoresState[vid.id]) && (
-                        <p className="pt-1 text-[10px] font-semibold text-emerald-300">
-                          理解度テスト最高点: {quizScoresState[vid.id]}点
-                        </p>
-                      )}
+                      {vid.isUnlocked && (() => {
+                        const questionCount = Number(quizByVideo[vid.id]?.question_count) || 0;
+                        const best = quizScoresState[vid.id];
+                        const attempted = Number.isFinite(best);
+                        if (!attempted && !questionCount) return null; // no quiz registered
+                        // Same wording as the My Page stats: 未受験 / 最高 N/M点 / 満点
+                        const label = !attempted
+                          ? '未受験'
+                          : questionCount && best >= questionCount
+                            ? `満点(${best}点)`
+                            : `最高 ${best}${questionCount ? `/${questionCount}` : ''}点`;
+                        return (
+                          <p className={`pt-1 text-[10px] font-semibold ${attempted ? 'text-emerald-300' : 'text-amber-300'}`}>
+                            理解度テスト: {label}
+                          </p>
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
