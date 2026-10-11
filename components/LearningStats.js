@@ -155,7 +155,7 @@ export default function LearningStats({ videos, registrationDate, watchedByVideo
         </div>
       )}
 
-      <h3 className="text-sm font-bold" title="公開済みの講義が対象。動画は実際に再生した時間が動画の長さの90%以上で完了、テストは満点で完了です。">学習状況</h3>
+      <h3 className="text-sm font-bold" title="公開済みの講義が対象。動画は「完了」表示、または実際に再生した時間が動画の長さの90%以上で完了、テストは満点で完了です。">学習状況</h3>
 
       {!statsAvailable && <p className="mt-1 text-[11px] text-amber-300">学習状況を取得できませんでした。しばらくしてから再読み込みしてください。</p>}
 
