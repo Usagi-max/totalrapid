@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import RenderErrorBoundary from './RenderErrorBoundary';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 // Quiz images live in a private bucket; fetch a short-lived signed URL per image.
@@ -24,7 +25,7 @@ function QuizImage({ path }) {
   return <img src={url} alt="問題の図" onError={() => setFailed(true)} className="mt-3 max-h-80 w-full rounded-xl bg-slate-950 object-contain" />;
 }
 
-export default function VideoQuiz({ videoId, onResult }) {
+function VideoQuizInner({ videoId, onResult }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [started, setStarted] = useState(false);
@@ -112,4 +113,8 @@ export default function VideoQuiz({ videoId, onResult }) {
       <button type="button" disabled={busy || Object.keys(answers).length !== questions.length} onClick={submit} className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 py-3 text-sm font-bold text-white disabled:opacity-50">{busy ? '採点中…' : '回答を送信して採点'}</button>
     </div>}
   </section>;
+}
+
+export default function VideoQuiz(props) {
+  return <RenderErrorBoundary label="理解度チェック" resetKey={props.videoId}><VideoQuizInner {...props} /></RenderErrorBoundary>;
 }

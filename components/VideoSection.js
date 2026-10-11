@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import StealthPlayer from './StealthPlayer';
 import VideoQuiz from './VideoQuiz';
+import RenderErrorBoundary from './RenderErrorBoundary';
 import { renderTextWithLinks } from '../lib/textLinks';
 import { formatTokyoDate, getTokyoDateString, getTokyoMidnight } from '../lib/tokyoDate';
 
@@ -280,6 +281,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
         <div className="lg:col-span-8 space-y-6">
           {selectedVideo ? (
             selectedVideo.isUnlocked ? (
+              <RenderErrorBoundary label="講義の表示" resetKey={selectedVideo.id}>
               <div id="video-player-section" className="space-y-6">
                 {/* ステルスプレイヤー */}
                 <StealthPlayer
@@ -372,6 +374,7 @@ export default function VideoSection({ videos = [], documentsByVideo = {}, userP
                 />
                 </div>
               </div>
+              </RenderErrorBoundary>
             ) : (
               /* 未公開（ロック中）カード */
               <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-2xl">
